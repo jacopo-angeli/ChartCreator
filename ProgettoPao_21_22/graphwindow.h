@@ -22,6 +22,7 @@ class GraphWindow : public QWidget
     Q_OBJECT
 private:
     QTableWidget *_ValueTab;
+    QWidget * _ChartGuide;
     QWidget *_ChartWindow;
     QChart *_Chart;
     QToolBar *_UpperToolBar;
