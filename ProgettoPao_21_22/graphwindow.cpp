@@ -1,6 +1,6 @@
 #include "graphwindow.h"
 
-GraphWindow::GraphWindow(QTableWidget *Table, QWidget *parent): QWidget(parent), _ValueTab(Table), _ChartWindow(new QWidget()), _Chart(new QChart()), _UpperToolBar(new QToolBar()), _ChartView(new QChartView()){
+GraphWindow::GraphWindow(QTableWidget *Table, QWidget *parent): QWidget(parent), _ValueTab(Table), _ChartGuide(new QWidget()), _ChartWindow(new QWidget()), _Chart(new QChart()), _UpperToolBar(new QToolBar()), _ChartView(new QChartView()){
     QVBoxLayout *MainLayout = new QVBoxLayout(this);
     QHBoxLayout *FrstRow = new QHBoxLayout();
     QHBoxLayout *ScndRow = new QHBoxLayout();
