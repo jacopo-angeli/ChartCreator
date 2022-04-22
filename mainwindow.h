@@ -25,6 +25,7 @@
 class MainWindow : public QMainWindow{
    Q_OBJECT
 private:
+    QTabWidget *_Tab;
     QTableWidget *_Table;
     QWidget *_GraphWindow;
     QSpinBox *_TxtDim;
@@ -58,6 +59,8 @@ public slots:
     void RightAlign();
     void SetTextSize();
     void SpinBoxRefresh();
+
+    void addTab(int);
 };
 
 #endif // MAINWINDOW_H

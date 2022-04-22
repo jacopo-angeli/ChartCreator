@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Table(new QTableWidget(50,50, this)), _GraphWindow(new GraphWindow(_Table)), _ValidatorFlag(0){
+MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tab(new QTabWidget()), _Table(new QTableWidget(50,50)), _GraphWindow(new GraphWindow(_Table)), _ValidatorFlag(0){
     QMenuBar *MenuBar = new QMenuBar(this);
 
     QMenu *File = new QMenu("&File", MenuBar);
@@ -145,6 +145,9 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Table(new QTableW
     _TxtDim->setMinimumWidth(110);
     _TxtDim->setStyleSheet("margin:5px;");
 
+    _Tab->addTab(_Table, QString("Sheet &1"));
+    _Tab->addTab(new QTableWidget(50,50), QString("New Sheet"));
+    connect(_Tab, SIGNAL(tabBarClicked(int)), this, SLOT(addTab(int)));
     _Table->setRowHeight(0, 50);
     _Table->setItem(0,0, new QTableWidgetItem());
     connect(_Table, SIGNAL(itemSelectionChanged()), this, SLOT(SpinBoxRefresh()));
@@ -154,7 +157,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Table(new QTableW
         _Table->item(0, i)->setTextAlignment(Qt::AlignCenter);
     }
     connect(_Table, SIGNAL(cellChanged(int,int)), this, SLOT(CellValidator(int,int)));
-    setCentralWidget(_Table);
+    setCentralWidget(_Tab);
 
     ToolBar->addWidget(NewRow);
     ToolBar->addWidget(NewColumn);
@@ -319,7 +322,13 @@ void MainWindow::CellValidator(int row, int column){
 void MainWindow::NewWorkSheet(){
     std::cout<<"asdadsa"<<std::endl;
 }
-
+void MainWindow::addTab(int index){
+    std::cout<<index<<std::endl<<_Tab->count()<<std::endl;
+    if((index+1) == _Tab->count()){
+        _Tab->setTabText(index, QString("Sheet &"+QString::number(index+1)));
+        _Tab->addTab(new QTableWidget(50,50), QString("New Sheet"));
+    }
+}
 void MainWindow::SaveCsvCopy(){
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),tr("ChartCreator (*.crt)"));
     //check if user typed .crt
