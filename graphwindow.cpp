@@ -16,6 +16,7 @@ GraphWindow::GraphWindow(QTableWidget *Table, QWidget *parent): QWidget(parent),
     BarC->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     connect(BarC, SIGNAL(clicked()), this, SLOT(BarChartCreator()));
 
+
     QToolButton *CandleStickC = new QToolButton();
     CandleStickC->setText("CandleStick Chart");
     CandleStickC->setIcon(QIcon("../ProgettoPao_21_22/icons/CandlestickChart.png"));
