@@ -2,18 +2,38 @@
 #define CONTROLLER_H
 
 #include "mainwindow.h"
+#include "chartwindow.h"
 
 #include <QObject>
+#include <QVector>
 #include <QWidget>
 
-class Controller
+class Controller : public QWidget
 {
     Q_OBJECT
 private:
     MainWindow* _MainWindow;
-
+    QVector<ChartWindow*> _ChartWindows;
 public:
     Controller();
+public slots:
+//    void NewChart(); //TBD : void o bool? Parametri?
+//    void ChangeChart(); //TBD : void o bool? Parametri?
+
+    /* MainWindow slots */
+//    void UpperInsert();
+//    void LowerInsert();
+//    void LeftInsert();
+//    void RightInsert();
+//    void TableReset();
+//    void RowReset();
+//    void ColumnReset();
+//    void RowDelete();
+//    void ColumnDelete();
+//    void LeftAlign();
+//    void CenterAlign();
+//    void RightAlign();
+//    void SpinBoxRefresh();
 };
 
 #endif // CONTROLLER_H
