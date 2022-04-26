@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tab(new QTabWidget()), _Table(new QTableWidget(50,50)), _GraphWindow(new GraphWindow(_Table)), _ValidatorFlag(0){
+MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tab(new QTabWidget()), _Table(new QTableWidget(50,50)), _ValidatorFlag(0){
     QMenuBar *MenuBar = new QMenuBar(this);
 
     QMenu *File = new QMenu("&File", MenuBar);
@@ -214,16 +214,6 @@ void MainWindow::ClearTable(){
         _Table->setItem(0,i, new QTableWidgetItem());
         _Table->item(0, i)->setBackgroundColor(QColor(150,150,150));
         _Table->item(0, i)->setTextAlignment(Qt::AlignCenter);
-    }
-}
-void MainWindow::OpenGraphWindow(){
-    _Table->clearSelection();
-    _Table->setCurrentCell(0,0);
-    _Table->clearSelection();
-    if(_ValidatorFlag>0){
-        QMessageBox::critical(this, "ERROR", "Alphanumeric value detected.", QMessageBox::Ok);
-    }else{
-       _GraphWindow->show();
     }
 }
 

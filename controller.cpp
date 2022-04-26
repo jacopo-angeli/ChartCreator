@@ -1,6 +1,8 @@
 #include "controller.h"
 
-Controller::Controller(): _MainWindow(new MainWindow), _ChartWindows(QVector<ChartWindow*>()), _ChartSelection(), _ChartSettings{}
+Controller::Controller(): _MainWindow(new MainWindow), _ChartWindows(QVector<ChartWindow*>()), _ChartSelection(new ChartSelection()), _ChartSettings(new ChartSettings()){
+    _MainWindow->show();
+}
 
 
 void Controller::NewChart(){

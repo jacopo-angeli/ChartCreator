@@ -10,9 +10,7 @@
 #include <QVector>
 #include <QWidget>
 
-class Controller : public QWidget
-{
-    Q_OBJECT
+class Controller{
 private:
     MainWindow* _MainWindow;
     QVector<ChartWindow*> _ChartWindows;

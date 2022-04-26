@@ -1,9 +1,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-
-
+#include <QJsonDocument>
 #include <QWidget>
+#include <QStandardPaths>
+#include <QTextStream>
+#include <QJsonArray>
+#include <QJsonObject>
+#include <QFileDialog>
 #include <QKeySequence>
 #include <QMainWindow>
 #include <QWindow>
@@ -27,7 +31,6 @@ class MainWindow : public QMainWindow{
 private:
     QTabWidget *_Tab;
     QTableWidget *_Table;
-    QWidget *_GraphWindow;
     QSpinBox *_TxtDim;
 
     int _ValidatorFlag;
@@ -43,7 +46,6 @@ public slots:
     void RightInsert();
     void LeftInsert();
     void TableResetAlert();
-    void OpenGraphWindow();
     void ClearSelection();
     void ClearRow();
     void ClearColumn();
