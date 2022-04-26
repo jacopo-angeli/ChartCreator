@@ -4,7 +4,7 @@
 #include "mainwindow.h"
 #include "chartwindow.h"
 #include "chartselection.h"
-#inlcude "chartsettings.h"
+#include "chartsettings.h"
 
 #include <QObject>
 #include <QVector>
