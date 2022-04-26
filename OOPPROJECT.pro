@@ -10,6 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
     chartselection.cpp \
+    chartsettings.cpp \
     chartwindow.cpp \
     controller.cpp \
     graphwindow.cpp \
@@ -18,6 +19,7 @@ SOURCES += \
 
 HEADERS += \
     chartselection.h \
+    chartsettings.h \
     chartwindow.h \
     controller.h \
     graphwindow.h \
