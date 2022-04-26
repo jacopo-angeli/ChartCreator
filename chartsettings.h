@@ -1,6 +1,7 @@
-#ifndef CHARTSELECTION_H
-#define CHARTSELECTION_H
+#ifndef CHARTSETTINGS_H
+#define CHARTSETTINGS_H
 
+#include <QObject>
 #include <QWidget>
 #include <QWidgetAction>
 #include <QStringList>
@@ -14,12 +15,17 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QFrame>
-class ChartSelection : public QWidget
+
+
+class ChartSettings : public QWidget
 {
-    Q_OBJECT
+        Q_OBJECT
+private:
+    QTableWidget *_ValueTab;
+
 public:
-    ChartSelection(QWidget* =nullptr);
+    ChartSettings();
 
 };
 
-#endif // CHARTSELECTION_H
+#endif // CHARTSETTINGS_H
