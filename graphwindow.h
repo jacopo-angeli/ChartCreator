@@ -1,7 +1,7 @@
 #ifndef GRAPHWINDOW_H
 #define GRAPHWINDOW_H
 
-#include "mainwindow.h"
+
 
 #include <QWidget>
 #include <QWidgetAction>

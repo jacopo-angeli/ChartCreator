@@ -1,7 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "graphwindow.h"
+
 
 #include <QWidget>
 #include <QKeySequence>
