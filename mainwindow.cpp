@@ -172,104 +172,127 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tab(new QTabWidge
     ToolBar->addWidget(NewGraph);
     addToolBar(Qt::LeftToolBarArea, ToolBar);
 }
-int MainWindow::getMaxMenuSize(QMenu *MenuBar){
-    int v=0;
-    foreach (QAction *action, MenuBar->actions()){
-        QFontMetrics metrics(action->font());
-        int T2P = metrics.lineWidth();
-        v = (v < T2P ? T2P : v);
-    }
-    return v;
-}
-void MainWindow::UpperInsert(){
-    if(_Table->currentRow()!=0){
-        _Table->insertRow(_Table->currentRow());
-    }
-}
-void MainWindow::LowerInsert(){
-    _Table->insertRow(_Table->currentRow()+1);
-}
-void MainWindow::RightInsert(){
-    _Table->insertColumn(_Table->currentColumn()+1);
-    _Table->setItem(0, (_Table->currentColumn()+1),  new QTableWidgetItem);
-    _Table->item(0, (_Table->currentColumn()+1))->setBackgroundColor(QColor(150,150,150));
-}
-void MainWindow::LeftInsert(){
-    if(_Table->currentColumn()!=0){
-        _Table->insertColumn(_Table->currentColumn());
-        _Table->setItem(0, (_Table->currentColumn()-1),  new QTableWidgetItem);
-        _Table->item(0, (_Table->currentColumn())-1)->setBackgroundColor(QColor(150,150,150));
+
+void MainWindow::addRow(Flags dir)
+{
+    switch (dir) {
+        case (Flags::TOP):
+            _Table->insertRow(_Table->currentRow());
+        break;
+        case (Flags::DOWN):
+            _Table->insertRow(_Table->currentRow()+1);
+        break;
+        default:
+        break;
     }
 }
-void MainWindow::TableResetAlert(){
-    QMessageBox::StandardButton Reply;
-    Reply = QMessageBox::question(this, "CONTINUE?", "You are cleaing the entire table. Are you sure?", QMessageBox::Yes|QMessageBox::No);
-    if(Reply == QMessageBox::Yes){
-        ClearTable();
+
+void MainWindow::addColumn(Flags dir)
+{
+    switch (dir) {
+        case (Flags::LEFT):
+            _Table->insertColumn(_Table->currentColumn()+1);
+        break;
+        case (Flags::RIGHT):
+            _Table->insertColumn(_Table->currentColumn());
+        break;
+        default:
+        break;
     }
 }
-void MainWindow::ClearTable(){
+
+void MainWindow::clearTable()
+{
     _Table->clearContents();
-    for(int i=0; i<_Table->rowCount(); i++){
-        _Table->setItem(0,i, new QTableWidgetItem());
-        _Table->item(0, i)->setBackgroundColor(QColor(150,150,150));
-        _Table->item(0, i)->setTextAlignment(Qt::AlignCenter);
+}
+
+void MainWindow::clearContent(Flags Content)
+{
+    switch (Content) {
+        case (Flags::SELECTION): {
+            QList<QTableWidgetItem*> ItemList = _Table->selectedItems();
+            for (auto it = ItemList.begin(); it!=ItemList.end(); it++){
+                QTableWidgetItem *element = *it;
+                element->setText("");
+            }
+        }
+            break;
+
+        case (Flags::COLUMN):{
+            int currentIndex = _Table->currentColumn();
+            for(int i=0; i<_Table->rowCount(); i++){
+                QTableWidgetItem *TI = _Table->item(i, currentIndex);
+                if(TI) TI->setText("");
+            }
+        }
+            break;
+
+        case (Flags::ROW):{
+            int currentIndex = _Table->currentRow();
+            for(int i=0; i<_Table->columnCount(); i++){
+                QTableWidgetItem *TI = _Table->item(currentIndex, i);
+                if(TI) TI->setText("");
+            }
+        }
+            break;
+
+        default:
+            break;
     }
 }
 
-void MainWindow::ClearSelection(){
+void MainWindow::deleteContent(Flags Content)
+{
+    switch (Content) {
+        case (Flags::ROW):
+            _Table->removeColumn(_Table->currentColumn());
+            break;
+        case (Flags::COLUMN):
+            _Table->removeRow(_Table->currentRow());
+            break;
+        default:
+            break;
+    }
+}
+
+void MainWindow::textAlign(Flags dir)
+{
     QList<QTableWidgetItem*> ItemList = _Table->selectedItems();
-    for (auto it = ItemList.begin(); it!=ItemList.end(); it++){
-        QTableWidgetItem *element = *it;
-        element->setText("");
+    switch (dir) {
+        case(Flags::LEFT):{
+            for (auto it = ItemList.begin(); it!=ItemList.end(); it++){
+                QTableWidgetItem *element = *it;
+                element->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+            }
+        }
+            break;
+        case(Flags::CENTER):{
+            for (auto it = ItemList.begin(); it!=ItemList.end(); it++){
+                QTableWidgetItem *element = *it;
+                element->setTextAlignment(Qt::AlignCenter | Qt::AlignVCenter);
+            }
+        }
+            break;
+        case(Flags::RIGHT):{
+            for (auto it = ItemList.begin(); it!=ItemList.end(); it++){
+                QTableWidgetItem *element = *it;
+                element->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
+            }
+        }
+            break;
+        default:
+            break;
     }
 }
 
-void MainWindow::ClearRow(){
-    int currentIndex = _Table->currentRow();
-    for(int i=0; i<_Table->columnCount(); i++){
-        QTableWidgetItem *TI = _Table->item(currentIndex, i);
-        if(TI) TI->setText("");
-    }
+void MainWindow::setSpinBox()
+{
+//    _TxtDim->setValue(getTextSize());
+    _TxtDim->setValue(10);
 }
 
-void MainWindow::ClearColumn(){
-    int currentIndex = _Table->currentColumn();
-    for(int i=0; i<_Table->rowCount(); i++){
-        QTableWidgetItem *TI = _Table->item(i, currentIndex);
-        if(TI) TI->setText("");
-    }
-}
-
-void MainWindow::DeleteColumn(){
-    _Table->removeColumn(_Table->currentColumn());
-}
-
-void MainWindow::DeleteRow(){
-    if(_Table->currentRow()!=0)_Table->removeRow(_Table->currentRow());
-}
-void MainWindow::LeftAlign(){
-    QList<QTableWidgetItem*> ItemList = _Table->selectedItems();
-    for (auto it = ItemList.begin(); it!=ItemList.end(); it++){
-        QTableWidgetItem *element = *it;
-        element->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    }
-}
-void MainWindow::CenterAlign(){
-    QList<QTableWidgetItem*> ItemList = _Table->selectedItems();
-    for (auto it = ItemList.begin(); it!=ItemList.end(); it++){
-        QTableWidgetItem *element = *it;
-        element->setTextAlignment(Qt::AlignCenter | Qt::AlignVCenter);
-    }
-}
-void MainWindow::RightAlign(){
-    QList<QTableWidgetItem*> ItemList = _Table->selectedItems();
-    for (auto it = ItemList.begin(); it!=ItemList.end(); it++){
-        QTableWidgetItem *element = *it;
-        element->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    }
-}
-void MainWindow::SetTextSize(){
+void MainWindow::setTextSize()
+{
     QFont TFont= _Table->font();
     TFont.setPointSize(_TxtDim->value());
     QList<QTableWidgetItem*> ItemList = _Table->selectedItems();
@@ -279,98 +302,127 @@ void MainWindow::SetTextSize(){
     }
 }
 
-void MainWindow::SpinBoxRefresh(){
-    _TxtDim->setValue(10);
+int MainWindow::getMaxMenuSize(QMenu *MenuBar){
+    int v=0;
+    foreach (QAction *action, MenuBar->actions()){
+        QFontMetrics metrics(action->font());
+        int T2P = metrics.lineWidth();
+        v = (v < T2P ? T2P : v);
+    }
+    return v;
 }
 
-void MainWindow::CellValidator(int row, int column){
-   if(row!=0 && column!=0){
-       QTableWidgetItem *Item = _Table->item(row, column);
-       QRegExp re("[+-]?([0-9]*[.])?[0-9]+");
-       QRegExp reDate("^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\\d\\d$");
-        if(Item){
-            if(Item->backgroundColor() == QColor(255, 0, 0, 100)){
-                if(re.exactMatch(Item->text()) || reDate.exactMatch(Item->text())){
-                    _ValidatorFlag--;
-                    Item->setBackgroundColor(QColor(255, 255, 255));
-                }else if(Item->text().toStdString() == ""){
-                    _ValidatorFlag--;
-                    Item->setBackgroundColor(QColor(255, 255, 255));
-                }
-            }else{
-                if(!(reDate.exactMatch(Item->text()) || re.exactMatch(Item->text()))){
-                    if(Item->text().toStdString() != ""){
-                        _ValidatorFlag++;
-                        Item->setBackgroundColor(QColor(255, 0, 0, 100));
+int MainWindow::getTextSize()
+{
+    int size=0;
+    QList<QTableWidgetItem*> ItemList = _Table->selectedItems();
+    if(!(ItemList.isEmpty())){
+        for (auto it = ItemList.begin(); it!=ItemList.end(); it++){
+            QTableWidgetItem *element = *it;
+            if(element){
+                QFont tmp = element->font();
+                if(size == 0){
+                    size = tmp.pointSize();
+                }else{
+                    if(tmp.pointSize() != size){
+                        size = 0;
+                        break;
                     }
                 }
             }
-       }
-   }
-}
-
-void MainWindow::NewWorkSheet(){
-    std::cout<<"asdadsa"<<std::endl;
-}
-void MainWindow::addTab(int index){
-    std::cout<<index<<std::endl<<_Tab->count()<<std::endl;
-    if((index+1) == _Tab->count()){
-        _Tab->setTabText(index, QString("Sheet &"+QString::number(index+1)));
-        _Tab->addTab(new QTableWidget(50,50), QString("New Sheet"));
-    }
-}
-void MainWindow::SaveCsvCopy(){
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),tr("ChartCreator (*.crt)"));
-    //check if user typed .crt
-    if(!(fileName.contains(".crt"))) fileName.append(".crt");
-
-    if(TableParser(fileName)){
-       std::cout<<"success"<<std::endl;
-    };
-    std::cout<<fileName.toStdString()<<std::endl;
-}
-
-bool MainWindow::TableParser(const QString& fileName){
-    //Create file
-    QFile file(fileName);
-    //Open file
-    if (file.open(QIODevice::ReadWrite | QIODevice::Truncate)) {
-        QTextStream stream(&file);
-        //file successfully opened
-        //table parse into the file
-
-        QJsonArray JRows;
-        for(int i=0; i<_Table->rowCount(); i++){
-            _Table->selectRow(i);
-            QList<QTableWidgetItem*> ItemList = _Table->selectedItems();
-            QJsonArray JRowi;
-            for(int j=0; j<ItemList.length(); j++){
-
-                if(ItemList[j]->text()!=""){
-
-                    QJsonObject ItemJ;
-                    ItemJ.insert("row", i);
-                    ItemJ.insert("column", j);
-                    ItemJ.insert("value", ItemList[j]->text());
-                    ItemJ.insert("color", ItemList[j]->backgroundColor().value());
-                    QFont f = ItemList[j]->font();
-                    ItemJ.insert("fontSize",f.pointSize());
-                    ItemJ.insert("NewLine", false);
-
-                    JRowi.append(ItemJ);
-                }
-            }
-
-            QJsonObject NewLine;
-            NewLine.insert("NewLine", true);
-            JRowi.append(NewLine);
-
-            JRows.append(JRowi);
         }
-        stream <<QJsonDocument(JRows).toJson();
-
-        _Table->setCurrentCell(0,0);
-
-        return true;
-    } else return false;
+    }
+    return size;
 }
+
+//void MainWindow::CellValidator(int row, int column){
+//   if(row!=0 && column!=0){
+//       QTableWidgetItem *Item = _Table->item(row, column);
+//       QRegExp re("[+-]?([0-9]*[.])?[0-9]+");
+//       QRegExp reDate("^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\\d\\d$");
+//        if(Item){
+//            if(Item->backgroundColor() == QColor(255, 0, 0, 100)){
+//                if(re.exactMatch(Item->text()) || reDate.exactMatch(Item->text())){
+//                    _ValidatorFlag--;
+//                    Item->setBackgroundColor(QColor(255, 255, 255));
+//                }else if(Item->text().toStdString() == ""){
+//                    _ValidatorFlag--;
+//                    Item->setBackgroundColor(QColor(255, 255, 255));
+//                }
+//            }else{
+//                if(!(reDate.exactMatch(Item->text()) || re.exactMatch(Item->text()))){
+//                    if(Item->text().toStdString() != ""){
+//                        _ValidatorFlag++;
+//                        Item->setBackgroundColor(QColor(255, 0, 0, 100));
+//                    }
+//                }
+//            }
+//       }
+//   }
+//}
+
+//void MainWindow::NewWorkSheet(){
+//    std::cout<<"asdadsa"<<std::endl;
+//}
+//void MainWindow::addTab(int index){
+//    std::cout<<index<<std::endl<<_Tab->count()<<std::endl;
+//    if((index+1) == _Tab->count()){
+//        _Tab->setTabText(index, QString("Sheet &"+QString::number(index+1)));
+//        _Tab->addTab(new QTableWidget(50,50), QString("New Sheet"));
+//    }
+//}
+//void MainWindow::SaveCsvCopy(){
+//    QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),tr("ChartCreator (*.crt)"));
+//    //check if user typed .crt
+//    if(!(fileName.contains(".crt"))) fileName.append(".crt");
+
+//    if(TableParser(fileName)){
+//       std::cout<<"success"<<std::endl;
+//    };
+//    std::cout<<fileName.toStdString()<<std::endl;
+//}
+
+//bool MainWindow::TableParser(const QString& fileName){
+//    //Create file
+//    QFile file(fileName);
+//    //Open file
+//    if (file.open(QIODevice::ReadWrite | QIODevice::Truncate)) {
+//        QTextStream stream(&file);
+//        //file successfully opened
+//        //table parse into the file
+
+//        QJsonArray JRows;
+//        for(int i=0; i<_Table->rowCount(); i++){
+//            _Table->selectRow(i);
+//            QList<QTableWidgetItem*> ItemList = _Table->selectedItems();
+//            QJsonArray JRowi;
+//            for(int j=0; j<ItemList.length(); j++){
+
+//                if(ItemList[j]->text()!=""){
+
+//                    QJsonObject ItemJ;
+//                    ItemJ.insert("row", i);
+//                    ItemJ.insert("column", j);
+//                    ItemJ.insert("value", ItemList[j]->text());
+//                    ItemJ.insert("color", ItemList[j]->backgroundColor().value());
+//                    QFont f = ItemList[j]->font();
+//                    ItemJ.insert("fontSize",f.pointSize());
+//                    ItemJ.insert("NewLine", false);
+
+//                    JRowi.append(ItemJ);
+//                }
+//            }
+
+//            QJsonObject NewLine;
+//            NewLine.insert("NewLine", true);
+//            JRowi.append(NewLine);
+
+//            JRows.append(JRowi);
+//        }
+//        stream <<QJsonDocument(JRows).toJson();
+
+//        _Table->setCurrentCell(0,0);
+
+//        return true;
+//    } else return false;
+//}

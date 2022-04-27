@@ -35,7 +35,9 @@ public slots:
     void LeftAlign();
     void CenterAlign();
     void RightAlign();
-    void SpinBoxRefresh();
+    void SpinBox();
+    void setTextSize();
+
 };
 
 #endif // CONTROLLER_H

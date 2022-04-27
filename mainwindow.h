@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "flags.h"
+
 #include <QJsonDocument>
 #include <QWidget>
 #include <QStandardPaths>
@@ -29,40 +31,25 @@
 class MainWindow : public QMainWindow{
    Q_OBJECT
 private:
-    QTabWidget *_Tab;
-    QTableWidget *_Table;
-    QSpinBox *_TxtDim;
+    QTabWidget* _Tab;
+    QTableWidget* _Table;
+    QSpinBox* _TxtDim;
 
     int _ValidatorFlag;
 
     int getMaxMenuSize(QMenu*);
-    void ClearTable();
+    int getTextSize();
     bool TableParser(const QString&);
 public:
     MainWindow(QWidget * =nullptr);
-public slots:
-    void UpperInsert();
-    void LowerInsert();
-    void RightInsert();
-    void LeftInsert();
-    void TableResetAlert();
-    void ClearSelection();
-    void ClearRow();
-    void ClearColumn();
-    void DeleteColumn();
-    void DeleteRow();
-    void CellValidator(int, int);
-
-    void NewWorkSheet();
-    void SaveCsvCopy();
-
-    void LeftAlign();
-    void CenterAlign();
-    void RightAlign();
-    void SetTextSize();
-    void SpinBoxRefresh();
-
-    void addTab(int);
+    void addRow(Flags = Flags::TOP);
+    void addColumn(Flags = Flags::LEFT);
+    void clearTable();
+    void clearContent(Flags = Flags::SELECTION);
+    void deleteContent(Flags = Flags::ROW);
+    void textAlign(Flags = Flags::LEFT);
+    void setSpinBox();
+    void setTextSize();
 };
 
 #endif // MAINWINDOW_H

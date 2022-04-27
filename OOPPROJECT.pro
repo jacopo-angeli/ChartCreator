@@ -22,6 +22,7 @@ HEADERS += \
     chartsettings.h \
     chartwindow.h \
     controller.h \
+    flags.h \
     graphwindow.h \
     mainwindow.h
 
