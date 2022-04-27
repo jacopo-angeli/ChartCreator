@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tab(new QTabWidge
 
     QAction *NewWorkSheet = new QAction("&New WorkSheet", File);
     NewWorkSheet->setShortcut(QKeySequence::New);
-    connect(NewWorkSheet, SIGNAL(triggered()), this, SLOT(NewWorkSheet()));
+//    connect(NewWorkSheet, SIGNAL(triggered()), this, SLOT(NewWorkSheet()));
     File->addAction(NewWorkSheet);
     File->addAction(new QAction("&Open WorkSheet...", File));
 
@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tab(new QTabWidge
     File->addAction(new QAction("Over&write File", File));
     QAction *SaveCsvCopy = new QAction("&Save a copy", File);
     SaveCsvCopy->setShortcut(QKeySequence::Save);
-    connect(SaveCsvCopy, SIGNAL(triggered()), this, SLOT(SaveCsvCopy()));
+//    connect(SaveCsvCopy, SIGNAL(triggered()), this, SLOT(SaveCsvCopy()));
     File->addAction(SaveCsvCopy);
     File->addSeparator();
     File->addAction(new QAction("&Print", File));
@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tab(new QTabWidge
 
     QAction *Quit = new QAction("&Quit", File);
     Quit->setShortcut(QKeySequence::Quit);
-    connect(Quit, SIGNAL(triggered()), this, SLOT(close()));
+//    connect(Quit, SIGNAL(triggered()), this, SLOT(close()));
     File->addAction(Quit);
 
     Help->addAction(new QAction("Usage &Manual", Help));
@@ -49,8 +49,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tab(new QTabWidge
     QAction *LowerInsert = new QAction("Lower Insert", NewRow);
     NewRow->addAction(UpperInsert);
     NewRow->addAction(LowerInsert);
-    connect(UpperInsert, SIGNAL(triggered()), this, SLOT(UpperInsert()));
-    connect(LowerInsert, SIGNAL(triggered()), this, SLOT(LowerInsert()));
+//    connect(UpperInsert, SIGNAL(triggered()), this, SLOT(UpperInsert()));
+//    connect(LowerInsert, SIGNAL(triggered()), this, SLOT(LowerInsert()));
 
     QToolButton *NewColumn = new QToolButton(ToolBar);
     NewColumn->setText("New Column");
@@ -61,8 +61,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tab(new QTabWidge
     QAction *LeftInsert = new QAction("Left Insert", NewColumn);
     NewColumn->addAction(RightInsert);
     NewColumn->addAction(LeftInsert);
-    connect(RightInsert, SIGNAL(triggered()), this, SLOT(RightInsert()));
-    connect(LeftInsert, SIGNAL(triggered()), this, SLOT(LeftInsert()));
+//    connect(RightInsert, SIGNAL(triggered()), this, SLOT(RightInsert()));
+//    connect(LeftInsert, SIGNAL(triggered()), this, SLOT(LeftInsert()));
 
     QToolButton *Clear = new QToolButton(ToolBar);
     Clear->setText("Eraser");
@@ -76,9 +76,9 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tab(new QTabWidge
     Clear->addAction(ClearSelection);
     Clear->addAction(ClearColumn);
     Clear->addAction(ClearRow);
-    connect(ClearSelection, SIGNAL(triggered()), this, SLOT(ClearSelection()));
-    connect(ClearColumn, SIGNAL(triggered()), this, SLOT(ClearColumn()));
-    connect(ClearRow, SIGNAL(triggered()), this, SLOT(ClearRow()));
+//    connect(ClearSelection, SIGNAL(triggered()), this, SLOT(ClearSelection()));
+//    connect(ClearColumn, SIGNAL(triggered()), this, SLOT(ClearColumn()));
+//    connect(ClearRow, SIGNAL(triggered()), this, SLOT(ClearRow()));
 
     QToolButton *Delete = new QToolButton(ToolBar);
     Delete->setText("Delete");
@@ -89,15 +89,15 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tab(new QTabWidge
     QAction *RowDeleting = new QAction("Delete selected row", Delete);
     Delete->addAction(ColumnDeleting);
     Delete->addAction(RowDeleting);
-    connect(ColumnDeleting, SIGNAL(triggered()), this, SLOT(DeleteColumn()));
-    connect(RowDeleting, SIGNAL(triggered()), this, SLOT(DeleteRow()));
+//    connect(ColumnDeleting, SIGNAL(triggered()), this, SLOT(DeleteColumn()));
+//    connect(RowDeleting, SIGNAL(triggered()), this, SLOT(DeleteRow()));
 
     QToolButton *TableReset = new QToolButton(ToolBar);
     TableReset->setText("Reset Table");
     TableReset->setIcon(QIcon("../ProgettoPao_21_22/icons/Reset.png"));
     TableReset->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     TableReset->setPopupMode(QToolButton::InstantPopup);
-    connect(TableReset, SIGNAL(clicked()), this, SLOT(TableResetAlert()));
+//    connect(TableReset, SIGNAL(clicked()), this, SLOT(TableResetAlert()));
 
     QToolButton *TextAlignment = new QToolButton(ToolBar);
     TextAlignment->setText("Text Align");
@@ -110,9 +110,9 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tab(new QTabWidge
     CenterAlign->setIcon(QIcon("../ProgettoPao_21_22/icons/CenterAlign.png"));
     QAction *RightAlign = new QAction("Align right",TextAlignment);
     RightAlign->setIcon(QIcon("../ProgettoPao_21_22/icons/RightAlign.png"));
-    connect(LeftAlign, SIGNAL(triggered()), this, SLOT(LeftAlign()));
-    connect(CenterAlign, SIGNAL(triggered()), this, SLOT(CenterAlign()));
-    connect(RightAlign, SIGNAL(triggered()), this, SLOT(RightAlign()));
+//    connect(LeftAlign, SIGNAL(triggered()), this, SLOT(LeftAlign()));
+//    connect(CenterAlign, SIGNAL(triggered()), this, SLOT(CenterAlign()));
+//    connect(RightAlign, SIGNAL(triggered()), this, SLOT(RightAlign()));
     TextAlignment->addAction(LeftAlign);
     TextAlignment->addAction(CenterAlign);
     TextAlignment->addAction(RightAlign);
@@ -122,11 +122,11 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tab(new QTabWidge
     NewGraph->setIcon(QIcon("../ProgettoPao_21_22/icons/NewGraph.png"));
     NewGraph->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     NewGraph->setPopupMode(QToolButton::InstantPopup);
-    connect(NewGraph, SIGNAL(clicked()), this, SLOT(OpenGraphWindow()));
+//    connect(NewGraph, SIGNAL(clicked()), this, SLOT(OpenGraphWindow()));
 
     _TxtDim = new QSpinBox(ToolBar);
     _TxtDim->setSpecialValueText("-");
-    connect(_TxtDim, SIGNAL(valueChanged(int)), this, SLOT(SetTextSize()));
+//    connect(_TxtDim, SIGNAL(valueChanged(int)), this, SLOT(SetTextSize()));
 
     NewColumn->setMinimumWidth(110);
     NewColumn->setStyleSheet("margin:5px;");
@@ -147,16 +147,9 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tab(new QTabWidge
 
     _Tab->addTab(_Table, QString("Sheet &1"));
     _Tab->addTab(new QTableWidget(50,50), QString("New Sheet"));
-    connect(_Tab, SIGNAL(tabBarClicked(int)), this, SLOT(addTab(int)));
-    _Table->setRowHeight(0, 50);
-    _Table->setItem(0,0, new QTableWidgetItem());
-    connect(_Table, SIGNAL(itemSelectionChanged()), this, SLOT(SpinBoxRefresh()));
-    for(int i=0; i<_Table->columnCount(); i++){
-        _Table->setItem(0,i, new QTableWidgetItem());
-        _Table->item(0, i)->setBackgroundColor(QColor(150,150,150));
-        _Table->item(0, i)->setTextAlignment(Qt::AlignCenter);
-    }
-    connect(_Table, SIGNAL(cellChanged(int,int)), this, SLOT(CellValidator(int,int)));
+//    connect(_Tab, SIGNAL(tabBarClicked(int)), this, SLOT(addTab(int)));
+//    connect(_Table, SIGNAL(itemSelectionChanged()), this, SLOT(SpinBoxRefresh()));
+//    connect(_Table, SIGNAL(cellChanged(int,int)), this, SLOT(CellValidator(int,int)));
     setCentralWidget(_Tab);
 
     ToolBar->addWidget(NewRow);

@@ -1,15 +1,13 @@
 #include "controller.h"
-#include "flags.h"
 
-#include <QMessageBox>
 
-Controller::Controller(): _MainWindow(new MainWindow), _ChartWindows(QVector<ChartWindow*>()), _ChartSelection(new ChartSelection()), _ChartSettings(new ChartSettings()){
+Controller::Controller(): _MainWindow(new MainWindow(this)), _ChartWindows(QVector<ChartWindow*>()), _ChartSelection(new ChartSelection()), _ChartSettings(new ChartSettings()){
+    _MainWindow->setWindowState(Qt::WindowMaximized);
     _MainWindow->show();
 }
 
 
 void Controller::NewChart(){
-
 }
 void Controller::ChangeChart(){
 
@@ -28,7 +26,7 @@ void Controller::RightInsert(){
 }
 void Controller::TableReset(){
     QMessageBox::StandardButton Reply;
-    Reply = QMessageBox::question(_MainWindow, "WARNING", "You are cleaing the entire table. Are you sure?", QMessageBox::Yes|QMessageBox::No /*"CONTINUE?", "You are cleaing the entire table. Are you sure?", QMessageBox::Yes|QMessageBox::No*/);
+    Reply = QMessageBox::question(this, "WARNING", "You are cleaning the entire table. Are you sure?", QMessageBox::Yes|QMessageBox::No /*"CONTINUE?", "You are cleaing the entire table. Are you sure?", QMessageBox::Yes|QMessageBox::No*/);
     if(Reply == QMessageBox::Yes){
         _MainWindow->clearContent();
     }
@@ -40,13 +38,11 @@ void Controller::ColumnReset(){
     _MainWindow->clearContent(Flags::COLUMN);
 }
 
-void Controller::RowDelete()
-{
+void Controller::RowDelete(){
     _MainWindow->deleteContent();
 }
 
-void Controller::ColumnDelete()
-{
+void Controller::ColumnDelete(){
     _MainWindow->deleteContent(Flags::COLUMN);
 };
 void Controller::LeftAlign(){
@@ -62,7 +58,11 @@ void Controller::SpinBox(){
     _MainWindow->setSpinBox();
 }
 
-void Controller::setTextSize()
-{
+void Controller::setTextSize(){
     _MainWindow->setTextSize();
+}
+
+void Controller::newSheet()
+{
+
 };

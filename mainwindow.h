@@ -35,13 +35,14 @@ private:
     QTableWidget* _Table;
     QSpinBox* _TxtDim;
 
+
     int _ValidatorFlag;
 
     int getMaxMenuSize(QMenu*);
     int getTextSize();
     bool TableParser(const QString&);
 public:
-    MainWindow(QWidget * =nullptr);
+    MainWindow(QWidget* =nullptr);
     void addRow(Flags = Flags::TOP);
     void addColumn(Flags = Flags::LEFT);
     void clearTable();

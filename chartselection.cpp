@@ -16,7 +16,7 @@
         BarC->setMinimumHeight(150);
         BarC->setIconSize(QSize(100,100));
         BarC->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-        connect(BarC, SIGNAL(clicked()), this, SLOT(BarChartCreator()));
+//        connect(BarC, SIGNAL(clicked()), this, SLOT(BarChartCreator()));
 
 
         QToolButton *CandleStickC = new QToolButton();
@@ -35,7 +35,7 @@
         LineC->setMinimumHeight(150);
         LineC->setIconSize(QSize(100,100));
         LineC->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-        connect(LineC, SIGNAL(clicked()), this, SLOT(LineChartCreator()));
+//        connect(LineC, SIGNAL(clicked()), this, SLOT(LineChartCreator()));
 
         QToolButton *PieC = new QToolButton();
         PieC->setText("Pie Charts");
@@ -44,7 +44,7 @@
         PieC->setMinimumHeight(150);
         PieC->setIconSize(QSize(100,100));
         PieC->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-        connect(PieC, SIGNAL(clicked()), this, SLOT(PieChartCreator()));
+//        connect(PieC, SIGNAL(clicked()), this, SLOT(PieChartCreator()));
 
         QToolButton *HistogramC = new QToolButton();
         HistogramC->setText("Histogram Charts");

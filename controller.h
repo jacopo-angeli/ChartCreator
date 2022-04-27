@@ -5,12 +5,14 @@
 #include "chartwindow.h"
 #include "chartselection.h"
 #include "chartsettings.h"
+#include "flags.h"
 
 #include <QObject>
 #include <QVector>
 #include <QWidget>
 
-class Controller{
+class Controller : public QWidget{
+    Q_OBJECT
 private:
     MainWindow* _MainWindow;
     QVector<ChartWindow*> _ChartWindows;
@@ -37,7 +39,7 @@ public slots:
     void RightAlign();
     void SpinBox();
     void setTextSize();
-
+    void newSheet();
 };
 
 #endif // CONTROLLER_H
