@@ -1,16 +1,19 @@
 #include "mainwindow.h"
-MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tab(new QTabWidget()), _Table(new QTableWidget(50,50)), _ValidatorFlag(0){
+MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tabs(new QTabWidget()){
     QMenuBar *MenuBar = new QMenuBar(this);
 
     QMenu *File = new QMenu("&File", MenuBar);
     QMenu *Tools = new QMenu("&Tools", MenuBar);
     QMenu *Help = new QMenu("&Help", MenuBar);
 
-    QAction *NewWorkSheet = new QAction("&New WorkSheet", File);
-    NewWorkSheet->setShortcut(QKeySequence::New);
-//    connect(NewWorkSheet, SIGNAL(triggered()), this, SLOT(NewWorkSheet()));
-    File->addAction(NewWorkSheet);
-    File->addAction(new QAction("&Open WorkSheet...", File));
+    QAction *NewFile = new QAction("&New File", File);
+    NewFile->setShortcut(QKeySequence::New);
+//    connect(NewWorkSheet, SIGNAL(triggered()), parent, SLOT(newFile()));
+    File->addAction(NewFile);
+    QAction *OpenFile = new QAction("&Open File", File);
+    OpenFile->setShortcut(QKeySequence::Open);
+    connect(OpenFile, SIGNAL(triggered()), parent, SLOT(openFile()));
+    File->addAction(OpenFile);
 
     File->addSeparator();
     File->addAction(new QAction("Over&write File", File));
@@ -110,8 +113,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tab(new QTabWidge
     CenterAlign->setIcon(QIcon("../ProgettoPao_21_22/icons/CenterAlign.png"));
     QAction *RightAlign = new QAction("Align right",TextAlignment);
     RightAlign->setIcon(QIcon("../ProgettoPao_21_22/icons/RightAlign.png"));
-//    connect(LeftAlign, SIGNAL(triggered()), this, SLOT(LeftAlign()));
-//    connect(CenterAlign, SIGNAL(triggered()), this, SLOT(CenterAlign()));
+    connect(LeftAlign, SIGNAL(triggered()), parent, SLOT(LeftAlign()));
+    connect(CenterAlign, SIGNAL(triggered()), parent, SLOT(CenterAlign()));
 //    connect(RightAlign, SIGNAL(triggered()), this, SLOT(RightAlign()));
     TextAlignment->addAction(LeftAlign);
     TextAlignment->addAction(CenterAlign);
@@ -125,8 +128,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tab(new QTabWidge
 //    connect(NewGraph, SIGNAL(clicked()), this, SLOT(OpenGraphWindow()));
 
     _TxtDim = new QSpinBox(ToolBar);
-    _TxtDim->setSpecialValueText("-");
-//    connect(_TxtDim, SIGNAL(valueChanged(int)), this, SLOT(SetTextSize()));
+    _TxtDim->setValue(10);
+    connect(_TxtDim, SIGNAL(valueChanged(int)), parent, SLOT(setTextSize()));
 
     NewColumn->setMinimumWidth(110);
     NewColumn->setStyleSheet("margin:5px;");
@@ -145,12 +148,16 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tab(new QTabWidge
     _TxtDim->setMinimumWidth(110);
     _TxtDim->setStyleSheet("margin:5px;");
 
-    _Tab->addTab(_Table, QString("Sheet &1"));
-    _Tab->addTab(new QTableWidget(50,50), QString("New Sheet"));
+    _Tabs->addTab(new QTableWidget(50,50), QString("Untitled"));
+    _Tabs->setTabsClosable(true);
+    connect(_Tabs, SIGNAL(tabCloseRequested(int)), parent, SLOT(tabClose(int)));
 //    connect(_Tab, SIGNAL(tabBarClicked(int)), this, SLOT(addTab(int)));
-//    connect(_Table, SIGNAL(itemSelectionChanged()), this, SLOT(SpinBoxRefresh()));
+    for(int i=0; i<_Tabs->count(); i++){
+        connect(static_cast<QTableWidget*>(_Tabs->widget(i)), SIGNAL(itemSelectionChanged()), parent, SLOT(SpinBox()));
+        connect(static_cast<QTableWidget*>(_Tabs->widget(i)), SIGNAL(itemSelectionChanged()), parent, SLOT(SpinBox()));
+    }
 //    connect(_Table, SIGNAL(cellChanged(int,int)), this, SLOT(CellValidator(int,int)));
-    setCentralWidget(_Tab);
+    setCentralWidget(_Tabs);
 
     ToolBar->addWidget(NewRow);
     ToolBar->addWidget(NewColumn);
@@ -168,12 +175,13 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tab(new QTabWidge
 
 void MainWindow::addRow(Flags dir)
 {
+    QTableWidget* currentTable = static_cast<QTableWidget*>(_Tabs->widget(_Tabs->currentIndex()));
     switch (dir) {
         case (Flags::TOP):
-            _Table->insertRow(_Table->currentRow());
+            currentTable->insertRow(currentTable->currentRow());
         break;
         case (Flags::DOWN):
-            _Table->insertRow(_Table->currentRow()+1);
+            currentTable->insertRow(currentTable->currentRow()+1);
         break;
         default:
         break;
@@ -182,12 +190,13 @@ void MainWindow::addRow(Flags dir)
 
 void MainWindow::addColumn(Flags dir)
 {
+    QTableWidget* currentTable = static_cast<QTableWidget*>(_Tabs->widget(_Tabs->currentIndex()));
     switch (dir) {
         case (Flags::LEFT):
-            _Table->insertColumn(_Table->currentColumn()+1);
+            currentTable->insertColumn(currentTable->currentColumn()+1);
         break;
         case (Flags::RIGHT):
-            _Table->insertColumn(_Table->currentColumn());
+            currentTable->insertColumn(currentTable->currentColumn());
         break;
         default:
         break;
@@ -196,14 +205,16 @@ void MainWindow::addColumn(Flags dir)
 
 void MainWindow::clearTable()
 {
-    _Table->clearContents();
+    QTableWidget* currentTable = static_cast<QTableWidget*>(_Tabs->widget(_Tabs->currentIndex()));
+    currentTable->clearContents();
 }
 
 void MainWindow::clearContent(Flags Content)
 {
+    QTableWidget* currentTable = static_cast<QTableWidget*>(_Tabs->widget(_Tabs->currentIndex()));
     switch (Content) {
         case (Flags::SELECTION): {
-            QList<QTableWidgetItem*> ItemList = _Table->selectedItems();
+            QList<QTableWidgetItem*> ItemList = currentTable->selectedItems();
             for (auto it = ItemList.begin(); it!=ItemList.end(); it++){
                 QTableWidgetItem *element = *it;
                 element->setText("");
@@ -212,18 +223,18 @@ void MainWindow::clearContent(Flags Content)
             break;
 
         case (Flags::COLUMN):{
-            int currentIndex = _Table->currentColumn();
-            for(int i=0; i<_Table->rowCount(); i++){
-                QTableWidgetItem *TI = _Table->item(i, currentIndex);
+            int currentIndex = currentTable->currentColumn();
+            for(int i=0; i<currentTable->rowCount(); i++){
+                QTableWidgetItem *TI = currentTable->item(i, currentIndex);
                 if(TI) TI->setText("");
             }
         }
             break;
 
         case (Flags::ROW):{
-            int currentIndex = _Table->currentRow();
-            for(int i=0; i<_Table->columnCount(); i++){
-                QTableWidgetItem *TI = _Table->item(currentIndex, i);
+            int currentIndex = currentTable->currentRow();
+            for(int i=0; i<currentTable->columnCount(); i++){
+                QTableWidgetItem *TI = currentTable->item(currentIndex, i);
                 if(TI) TI->setText("");
             }
         }
@@ -234,14 +245,14 @@ void MainWindow::clearContent(Flags Content)
     }
 }
 
-void MainWindow::deleteContent(Flags Content)
-{
+void MainWindow::deleteContent(Flags Content){
+    QTableWidget* currentTable = static_cast<QTableWidget*>(_Tabs->widget(_Tabs->currentIndex()));
     switch (Content) {
         case (Flags::ROW):
-            _Table->removeColumn(_Table->currentColumn());
+            currentTable->removeColumn(currentTable->currentColumn());
             break;
         case (Flags::COLUMN):
-            _Table->removeRow(_Table->currentRow());
+            currentTable->removeRow(currentTable->currentRow());
             break;
         default:
             break;
@@ -250,7 +261,8 @@ void MainWindow::deleteContent(Flags Content)
 
 void MainWindow::textAlign(Flags dir)
 {
-    QList<QTableWidgetItem*> ItemList = _Table->selectedItems();
+    QTableWidget* currentTable = static_cast<QTableWidget*>(_Tabs->widget(_Tabs->currentIndex()));
+    QList<QTableWidgetItem*> ItemList = currentTable->selectedItems();
     switch (dir) {
         case(Flags::LEFT):{
             for (auto it = ItemList.begin(); it!=ItemList.end(); it++){
@@ -278,21 +290,50 @@ void MainWindow::textAlign(Flags dir)
     }
 }
 
-void MainWindow::setSpinBox()
+void MainWindow::setSpinBox(int value)
 {
-//    _TxtDim->setValue(getTextSize());
-    _TxtDim->setValue(10);
+    _TxtDim->setValue(value);
 }
 
-void MainWindow::setTextSize()
+void MainWindow::setTextSize(int pointSize)
 {
-    QFont TFont= _Table->font();
-    TFont.setPointSize(_TxtDim->value());
-    QList<QTableWidgetItem*> ItemList = _Table->selectedItems();
+    QFont TFont= _Tabs->widget(_Tabs->currentIndex())->font();
+    TFont.setPointSize(pointSize);
+    QList<QTableWidgetItem*> ItemList = static_cast<QTableWidget*>(_Tabs->widget(_Tabs->currentIndex()))->selectedItems();
     for (auto it = ItemList.begin(); it!=ItemList.end(); it++){
         QTableWidgetItem *element = *it;
         element->setFont(TFont);
     }
+}
+
+int MainWindow::getSpinValue(){
+    return _TxtDim->value();
+}
+
+QString MainWindow::getCurrentTabName(){
+    return _Tabs->tabText(_Tabs->currentIndex());
+}
+
+QString MainWindow::getTabName(int index){
+    return _Tabs->tabText(index);
+}
+
+QTableWidget* MainWindow::getFullTable(int index){
+    return static_cast<QTableWidget*>(_Tabs->widget(index));
+}
+
+void MainWindow::closeTab(int index){
+    _Tabs->removeTab(index);
+}
+
+
+void MainWindow::openFile(QString TabName, QTableWidget* Table){
+    _Tabs->addTab(Table, TabName);
+    _Tabs->setCurrentIndex(_Tabs->count()-1);
+}
+
+void MainWindow::newTab(){
+    _Tabs->addTab(new QTableWidget(50,50), QString("New File *"));
 }
 
 int MainWindow::getMaxMenuSize(QMenu *MenuBar){
@@ -307,8 +348,9 @@ int MainWindow::getMaxMenuSize(QMenu *MenuBar){
 
 int MainWindow::getTextSize()
 {
+    QTableWidget* currentTable = static_cast<QTableWidget*>(_Tabs->widget(_Tabs->currentIndex()));
     int size=0;
-    QList<QTableWidgetItem*> ItemList = _Table->selectedItems();
+    QList<QTableWidgetItem*> ItemList = currentTable->selectedItems();
     if(!(ItemList.isEmpty())){
         for (auto it = ItemList.begin(); it!=ItemList.end(); it++){
             QTableWidgetItem *element = *it;

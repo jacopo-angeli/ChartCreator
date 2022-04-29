@@ -8,6 +8,8 @@ enum class Flags{
     CENTER,
     SELECTION,
     COLUMN,
-    ROW
+    ROW,
+    DELETE,
+    ADD
 };
 #endif // FLAGS_H

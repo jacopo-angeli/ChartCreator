@@ -31,12 +31,8 @@
 class MainWindow : public QMainWindow{
    Q_OBJECT
 private:
-    QTabWidget* _Tab;
-    QTableWidget* _Table;
+    QTabWidget* _Tabs;
     QSpinBox* _TxtDim;
-
-
-    int _ValidatorFlag;
 
     int getMaxMenuSize(QMenu*);
     int getTextSize();
@@ -49,8 +45,20 @@ public:
     void clearContent(Flags = Flags::SELECTION);
     void deleteContent(Flags = Flags::ROW);
     void textAlign(Flags = Flags::LEFT);
-    void setSpinBox();
-    void setTextSize();
+    void setSpinBox(int);
+    void setTextSize(int);
+
+    int getSpinValue();
+    QString getCurrentTabName();
+    QString getTabName(int);
+    QTableWidget* getFullTable(int);
+    int getRowCount(int);
+    int getColumnCount(int);
+
+    void closeTab(int);
+
+    void openFile(QString,QTableWidget*);
+    void newTab();
 };
 
 #endif // MAINWINDOW_H

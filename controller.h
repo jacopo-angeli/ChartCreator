@@ -18,8 +18,14 @@ private:
     QVector<ChartWindow*> _ChartWindows;
     ChartSelection* _ChartSelection;
     ChartSettings* _ChartSettings;
+    QMap<QString, QString> _ActiveFiles;
+
+    QTableWidget* fileParser(const QString);
+    bool TableParser(const QString&);
 public:
     Controller();
+    void saveFile(int);
+    void overwriteFile(QString, int);
 public slots:
     void NewChart(); //TBD : void o bool? Parametri?
     void ChangeChart(); //TBD : void o bool? Parametri?
@@ -39,7 +45,12 @@ public slots:
     void RightAlign();
     void SpinBox();
     void setTextSize();
-    void newSheet();
+    void tabClose(int);
+
+    /* File Managment */
+    void openFile();
+    void newTab();
+    void overwrite();
 };
 
 #endif // CONTROLLER_H
