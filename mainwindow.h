@@ -49,11 +49,13 @@ public:
     void setTextSize(int);
 
     int getSpinValue();
-    QString getCurrentTabName();
-    QString getTabName(int);
+    int getCurrentTabIndex();
+    QString getTabName(int =-1);
     QTableWidget* getFullTable(int);
     int getRowCount(int);
     int getColumnCount(int);
+    int getFilePosition(QString);
+    void setCurrentTabTitle(QString);
 
     void closeTab(int);
 

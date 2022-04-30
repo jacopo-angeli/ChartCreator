@@ -23,9 +23,7 @@ private:
     QTableWidget* fileParser(const QString);
     bool TableParser(const QString&);
     void lastSessionRestore();
-    void fileSave(int);
-    //Unire fileSave con fileOverwrite
-    void fileOverwrite(QString, int);
+    void fileSave(int, QString = "");
     void fileOpen(QString = "");
 public:
     Controller();
@@ -41,19 +39,22 @@ public slots:
     void TableReset();
     void RowReset();
     void ColumnReset();
+    void SelectionReset();
     void RowDelete();
     void ColumnDelete();
     void LeftAlign();
     void CenterAlign();
     void RightAlign();
     void SpinBox();
-    void setTextSize();
-    void tabClose(int);
+    void SetTextSize();
+    void TabClose(int);
 
     /* File Managment */
     void openFile();
+    void saveFile();
+    void saveACopy();
+
     void newTab();
-    void overwrite();
 
     void mainWindowCloseEvent();
 };

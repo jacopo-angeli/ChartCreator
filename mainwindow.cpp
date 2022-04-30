@@ -6,28 +6,38 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tabs(new QTabWidg
     QMenu *Tools = new QMenu("&Tools", MenuBar);
     QMenu *Help = new QMenu("&Help", MenuBar);
 
-    QAction *NewFile = new QAction("&New File", File);
-    NewFile->setShortcut(QKeySequence::New);
-//    connect(NewWorkSheet, SIGNAL(triggered()), parent, SLOT(newFile()));
-    File->addAction(NewFile);
+    QAction *NewTab = new QAction("&New File", File);
+    NewTab->setShortcut(QKeySequence::New);
+    connect(NewTab, SIGNAL(triggered()), parent, SLOT(newTab()));
+    File->addAction(NewTab);
+
     QAction *OpenFile = new QAction("&Open File", File);
     OpenFile->setShortcut(QKeySequence::Open);
     connect(OpenFile, SIGNAL(triggered()), parent, SLOT(openFile()));
     File->addAction(OpenFile);
 
     File->addSeparator();
-    File->addAction(new QAction("Over&write File", File));
-    QAction *SaveCsvCopy = new QAction("&Save a copy", File);
-    SaveCsvCopy->setShortcut(QKeySequence::Save);
-//    connect(SaveCsvCopy, SIGNAL(triggered()), this, SLOT(SaveCsvCopy()));
-    File->addAction(SaveCsvCopy);
+
+    QAction *Save = new QAction("&Save", File);
+    Save->setShortcut(QKeySequence::Save);
+    connect(Save, SIGNAL(triggered()), parent, SLOT(saveFile()));
+    File->addAction(Save);
+
+    QAction *SaveACopy = new QAction("&Save a copy", File);
+    SaveACopy->setShortcut(QKeySequence::SaveAs);
+    connect(SaveACopy, SIGNAL(triggered()), parent, SLOT(saveACopy()));
+    File->addAction(SaveACopy);
+
     File->addSeparator();
+
     File->addAction(new QAction("&Print", File));
+    /*TODO : Print command*/
+
     File->addSeparator();
 
     QAction *Quit = new QAction("&Quit", File);
     Quit->setShortcut(QKeySequence::Quit);
-//    connect(Quit, SIGNAL(triggered()), this, SLOT(close()));
+    connect(Quit, SIGNAL(triggered()), parent, SLOT(close()));
     File->addAction(Quit);
 
     Help->addAction(new QAction("Usage &Manual", Help));
@@ -43,6 +53,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tabs(new QTabWidg
     setMenuBar(MenuBar);
 
     QToolBar *ToolBar = new QToolBar("Toolbar");
+
     QToolButton *NewRow = new QToolButton(ToolBar);
     NewRow->setText("New Row");
     NewRow->setIcon(QIcon("../ProgettoPao_21_22/icons/NewRow.png"));
@@ -79,9 +90,9 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tabs(new QTabWidg
     Clear->addAction(ClearSelection);
     Clear->addAction(ClearColumn);
     Clear->addAction(ClearRow);
-//    connect(ClearSelection, SIGNAL(triggered()), this, SLOT(ClearSelection()));
-//    connect(ClearColumn, SIGNAL(triggered()), this, SLOT(ClearColumn()));
-//    connect(ClearRow, SIGNAL(triggered()), this, SLOT(ClearRow()));
+    connect(ClearSelection, SIGNAL(triggered()), parent, SLOT(SelectionReset()));
+    connect(ClearColumn, SIGNAL(triggered()), parent, SLOT(ColumnReset()));
+    connect(ClearRow, SIGNAL(triggered()), parent, SLOT(RowReset()));
 
     QToolButton *Delete = new QToolButton(ToolBar);
     Delete->setText("Delete");
@@ -113,12 +124,12 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tabs(new QTabWidg
     CenterAlign->setIcon(QIcon("../ProgettoPao_21_22/icons/CenterAlign.png"));
     QAction *RightAlign = new QAction("Align right",TextAlignment);
     RightAlign->setIcon(QIcon("../ProgettoPao_21_22/icons/RightAlign.png"));
-    connect(LeftAlign, SIGNAL(triggered()), parent, SLOT(LeftAlign()));
-    connect(CenterAlign, SIGNAL(triggered()), parent, SLOT(CenterAlign()));
-//    connect(RightAlign, SIGNAL(triggered()), this, SLOT(RightAlign()));
     TextAlignment->addAction(LeftAlign);
     TextAlignment->addAction(CenterAlign);
     TextAlignment->addAction(RightAlign);
+    connect(LeftAlign, SIGNAL(triggered()), parent, SLOT(LeftAlign()));
+    connect(CenterAlign, SIGNAL(triggered()), parent, SLOT(CenterAlign()));
+    connect(RightAlign, SIGNAL(triggered()), parent, SLOT(RightAlign()));
 
     QToolButton *NewGraph = new QToolButton(ToolBar);
     NewGraph->setText("Create Graph");
@@ -129,7 +140,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tabs(new QTabWidg
 
     _TxtDim = new QSpinBox(ToolBar);
     _TxtDim->setValue(10);
-    connect(_TxtDim, SIGNAL(valueChanged(int)), parent, SLOT(setTextSize()));
+    connect(_TxtDim, SIGNAL(valueChanged(int)), parent, SLOT(SetTextSize()));
 
     NewColumn->setMinimumWidth(110);
     NewColumn->setStyleSheet("margin:5px;");
@@ -150,13 +161,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tabs(new QTabWidg
 
     _Tabs->addTab(new QTableWidget(50,50), QString("Untitled"));
     _Tabs->setTabsClosable(true);
-    connect(_Tabs, SIGNAL(tabCloseRequested(int)), parent, SLOT(tabClose(int)));
-//    connect(_Tab, SIGNAL(tabBarClicked(int)), this, SLOT(addTab(int)));
-    for(int i=0; i<_Tabs->count(); i++){
-        connect(static_cast<QTableWidget*>(_Tabs->widget(i)), SIGNAL(itemSelectionChanged()), parent, SLOT(SpinBox()));
-        connect(static_cast<QTableWidget*>(_Tabs->widget(i)), SIGNAL(itemSelectionChanged()), parent, SLOT(SpinBox()));
-    }
-//    connect(_Table, SIGNAL(cellChanged(int,int)), this, SLOT(CellValidator(int,int)));
+    connect(_Tabs, SIGNAL(tabCloseRequested(int)), parent, SLOT(TabClose(int)));
+    connect(static_cast<QTableWidget*>(_Tabs->widget(0)), SIGNAL(itemSelectionChanged()), parent, SLOT(SpinBox()));
     setCentralWidget(_Tabs);
 
     ToolBar->addWidget(NewRow);
@@ -313,16 +319,32 @@ int MainWindow::getSpinValue(){
     return _TxtDim->value();
 }
 
-QString MainWindow::getCurrentTabName(){
-    return _Tabs->tabText(_Tabs->currentIndex());
+
+int MainWindow::getCurrentTabIndex(){
+    return _Tabs->currentIndex();
 }
 
 QString MainWindow::getTabName(int index){
-    return _Tabs->tabText(index);
+    if(index<0) return _Tabs->tabText(_Tabs->currentIndex());
+    else return _Tabs->tabText(index);
 }
 
 QTableWidget* MainWindow::getFullTable(int index){
     return static_cast<QTableWidget*>(_Tabs->widget(index));
+}
+
+int MainWindow::getFilePosition(QString fileName){
+    for (int i=0; i<_Tabs->count(); i++ ){
+        if(_Tabs->tabText(i) == fileName){
+            _Tabs->setCurrentIndex(i);
+            return i;
+        }
+    }
+    return -1;
+}
+
+void MainWindow::setCurrentTabTitle(QString fileName){
+    _Tabs->setTabText(_Tabs->currentIndex(), fileName);
 }
 
 void MainWindow::closeTab(int index){
@@ -333,10 +355,13 @@ void MainWindow::closeTab(int index){
 void MainWindow::openFile(QString TabName, QTableWidget* Table){
     _Tabs->addTab(Table, TabName);
     _Tabs->setCurrentIndex(_Tabs->count()-1);
+    connect(static_cast<QTableWidget*>(_Tabs->widget(_Tabs->count()-1)), SIGNAL(itemSelectionChanged()), parent(), SLOT(SpinBox()));
 }
 
 void MainWindow::newTab(){
-    _Tabs->addTab(new QTableWidget(50,50), QString("New File *"));
+    _Tabs->addTab(new QTableWidget(50,50), QString("Untitled"));
+    _Tabs->setCurrentIndex(_Tabs->count()-1);
+    connect(static_cast<QTableWidget*>(_Tabs->widget(_Tabs->count()-1)), SIGNAL(itemSelectionChanged()), parent(), SLOT(SpinBox()));
 }
 
 void MainWindow::closeEvent(QCloseEvent *){

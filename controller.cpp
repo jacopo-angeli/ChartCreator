@@ -10,19 +10,19 @@
 
 
 Controller::Controller(): _MainWindow(new MainWindow(this)), _ChartWindows(QVector<ChartWindow*>()), _ChartSelection(new ChartSelection()), _ChartSettings(new ChartSettings()), _ActiveFiles(QMap<QString, QString>()){
-    //aprire il file di config
-    //controllare se c'erano file aperti
-    //aprire tutti i file della scorsa sessione
-    //se non c'erano file aperti, aprire untitled
     lastSessionRestore();
     _MainWindow->setWindowState(Qt::WindowMaximized);
     _MainWindow->setAnimated(true);
     _MainWindow->show();
 }
 
-void Controller::fileSave(int tableIndex){
-    QString filePath = QFileDialog::getSaveFileName(_MainWindow, QString("Open file"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation), tr("ChartCreator (*.crt)"));
-    if(!(filePath.contains(".crt"))) filePath.append(".crt");;
+void Controller::fileSave(int tableIndex, QString fileName){
+    QString filePath = "";
+    if(fileName==""){
+        filePath = QFileDialog::getSaveFileName(_MainWindow, QString("Open file"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation), tr("ChartCreator (*.crt)"));
+        if(!(filePath.contains(".crt"))) filePath.append(".crt");
+        _MainWindow->setCurrentTabTitle(QString("../"+(filePath.split("/")).last()));
+    }else filePath=_ActiveFiles[fileName];
     QFile file(filePath);
     if (file.open(QIODevice::ReadWrite | QIODevice::Truncate)) {
         QTextStream stream(&file);
@@ -49,42 +49,9 @@ void Controller::fileSave(int tableIndex){
         stream<<QJsonDocument(obj).toJson();
         file.close();
     }else{
-        //error
+        qDebug() << "Cannot Open file : "<<filePath;
     }
 }
-
-void Controller::fileOverwrite(QString fileName, int tableIndex){
-    QFile file(_ActiveFiles[fileName]);
-    if (file.open(QIODevice::ReadWrite | QIODevice::Truncate)) {
-        QTextStream stream(&file);
-        QJsonObject obj;
-        QTableWidget* table = _MainWindow->getFullTable(tableIndex);
-        obj.insert("ColNumber", table->columnCount());
-        obj.insert("RowNumber", table->rowCount());
-
-        table->selectAll();
-        QList<QTableWidgetItem*> ItemList = table->selectedItems();
-        table->clearSelection();
-
-        int i=0;
-        for(auto it = ItemList.begin(); it != ItemList.end(); it++){
-            QJsonObject cell;
-            cell.insert("row", (*it)->row());
-            cell.insert("column", (*it)->column());
-            cell.insert("value", (*it)->text());
-            QFont f = (*it)->font();
-            cell.insert("fontSize",f.pointSize());
-            obj.insert(QString::number(i), cell);
-            i++;
-        }
-        stream<<QJsonDocument(obj).toJson();
-        file.close();
-    }else{
-        //error
-    }
-}
-
-
 void Controller::NewChart(){
 }
 void Controller::ChangeChart(){
@@ -116,6 +83,10 @@ void Controller::ColumnReset(){
     _MainWindow->clearContent(Flags::COLUMN);
 }
 
+void Controller::SelectionReset(){
+    _MainWindow->clearContent(Flags::SELECTION);
+}
+
 void Controller::RowDelete(){
     _MainWindow->deleteContent();
 }
@@ -136,23 +107,16 @@ void Controller::SpinBox(){
     _MainWindow->setSpinBox(10);
 }
 
-void Controller::setTextSize(){
+void Controller::SetTextSize(){
     _MainWindow->setTextSize(_MainWindow->getSpinValue());
 }
 
-void Controller::tabClose(int index){
+void Controller::TabClose(int index){
     QString tabName = _MainWindow->getTabName(index);
     QMessageBox::StandardButton Reply;
     Reply = QMessageBox::question(_MainWindow, "Unsaved File", tabName+" may have usaved changes. Would you like to save them?", QMessageBox::Cancel|QMessageBox::Discard|QMessageBox::Save);
-    if(Reply == QMessageBox::Save){
-        if(tabName == "Untitled"){
-            fileSave(index);
-        }else{
-            fileOverwrite(tabName, index);
-        }
-    }else if(Reply == QMessageBox::Cancel){
-        return;
-    }
+    if(Reply == QMessageBox::Save) fileSave(index, tabName=="Untitled" ? "" : tabName);
+    else if(Reply == QMessageBox::Cancel) return;
     _ActiveFiles.remove(tabName);
     _MainWindow->closeTab(index);
 }
@@ -161,20 +125,17 @@ void Controller::openFile(){
     fileOpen();
 }
 
-void Controller::newTab(){
-
+void Controller::saveACopy(){
+    fileSave(_MainWindow->getCurrentTabIndex());
 }
 
-void Controller::overwrite(){
-    //parsa la current tab di _Tabs e sovrascrive il file aperto
-    //ho bisogno della path completa del current file
-    //ho bisogno che la tab non sia nuova
-    //distigunere il caso della prima apertura del file
-    if(_MainWindow->getCurrentTabName() != QString("Untitled")){
+void Controller::newTab(){
+    _MainWindow->newTab();
+}
 
-    }else{
-
-    }
+void Controller::saveFile(){
+    qDebug() << _MainWindow->getTabName();
+    fileSave(_MainWindow->getCurrentTabIndex(), _MainWindow->getTabName()=="Untitled" ? "" : _MainWindow->getTabName());
 }
 
 void Controller::mainWindowCloseEvent(){
@@ -198,6 +159,7 @@ void Controller::mainWindowCloseEvent(){
     }else{
         qDebug()<<"file cannot be opened";
     }
+    _MainWindow->close();
 };
 
 QTableWidget* Controller::fileParser(const QString filePath){
@@ -239,16 +201,16 @@ void Controller::lastSessionRestore(){
         for(int i=0; i<lastArrayState.size()-1; i++){
             QJsonObject keyValuePair = lastArrayState.value(QString("File ")+QString::number(i)).toObject();
             fileOpen(keyValuePair.value("path").toString());
-//            qDebug() << keyValuePair.value("key").toString() << keyValuePair.value("path").toString() << " inserted; \n";
-//            _ActiveFiles.insert(keyValuePair.value("key").toString(), keyValuePair.value("path").toString());
         }
     }
 }
 
 void Controller::fileOpen(QString filePath){
     if (filePath == "") filePath = QFileDialog::getOpenFileName(_MainWindow, QString("Open file"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation), tr("ChartCreator (*.crt)"));
-    if (!(filePath.isEmpty()) && filePath.endsWith(QString(".crt"))){
-        _MainWindow->openFile(QString("../"+(filePath.split("/")).last()), fileParser(filePath));
-        _ActiveFiles.insert(QString("../"+(filePath.split("/")).last()), filePath);
+    if(_MainWindow->getFilePosition(QString("../"+(filePath.split("/")).last())) < 0){
+        if (!(filePath.isEmpty()) && filePath.endsWith(QString(".crt"))){
+            _MainWindow->openFile(QString("../"+(filePath.split("/")).last()), fileParser(filePath));
+            _ActiveFiles.insert(QString("../"+(filePath.split("/")).last()), filePath);
+        }
     }
 }
