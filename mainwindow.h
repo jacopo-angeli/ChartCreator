@@ -59,6 +59,10 @@ public:
 
     void openFile(QString,QTableWidget*);
     void newTab();
+
+    void closeEvent(QCloseEvent*);
+signals:
+    void closing();
 };
 
 #endif // MAINWINDOW_H

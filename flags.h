@@ -9,6 +9,7 @@ enum class Flags{
     SELECTION,
     COLUMN,
     ROW,
+    ALL,
     DELETE,
     ADD
 };

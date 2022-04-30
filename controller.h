@@ -22,10 +22,13 @@ private:
 
     QTableWidget* fileParser(const QString);
     bool TableParser(const QString&);
+    void lastSessionRestore();
+    void fileSave(int);
+    //Unire fileSave con fileOverwrite
+    void fileOverwrite(QString, int);
+    void fileOpen(QString = "");
 public:
     Controller();
-    void saveFile(int);
-    void overwriteFile(QString, int);
 public slots:
     void NewChart(); //TBD : void o bool? Parametri?
     void ChangeChart(); //TBD : void o bool? Parametri?
@@ -51,6 +54,8 @@ public slots:
     void openFile();
     void newTab();
     void overwrite();
+
+    void mainWindowCloseEvent();
 };
 
 #endif // CONTROLLER_H

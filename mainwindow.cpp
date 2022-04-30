@@ -52,8 +52,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tabs(new QTabWidg
     QAction *LowerInsert = new QAction("Lower Insert", NewRow);
     NewRow->addAction(UpperInsert);
     NewRow->addAction(LowerInsert);
-//    connect(UpperInsert, SIGNAL(triggered()), this, SLOT(UpperInsert()));
-//    connect(LowerInsert, SIGNAL(triggered()), this, SLOT(LowerInsert()));
+    connect(UpperInsert, SIGNAL(triggered()), parent, SLOT(UpperInsert()));
+    connect(LowerInsert, SIGNAL(triggered()), parent, SLOT(LowerInsert()));
 
     QToolButton *NewColumn = new QToolButton(ToolBar);
     NewColumn->setText("New Column");
@@ -64,8 +64,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tabs(new QTabWidg
     QAction *LeftInsert = new QAction("Left Insert", NewColumn);
     NewColumn->addAction(RightInsert);
     NewColumn->addAction(LeftInsert);
-//    connect(RightInsert, SIGNAL(triggered()), this, SLOT(RightInsert()));
-//    connect(LeftInsert, SIGNAL(triggered()), this, SLOT(LeftInsert()));
+    connect(RightInsert, SIGNAL(triggered()), parent, SLOT(RightInsert()));
+    connect(LeftInsert, SIGNAL(triggered()), parent, SLOT(LeftInsert()));
 
     QToolButton *Clear = new QToolButton(ToolBar);
     Clear->setText("Eraser");
@@ -92,15 +92,15 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tabs(new QTabWidg
     QAction *RowDeleting = new QAction("Delete selected row", Delete);
     Delete->addAction(ColumnDeleting);
     Delete->addAction(RowDeleting);
-//    connect(ColumnDeleting, SIGNAL(triggered()), this, SLOT(DeleteColumn()));
-//    connect(RowDeleting, SIGNAL(triggered()), this, SLOT(DeleteRow()));
+    connect(ColumnDeleting, SIGNAL(triggered()), parent, SLOT(ColumnDelete()));
+    connect(RowDeleting, SIGNAL(triggered()), parent, SLOT(RowDelete()));
 
     QToolButton *TableReset = new QToolButton(ToolBar);
     TableReset->setText("Reset Table");
     TableReset->setIcon(QIcon("../ProgettoPao_21_22/icons/Reset.png"));
     TableReset->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     TableReset->setPopupMode(QToolButton::InstantPopup);
-//    connect(TableReset, SIGNAL(clicked()), this, SLOT(TableResetAlert()));
+    connect(TableReset, SIGNAL(clicked()), parent, SLOT(TableReset()));
 
     QToolButton *TextAlignment = new QToolButton(ToolBar);
     TextAlignment->setText("Text Align");
@@ -171,6 +171,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Tabs(new QTabWidg
     ToolBar->addSeparator();
     ToolBar->addWidget(NewGraph);
     addToolBar(Qt::LeftToolBarArea, ToolBar);
+
+    connect(this, SIGNAL(closing()), parent, SLOT(mainWindowCloseEvent()));
 }
 
 void MainWindow::addRow(Flags dir)
@@ -203,14 +205,12 @@ void MainWindow::addColumn(Flags dir)
     }
 }
 
-void MainWindow::clearTable()
-{
+void MainWindow::clearTable(){
     QTableWidget* currentTable = static_cast<QTableWidget*>(_Tabs->widget(_Tabs->currentIndex()));
     currentTable->clearContents();
 }
 
-void MainWindow::clearContent(Flags Content)
-{
+void MainWindow::clearContent(Flags Content){
     QTableWidget* currentTable = static_cast<QTableWidget*>(_Tabs->widget(_Tabs->currentIndex()));
     switch (Content) {
         case (Flags::SELECTION): {
@@ -240,6 +240,10 @@ void MainWindow::clearContent(Flags Content)
         }
             break;
 
+        case (Flags::ALL):
+            currentTable->clear();
+            break;
+
         default:
             break;
     }
@@ -259,8 +263,7 @@ void MainWindow::deleteContent(Flags Content){
     }
 }
 
-void MainWindow::textAlign(Flags dir)
-{
+void MainWindow::textAlign(Flags dir){
     QTableWidget* currentTable = static_cast<QTableWidget*>(_Tabs->widget(_Tabs->currentIndex()));
     QList<QTableWidgetItem*> ItemList = currentTable->selectedItems();
     switch (dir) {
@@ -334,6 +337,10 @@ void MainWindow::openFile(QString TabName, QTableWidget* Table){
 
 void MainWindow::newTab(){
     _Tabs->addTab(new QTableWidget(50,50), QString("New File *"));
+}
+
+void MainWindow::closeEvent(QCloseEvent *){
+   emit closing();
 }
 
 int MainWindow::getMaxMenuSize(QMenu *MenuBar){

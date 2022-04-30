@@ -14,11 +14,13 @@ Controller::Controller(): _MainWindow(new MainWindow(this)), _ChartWindows(QVect
     //controllare se c'erano file aperti
     //aprire tutti i file della scorsa sessione
     //se non c'erano file aperti, aprire untitled
+    lastSessionRestore();
     _MainWindow->setWindowState(Qt::WindowMaximized);
+    _MainWindow->setAnimated(true);
     _MainWindow->show();
 }
 
-void Controller::saveFile(int tableIndex){
+void Controller::fileSave(int tableIndex){
     QString filePath = QFileDialog::getSaveFileName(_MainWindow, QString("Open file"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation), tr("ChartCreator (*.crt)"));
     if(!(filePath.contains(".crt"))) filePath.append(".crt");;
     QFile file(filePath);
@@ -51,7 +53,7 @@ void Controller::saveFile(int tableIndex){
     }
 }
 
-void Controller::overwriteFile(QString fileName, int tableIndex){
+void Controller::fileOverwrite(QString fileName, int tableIndex){
     QFile file(_ActiveFiles[fileName]);
     if (file.open(QIODevice::ReadWrite | QIODevice::Truncate)) {
         QTextStream stream(&file);
@@ -104,7 +106,7 @@ void Controller::TableReset(){
     QMessageBox::StandardButton Reply;
     Reply = QMessageBox::question(_MainWindow, "WARNING", "You are cleaning the entire table. Are you sure?", QMessageBox::Yes|QMessageBox::No);
     if(Reply == QMessageBox::Yes){
-        _MainWindow->clearContent();
+        _MainWindow->clearContent(Flags::ALL);
     }
 };
 void Controller::RowReset(){
@@ -141,25 +143,22 @@ void Controller::setTextSize(){
 void Controller::tabClose(int index){
     QString tabName = _MainWindow->getTabName(index);
     QMessageBox::StandardButton Reply;
-    Reply = QMessageBox::question(_MainWindow, "Unsaved File", tabName+" have unsaved change.", QMessageBox::Save|QMessageBox::Discard);
+    Reply = QMessageBox::question(_MainWindow, "Unsaved File", tabName+" may have usaved changes. Would you like to save them?", QMessageBox::Cancel|QMessageBox::Discard|QMessageBox::Save);
     if(Reply == QMessageBox::Save){
         if(tabName == "Untitled"){
-            saveFile(index);
+            fileSave(index);
         }else{
-            overwriteFile(tabName, index);
-            _ActiveFiles.remove(tabName);
+            fileOverwrite(tabName, index);
         }
+    }else if(Reply == QMessageBox::Cancel){
+        return;
     }
+    _ActiveFiles.remove(tabName);
     _MainWindow->closeTab(index);
 }
 
 void Controller::openFile(){
-    QString filePath = QFileDialog::getOpenFileName(_MainWindow, QString("Open file"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation), tr("ChartCreator (*.crt)"));
-    if (!(filePath.isEmpty()) && filePath.endsWith(QString(".crt"))){
-        _MainWindow->openFile(QString("../"+(filePath.split("/")).last()), fileParser(filePath));
-        _ActiveFiles.insert(QString("../"+(filePath.split("/")).last()), filePath);
-    }
-
+    fileOpen();
 }
 
 void Controller::newTab(){
@@ -175,6 +174,29 @@ void Controller::overwrite(){
 
     }else{
 
+    }
+}
+
+void Controller::mainWindowCloseEvent(){
+    QFile file(QDir::currentPath()+"/cnfg.json");
+    if (file.open(QIODevice::ReadWrite | QIODevice::Truncate)) {
+        QFileInfo fInfo = QFileInfo(file);
+        qDebug() << "file opened. Location : " << fInfo.absoluteFilePath();
+        QTextStream stream(&file);
+        QJsonObject obj;
+        obj.insert("File number", _ActiveFiles.size());
+        int i=0;
+        for (auto it = _ActiveFiles.begin(); it!=_ActiveFiles.end() ; it++) {
+            qDebug() << it.value() <<" stored; /n";
+            QJsonObject file;
+            file.insert("path", it.value());
+            obj.insert(QString("File ")+QString::number(i), file);
+            i++;
+        }
+        stream<<QJsonDocument(obj).toJson();
+        file.close();
+    }else{
+        qDebug()<<"file cannot be opened";
     }
 };
 
@@ -204,4 +226,29 @@ QTableWidget* Controller::fileParser(const QString filePath){
         }
     }
     return parsedTable;
+}
+
+void Controller::lastSessionRestore(){
+    QFile file(QDir::currentPath()+"/cnfg.json");
+    if (file.open(QIODevice::ReadOnly)){
+        QByteArray data = file.readAll();
+        file.close();
+        QJsonDocument doc = QJsonDocument::fromJson(data);
+        QJsonObject lastArrayState = doc.object();
+        qDebug() << lastArrayState.size()-1 << " file to open; \n";
+        for(int i=0; i<lastArrayState.size()-1; i++){
+            QJsonObject keyValuePair = lastArrayState.value(QString("File ")+QString::number(i)).toObject();
+            fileOpen(keyValuePair.value("path").toString());
+//            qDebug() << keyValuePair.value("key").toString() << keyValuePair.value("path").toString() << " inserted; \n";
+//            _ActiveFiles.insert(keyValuePair.value("key").toString(), keyValuePair.value("path").toString());
+        }
+    }
+}
+
+void Controller::fileOpen(QString filePath){
+    if (filePath == "") filePath = QFileDialog::getOpenFileName(_MainWindow, QString("Open file"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation), tr("ChartCreator (*.crt)"));
+    if (!(filePath.isEmpty()) && filePath.endsWith(QString(".crt"))){
+        _MainWindow->openFile(QString("../"+(filePath.split("/")).last()), fileParser(filePath));
+        _ActiveFiles.insert(QString("../"+(filePath.split("/")).last()), filePath);
+    }
 }
