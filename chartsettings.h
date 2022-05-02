@@ -24,7 +24,7 @@ private:
     QTableWidget *_ValueTab;
 
 public:
-    ChartSettings();
+    ChartSettings(QWidget *parent = nullptr);
 
 };
 
