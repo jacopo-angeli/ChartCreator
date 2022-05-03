@@ -18,8 +18,7 @@ class ChartSelection : public QWidget
 {
     Q_OBJECT
 public:
-    ChartSelection(QWidget* =nullptr);
-
+    ChartSelection(QWidget* = nullptr);
 };
 
 #endif // CHARTSELECTION_H

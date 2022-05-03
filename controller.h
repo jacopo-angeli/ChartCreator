@@ -53,10 +53,12 @@ public slots:
     void openFile();
     void saveFile();
     void saveACopy();
-
     void newTab();
 
+    /* App Managment */
     void mainWindowCloseEvent();
+    void openChartSelection();
+    void openChartSettings();
 };
 
 #endif // CONTROLLER_H

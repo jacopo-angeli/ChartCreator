@@ -9,7 +9,7 @@
 #include<string>
 
 
-Controller::Controller(): _MainWindow(new MainWindow(this)), _ChartWindows(QVector<ChartWindow*>()), _ChartSelection(new ChartSelection()), _ChartSettings(new ChartSettings()), _ActiveFiles(QMap<QString, QString>()){
+Controller::Controller(): _MainWindow(new MainWindow(this)), _ChartWindows(QVector<ChartWindow*>()), _ChartSelection(new ChartSelection(_MainWindow)), _ChartSettings(new ChartSettings(_MainWindow)), _ActiveFiles(QMap<QString, QString>()){
     lastSessionRestore();
     _MainWindow->setWindowState(Qt::WindowMaximized);
     _MainWindow->setAnimated(true);
@@ -23,6 +23,7 @@ void Controller::fileSave(int tableIndex, QString fileName){
         if(!(filePath.contains(".crt"))) filePath.append(".crt");
         _MainWindow->setCurrentTabTitle(QString("../"+(filePath.split("/")).last()));
     }else filePath=_ActiveFiles[fileName];
+    //TODO: File name change while modifing it problem
     QFile file(filePath);
     if (file.open(QIODevice::ReadWrite | QIODevice::Truncate)) {
         QTextStream stream(&file);
@@ -160,6 +161,16 @@ void Controller::mainWindowCloseEvent(){
         qDebug()<<"file cannot be opened";
     }
     _MainWindow->close();
+}
+
+void Controller::openChartSelection(){
+    qDebug() << "open chart selection()";
+    _ChartSelection->show();
+}
+
+void Controller::openChartSettings(){
+    qDebug() << "open chart selection()";
+    _ChartSettings->show();
 };
 
 QTableWidget* Controller::fileParser(const QString filePath){

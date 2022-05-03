@@ -14,14 +14,61 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QFrame>
-ChartSettings::ChartSettings(QWidget * parent) : QWidget(parent)
-{
+ChartSettings::ChartSettings(QWidget * parent) : QWidget(parent), _Settings(new QGroupBox(this)), _ChartView(new QChartView(this)){
+
+
+    QPieSeries *series = new QPieSeries();
+        series->append("Jane", 1);
+        series->append("Joe", 2);
+        series->append("Andy", 3);
+        series->append("Barbara", 4);
+        series->append("Axel", 5);
+    //![1]
+
+    //![2]
+        QPieSlice *slice = series->slices().at(1);
+        slice->setExploded();
+        slice->setLabelVisible();
+        slice->setPen(QPen(Qt::darkGreen, 2));
+        slice->setBrush(Qt::green);
+    //![2]
+
+    //![3]
+        QChart *chart = new QChart();
+        chart->addSeries(series);
+        chart->setTitle("Simple piechart example");
+        chart->legend()->hide();
+    //![3]
+
+    //![4]
+        _ChartView->setChart(chart);
+        _ChartView->setRenderHint(QPainter::Antialiasing);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     _ValueTab= new QTableWidget(50,50);
     _ValueTab->setFixedHeight(250);
 
+    QHBoxLayout* mainL = new QHBoxLayout;
+
     QVBoxLayout* vert= new QVBoxLayout();
     vert->addWidget(_ValueTab);
-//layout orizzontale
+    QVBoxLayout* vert2= new QVBoxLayout();
+    //layout orizzontale
     QHBoxLayout * hor1=new QHBoxLayout();
     QHBoxLayout * hor2=new QHBoxLayout();
     QHBoxLayout * hor3=new QHBoxLayout();
@@ -33,7 +80,7 @@ ChartSettings::ChartSettings(QWidget * parent) : QWidget(parent)
     QHBoxLayout * hor9=new QHBoxLayout();
     QHBoxLayout * hor10=new QHBoxLayout();
     QHBoxLayout * foot=new QHBoxLayout();
-//labels
+    //labels
     QLabel* _lab1=new  QLabel("Title");
     _lab1->setMaximumHeight(50);
     _lab1->setMaximumWidth(250);
@@ -74,7 +121,7 @@ ChartSettings::ChartSettings(QWidget * parent) : QWidget(parent)
     _lab10->setMaximumHeight(50);
     _lab10->setMaximumWidth(250);
 
-//buttons
+    //buttons
 
     QPushButton* _btn1=new QPushButton("PICK");
     _btn1->setMaximumHeight(50);
@@ -127,8 +174,9 @@ ChartSettings::ChartSettings(QWidget * parent) : QWidget(parent)
     QPushButton* _create=new QPushButton("CREATE");
     _btn10->setMaximumHeight(25);
     _btn10->setMaximumWidth(200);
+    connect(_create, SIGNAL(clicked()), this, SLOT(createPushd()));
 
-//textboxes
+    //textboxes
 
     QTextEdit* _txt1=new QTextEdit("text");
     _txt1->setMaximumHeight(50);
@@ -166,67 +214,83 @@ ChartSettings::ChartSettings(QWidget * parent) : QWidget(parent)
     _txt9->setMaximumHeight(50);
     _txt9->setMaximumWidth(250);
 
-//setting layout
+    //setting layout
     //line1
     hor1->addWidget(_lab1);
     hor1->addWidget(_btn1);
     hor1->addWidget(_txt1);
-        vert->addLayout(hor1);
+    vert2->addLayout(hor1);
     //line2
     hor2->addWidget(_lab2);
     hor2->addWidget(_btn2);
     hor2->addWidget(_txt2);
-        vert->addLayout(hor2);
+    vert2->addLayout(hor2);
 
     //line3
     hor3->addWidget(_lab3);
     hor3->addWidget(_btn3);
     hor3->addWidget(_txt3);
-        vert->addLayout(hor3);
+    vert2->addLayout(hor3);
     //line4
     hor4->addWidget(_lab4);
     hor4->addWidget(_btn4);
     hor4->addWidget(_txt4);
-        vert->addLayout(hor4);
+    vert2->addLayout(hor4);
     //line5
     hor5->addWidget(_lab5);
     hor5->addWidget(_btn5);
     hor5->addWidget(_txt5);
-        vert->addLayout(hor5);
+    vert2->addLayout(hor5);
     //line6
     hor6->addWidget(_lab6);
     hor6->addWidget(_btn6);
     hor6->addWidget(_txt6);
-        vert->addLayout(hor6);
+    vert2->addLayout(hor6);
     //line7
     hor7->addWidget(_lab7);
     hor7->addWidget(_btn7);
     hor7->addWidget(_txt7);
-        vert->addLayout(hor7);
+    vert2->addLayout(hor7);
     //line8
     hor8->addWidget(_lab8);
     hor8->addWidget(_btn8);
     hor8->addWidget(_txt8);
-        vert->addLayout(hor8);
+    vert2->addLayout(hor8);
     //line9
     hor9->addWidget(_lab9);
     hor9->addWidget(_btn9);
     hor9->addWidget(_txt9);
-        vert->addLayout(hor9);
+    vert2->addLayout(hor9);
     //line10
     hor10->addWidget(_lab10);
     hor10->addWidget(_btn10);
-        vert->addLayout(hor10);
+    vert2->addLayout(hor10);
+
+    _Settings->setLayout(vert2);
+    vert->addWidget(_Settings);
 
     //footer
     foot->addWidget(_help);
     foot->addWidget(_cancel);
     foot->addWidget(_create);
     foot->setAlignment(Qt::AlignBottom | Qt::AlignRight);
-        vert->addLayout(foot);
+    vert->addLayout(foot);
 
-    setLayout(vert);
-   setWindowFlag(Qt::MSWindowsFixedSizeDialogHint);
-   setFixedSize(600,1000);
+    mainL->addLayout(vert);
+    _ChartView->setMinimumWidth(600);
+    mainL->addWidget(_ChartView);
 
+    setLayout(mainL);
+    setWindowFlags(Qt::Window);
+
+}
+
+void ChartSettings::createPushd(){
+    if(_Settings->isVisible()){
+        _Settings->hide();
+        _ValueTab->setMaximumHeight(800);
+    }else{
+        _Settings->show();
+        _ValueTab->setMaximumHeight(250);
+    }
 }

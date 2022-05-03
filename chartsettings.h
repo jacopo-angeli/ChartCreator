@@ -22,9 +22,12 @@ class ChartSettings : public QWidget
         Q_OBJECT
 private:
     QTableWidget *_ValueTab;
-
+    QGroupBox *_Settings;
+    QChartView *_ChartView;
 public:
-    ChartSettings(QWidget *parent = nullptr);
+    ChartSettings(QWidget* = nullptr);
+public slots:
+    void createPushd();
 
 };
 
