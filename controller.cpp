@@ -9,7 +9,7 @@
 #include<string>
 
 
-Controller::Controller(): _MainWindow(new MainWindow(this)), _ChartWindows(QVector<ChartWindow*>()), _ChartSelection(new ChartSelection(_MainWindow)), _ChartSettings(new ChartSettings(_MainWindow)), _ActiveFiles(QMap<QString, QString>()){
+Controller::Controller(): _MainWindow(new MainWindow(this)),  _ActiveFiles(QMap<QString, QString>()){
     lastSessionRestore();
     _MainWindow->setWindowState(Qt::WindowMaximized);
     _MainWindow->setAnimated(true);
@@ -28,6 +28,7 @@ void Controller::fileSave(int tableIndex, QString fileName){
     if (file.open(QIODevice::ReadWrite | QIODevice::Truncate)) {
         QTextStream stream(&file);
         QJsonObject obj;
+        //Salvataggio della tabella TODO:Usare Dynamic_Cast al posto di static e fare un controllo sul ritorno? Piccati fuoco
         QTableWidget* table = _MainWindow->getFullTable(tableIndex);
         obj.insert("ColNumber", table->columnCount());
         obj.insert("RowNumber", table->rowCount());
@@ -47,6 +48,7 @@ void Controller::fileSave(int tableIndex, QString fileName){
             obj.insert(QString::number(i), cell);
             i++;
         }
+        //TODO : Salvare anche i grafici aperti?
         stream<<QJsonDocument(obj).toJson();
         file.close();
     }else{
@@ -163,14 +165,61 @@ void Controller::mainWindowCloseEvent(){
     _MainWindow->close();
 }
 
-void Controller::openChartSelection(){
-    qDebug() << "open chart selection()";
-    _ChartSelection->show();
+void Controller::BarChartCreation(){
+
 }
 
-void Controller::openChartSettings(){
-    qDebug() << "open chart selection()";
-    _ChartSettings->show();
+void Controller::CandleStickChartCreation()
+{
+
+}
+
+void Controller::LineChartCreation()
+{
+
+}
+
+void Controller::PieChartCreation(){
+    _MainWindow->chartTypeSelected(Flags::PIECHART);
+}
+
+void Controller::HistogramChartCreation()
+{
+
+}
+
+void Controller::pickTitle(){
+    //Collegare la tabella al TitleChange slot
+    //Settare la nuova posizione del titolo se dicersa dalla precedente
+    QTableWidget* CurrentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+
+    if(CurrentTable->selectedItems().size() > 0){
+
+        QString newPosition = QString("(" + QString::number(CurrentTable->selectedItems()[0]->row()) + ", " + QString::number(CurrentTable->selectedItems()[0]->column()) + ")");
+        if(newPosition != _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->getTitlePosition())
+            _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->setTitle(newPosition);
+        else
+            //UNSET TITLE CELL
+            _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->setTitle();
+    }else
+        //UNSET TITLE CELL
+        _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->setTitle();
+}
+
+void Controller::ContentChanged(int row, int column){
+    //scorrere tutte le chart tab della current file tab e modificare tutti i grafici
+    //che hanno come tag titolo la posizione della cella appena modificata
+    QTableWidget* CurrentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+    QString newTitle = QString("(" + QString::number(row) + ", " + QString::number(column) + ")");
+
+    for (int i=0; i<_MainWindow->getChartNumber(_MainWindow->getCurrentChartTabIndex()); i++){
+        ChartSettings* ChartTab = _MainWindow->getChartTab(i);
+        if(newTitle != ChartTab->getTitlePosition()){
+            qDebug() <<"Test";
+            ChartTab->setTitle(newTitle);
+            ChartTab->getChart()->setTitle(CurrentTable->item(row, column)->text());
+        }
+    }
 };
 
 QTableWidget* Controller::fileParser(const QString filePath){

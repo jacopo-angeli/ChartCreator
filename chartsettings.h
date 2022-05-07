@@ -21,11 +21,18 @@ class ChartSettings : public QWidget
 {
         Q_OBJECT
 private:
-    QTableWidget *_ValueTab;
     QGroupBox *_Settings;
     QChartView *_ChartView;
+    QChart *_Chart;
+    QLabel *_Title;
+    QLabel *_Description;
+    QLabel *_DataRange;
 public:
     ChartSettings(QWidget* = nullptr);
+    QChart* getChart();
+    void setTitle(QString = "");
+
+    QString getTitlePosition();
 public slots:
     void createPushd();
 

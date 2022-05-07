@@ -11,6 +11,8 @@ enum class Flags{
     ROW,
     ALL,
     DELETE,
-    ADD
+    ADD,
+    PIECHART
+
 };
 #endif // FLAGS_H

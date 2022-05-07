@@ -15,9 +15,6 @@ class Controller : public QWidget{
     Q_OBJECT
 private:
     MainWindow* _MainWindow;
-    QVector<ChartWindow*> _ChartWindows;
-    ChartSelection* _ChartSelection;
-    ChartSettings* _ChartSettings;
     QMap<QString, QString> _ActiveFiles;
 
     QTableWidget* fileParser(const QString);
@@ -57,8 +54,17 @@ public slots:
 
     /* App Managment */
     void mainWindowCloseEvent();
-    void openChartSelection();
-    void openChartSettings();
+
+    /*Chart section slots*/
+    void BarChartCreation();
+    void CandleStickChartCreation();
+    void LineChartCreation();
+    void PieChartCreation();
+    void HistogramChartCreation();
+
+    /*Real-Time Chart Changes*/
+    void pickTitle();
+    void ContentChanged(int, int);
 };
 
 #endif // CONTROLLER_H

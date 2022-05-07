@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include "flags.h"
+#include "chartselection.h"
+#include "chartsettings.h"
 
 #include <QJsonDocument>
 #include <QWidget>
@@ -31,7 +33,7 @@
 class MainWindow : public QMainWindow{
    Q_OBJECT
 private:
-    QTabWidget* _Tabs;
+    QTabWidget* _Files;
     QSpinBox* _TxtDim;
 
     int getMaxMenuSize(QMenu*);
@@ -48,18 +50,22 @@ public:
     void setSpinBox(int);
     void setTextSize(int);
 
-    int getSpinValue();
-    int getCurrentTabIndex();
-    QString getTabName(int =-1);
-    QTableWidget* getFullTable(int);
+    int getFilePosition(QString);
     int getRowCount(int);
     int getColumnCount(int);
-    int getFilePosition(QString);
+    int getSpinValue();
+    int getCurrentTabIndex();
+    int getCurrentChartTabIndex();
+    int getChartNumber(int);
+    QString getTabName(int =-1);
+    QTableWidget* getFullTable(int);
+    ChartSettings* getChartTab(int);
     void setCurrentTabTitle(QString);
 
     void closeTab(int);
 
     void openFile(QString,QTableWidget*);
+    void chartTypeSelected(Flags);
     void newTab();
 
     void closeEvent(QCloseEvent*);
