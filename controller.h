@@ -23,6 +23,8 @@ private:
     void fileSave(int, QString = "");
     void fileOpen(QString = "");
     QString positionTag(QModelIndexList*);
+    bool isNumeric(QString);
+    bool isDate(QString);
 public:
     Controller();
 public slots:

@@ -86,9 +86,6 @@ ChartSettings::ChartSettings(QWidget * parent) : QWidget(parent), _Settings(new 
     QPushButton* _btn9=new QPushButton("PICK");
     QPushButton* _btn10=new QPushButton("PICK");
     QPushButton* _help=new QPushButton("HELP");
-    QPushButton* _cancel=new QPushButton("CANCEL");
-    QPushButton* _create=new QPushButton("CREATE");
-    connect(_create, SIGNAL(clicked()), this, SLOT(createPushd()));
 
     //Lables
     QLabel* _txt4=new QLabel("Unset");
@@ -156,8 +153,6 @@ ChartSettings::ChartSettings(QWidget * parent) : QWidget(parent), _Settings(new 
 
     //footer
     foot->addWidget(_help);
-    foot->addWidget(_cancel);
-    foot->addWidget(_create);
     foot->setAlignment(Qt::AlignBottom | Qt::AlignRight);
     vert->addLayout(foot);
 

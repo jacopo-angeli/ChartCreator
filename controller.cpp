@@ -234,7 +234,15 @@ void Controller::pickSeries(){
            QString sliceName = CurrentTable->item(i, firstColumn)->text();
            int sliceValue = 0;
            for(int j=firstColumn+1; j<=lastColumn; j++){
-                sliceValue+=CurrentTable->item(i, j)->text().toInt();
+               if(CurrentTable->item(i, j)){
+                   if(isNumeric(CurrentTable->item(i, j)->text())){
+                       qDebug() << "is a number";
+                       sliceValue+=CurrentTable->item(i, j)->text().toInt();
+                   }else{
+                       qDebug() << "is not a number";
+                       //Segnalare all'utente che non c'è consistenza nel formato dei dati selezionati
+                   }
+               }
            }
            series->append(sliceName, sliceValue);
        }
@@ -321,4 +329,9 @@ QString Controller::positionTag(QModelIndexList* IndexList){
     //{(r1,c1) : (r2,c2)}
     //dove ri e ci sono rispettivamente la riga e la colonna del primo e dell'ultimo elemento
     return QString("{("+QString::number((*IndexList)[0].row())+","+QString::number((*IndexList)[0].column())+") : ("+QString::number((*IndexList)[(*IndexList).size()-1].row())+","+QString::number((*IndexList)[(*IndexList).size()-1].column())+")}");
+}
+
+bool Controller::isNumeric(QString string){
+    QRegExp regex("^[0-9]\\d*(\\.\\d+)?$");
+    return regex.exactMatch(string);
 };
