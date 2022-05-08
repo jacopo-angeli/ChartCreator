@@ -178,6 +178,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Files(new QTabWid
 
     connect(_Files, SIGNAL(tabCloseRequested(int)), parent, SLOT(TabClose(int)));
     connect(static_cast<QTableWidget*>(_Files->widget(0)->layout()->itemAt(0)->widget()), SIGNAL(itemSelectionChanged()), parent, SLOT(SpinBox()));
+    connect(static_cast<QTableWidget*>(_Files->widget(0)->layout()->itemAt(0)->widget()), SIGNAL(cellChanged(int,int)), parent, SLOT(ChartRefresh(int,int)));
+
 
     setCentralWidget(_Files);
     this->layout()->setSpacing(0);

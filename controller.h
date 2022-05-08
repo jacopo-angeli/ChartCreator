@@ -22,6 +22,7 @@ private:
     void lastSessionRestore();
     void fileSave(int, QString = "");
     void fileOpen(QString = "");
+    QString positionTag(QModelIndexList*);
 public:
     Controller();
 public slots:
@@ -64,7 +65,8 @@ public slots:
 
     /*Real-Time Chart Changes*/
     void pickTitle();
-    void ContentChanged(int, int);
+    void pickSeries();
+    void ChartRefresh(int, int);
 };
 
 #endif // CONTROLLER_H

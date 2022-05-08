@@ -17,12 +17,12 @@
 ChartSettings::ChartSettings(QWidget * parent) : QWidget(parent), _Settings(new QGroupBox(this)), _ChartView(new QChartView(this)), _Chart(new QChart()), _Title(new QLabel("Unset")), _Description(new QLabel("Unset")), _DataRange(new QLabel("Unset")){
 
 
-    QPieSeries *series = new QPieSeries();
-        series->append("Jane", 1);
-        series->append("Joe", 2);
-        series->append("Andy", 3);
-        series->append("Barbara", 4);
-        series->append("Axel", 5);
+//    QPieSeries *series = new QPieSeries();
+//        series->append("Jane", 1);
+//        series->append("Joe", 2);
+//        series->append("Andy", 3);
+//        series->append("Barbara", 4);
+//        series->append("Axel", 5);
     //![1]
 
 //    //![2]
@@ -41,6 +41,7 @@ ChartSettings::ChartSettings(QWidget * parent) : QWidget(parent), _Settings(new 
 
 //    //![4]
         _ChartView->setChart(_Chart);
+        _Chart->setAnimationOptions(QChart::AllAnimations);
         _ChartView->setRenderHint(QPainter::Antialiasing);
 
 
@@ -75,8 +76,8 @@ ChartSettings::ChartSettings(QWidget * parent) : QWidget(parent), _Settings(new 
     //buttons
 
     QPushButton* _btn1=new QPushButton("PICK", this);
-    QPushButton* _btn2=new QPushButton("PICK");
-    QPushButton* _btn3=new QPushButton("PICK");
+    QPushButton* _btn2=new QPushButton("PICK", this);
+    QPushButton* _btn3=new QPushButton("PICK", this);
     QPushButton* _btn4=new QPushButton("PICK");
     QPushButton* _btn5=new QPushButton("PICK");
     QPushButton* _btn6=new QPushButton("PICK");
@@ -112,6 +113,7 @@ ChartSettings::ChartSettings(QWidget * parent) : QWidget(parent), _Settings(new 
     //line3
     hor3->addWidget(_lab3);
     hor3->addWidget(_btn3);
+    connect(_btn3, SIGNAL(clicked()), parent->parent(), SLOT(pickSeries()));
     hor3->addWidget(_DataRange);
     vert2->addLayout(hor3);
     //line4
@@ -169,23 +171,23 @@ ChartSettings::ChartSettings(QWidget * parent) : QWidget(parent), _Settings(new 
 }
 
 QChart *ChartSettings::getChart(){
-    qDebug() << _Chart->title();
     return _Chart;
 }
 
-void ChartSettings::setTitle(QString text){
+void ChartSettings::setTitleTag(QString text){
     if(text=="") _Title->setText("Unset");
     else _Title->setText(text);
 }
 
-QString ChartSettings::getTitlePosition(){
+QString ChartSettings::getTitleTag(){
     return _Title->text();
 }
 
-void ChartSettings::createPushd(){
-    if(_Settings->isVisible()){
-        _Settings->hide();
-    }else{
-        _Settings->show();
-    }
+void ChartSettings::setDataRangeTag(QString newTag){
+    if(newTag!="") _DataRange->setText(newTag);
+    else _DataRange->setText("Unset");
+}
+
+QString ChartSettings::getDataRangeTag(){
+    return _DataRange->text();
 }

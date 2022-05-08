@@ -30,11 +30,12 @@ private:
 public:
     ChartSettings(QWidget* = nullptr);
     QChart* getChart();
-    void setTitle(QString = "");
 
-    QString getTitlePosition();
-public slots:
-    void createPushd();
+    void setTitleTag(QString = "");
+    QString getTitleTag();
+
+    void setDataRangeTag(QString = "");
+    QString getDataRangeTag();
 
 };
 
