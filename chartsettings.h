@@ -20,25 +20,19 @@
 class ChartSettings : public QWidget
 {
         Q_OBJECT
-private:
+protected:
     QGroupBox *_Settings;
+private:
     QChartView *_ChartView;
     Chart *_Chart;
     QLabel *_Title;
-    QLabel *_Description;
-    QLabel *_DataRange;
+    QComboBox * _Color;
 public:
     ChartSettings(QWidget* = nullptr);
     QChart* getChart();
 
     void setTitleTag(QString = "");
     QString getTitleTag() const;
-
-    void setDataRangeTag(QString = "");
-    QString getDataRangeTag() const;
-    QPair<QPair<int, int>, QPair<int, int>> getDataRange() const;
-
-    void recollect();
 };
 
 #endif // CHARTSETTINGS_H

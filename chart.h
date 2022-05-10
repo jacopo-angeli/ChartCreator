@@ -7,7 +7,7 @@ class Chart : public QChart
 {
     Q_OBJECT
 public:
-    Chart();
+    Chart(QGraphicsItem* =nullptr);
 };
 
 #endif // CHART_H

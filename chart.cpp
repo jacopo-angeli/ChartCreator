@@ -1,6 +1,6 @@
 #include "chart.h"
 
-Chart::Chart()
+Chart::Chart(QGraphicsItem* parent) : QChart(parent)
 {
 
 }
