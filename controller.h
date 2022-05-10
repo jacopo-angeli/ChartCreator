@@ -23,13 +23,12 @@ private:
     void fileSave(int, QString = "");
     void fileOpen(QString = "");
     QString positionTag(QModelIndexList*);
-    bool isNumeric(QString);
+    bool isNumeric(QString) const;
     bool isDate(QString);
+    void recollectData(int) const;
 public:
     Controller();
 public slots:
-    void NewChart(); //TBD : void o bool? Parametri?
-    void ChangeChart(); //TBD : void o bool? Parametri?
 
     /* MainWindow slots */
     void UpperInsert();

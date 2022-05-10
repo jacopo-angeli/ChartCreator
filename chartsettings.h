@@ -32,11 +32,13 @@ public:
     QChart* getChart();
 
     void setTitleTag(QString = "");
-    QString getTitleTag();
+    QString getTitleTag() const;
 
     void setDataRangeTag(QString = "");
-    QString getDataRangeTag();
+    QString getDataRangeTag() const;
+    QPair<QPair<int, int>, QPair<int, int>> getDataRange() const;
 
+    void recollect();
 };
 
 #endif // CHARTSETTINGS_H

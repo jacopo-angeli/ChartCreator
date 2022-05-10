@@ -324,9 +324,9 @@ void MainWindow::setSpinBox(int value){
 }
 
 void MainWindow::setTextSize(int pointSize){
-    QFont TFont= _Files->widget(_Files->currentIndex())->font();
+    QFont TFont= _Files->widget(_Files->currentIndex())->layout()->itemAt(0)->widget()->font();
     TFont.setPointSize(pointSize);
-    QList<QTableWidgetItem*> ItemList = static_cast<QTableWidget*>(_Files->widget(_Files->currentIndex()))->selectedItems();
+    QList<QTableWidgetItem*> ItemList = static_cast<QTableWidget*>(_Files->widget(_Files->currentIndex())->layout()->itemAt(0)->widget())->selectedItems();
     for (auto it = ItemList.begin(); it!=ItemList.end(); it++){
         QTableWidgetItem *element = *it;
         element->setFont(TFont);

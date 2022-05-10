@@ -16,6 +16,37 @@ Controller::Controller(): _MainWindow(new MainWindow(this)),  _ActiveFiles(QMap<
     _MainWindow->show();
 }
 
+void Controller::recollectData(int index) const{
+    QTableWidget* CurrentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+    ChartSettings* chartPage = _MainWindow->getChartTab(index);
+    QPair<QPair<int, int>, QPair<int, int>> dataRange = chartPage->getDataRange();
+    QPieSeries* series = new QPieSeries();
+    //scorrimento per righe al momento
+    //recollecto per il pie chart
+    //idea fare recollect data diversa per ogni chart settings window e passare come parametri la modalità di scorrimento e l'array di elementidella tabella presi usanto get data range
+    for(int i=dataRange.first.first-1; i<dataRange.second.first; i++){
+        //NOTE:la funzione item di QTableWidget usa gli indici a partire da 0 !!!
+        QString sliceName = CurrentTable->item(i, dataRange.first.second-1)->text();
+        int sliceValue = 0;
+        for(int j=dataRange.first.second-1; j<dataRange.second.second; j++){
+            if(CurrentTable->item(i, j)){
+                if(isNumeric(CurrentTable->item(i, j)->text())){
+                    sliceValue+=CurrentTable->item(i, j)->text().toInt();
+                }else{
+                    //Segnalare all'utente che non c'è consistenza nel formato dei dati selezionati
+                }
+            }
+        }
+        qDebug() << i <<"crash test";
+        series->append(sliceName, sliceValue);
+    }
+
+    chartPage->getChart()->removeAllSeries();
+    //Removes and deletes all series objects that have been added to the chart. https://doc.qt.io/qt-5/qchart.html#removeAllSeries
+    chartPage->getChart()->addSeries(series);
+}
+
+
 void Controller::fileSave(int tableIndex, QString fileName){
     QString filePath = "";
     if(fileName==""){
@@ -54,12 +85,6 @@ void Controller::fileSave(int tableIndex, QString fileName){
     }else{
         qDebug() << "Cannot Open file : "<<filePath;
     }
-}
-void Controller::NewChart(){
-
-}
-void Controller::ChangeChart(){
-
 }
 void Controller::UpperInsert(){
     _MainWindow->addRow();
@@ -209,7 +234,8 @@ void Controller::pickTitle(){
 }
 
 void Controller::pickSeries(){
-    //controllo le posizione e se sono diverse le aggiorno e aggiorno anche il grafico
+    // BUG:Selezione vuota crasha!
+    //Controllo le posizione e se sono diverse le aggiorno e aggiorno anche il grafico
     //Guardo la modalità di scorrimento degli elementi
         //Se è orizzontale
             //Scorro gli elementi per colonna, il primo elemento di ogni riga è il nome della fetta
@@ -236,10 +262,8 @@ void Controller::pickSeries(){
            for(int j=firstColumn+1; j<=lastColumn; j++){
                if(CurrentTable->item(i, j)){
                    if(isNumeric(CurrentTable->item(i, j)->text())){
-                       qDebug() << "is a number";
                        sliceValue+=CurrentTable->item(i, j)->text().toInt();
                    }else{
-                       qDebug() << "is not a number";
                        //Segnalare all'utente che non c'è consistenza nel formato dei dati selezionati
                    }
                }
@@ -260,15 +284,21 @@ void Controller::ChartRefresh(int row, int column){
     //Scorro tutte la tab di _Chart
     //Se l'elemento selezionato è nella posizione della cella del titolo
     //Modifico il titolo del grafico con quello dell'elemento selezionato
+    row++; column++;
     QTableWidget* CurrentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
-    QString newTitle = QString("(" + QString::number(row) + ", " + QString::number(column) + ")");
+    QString cellPos = QString("(" + (QString::number(row)) + ", " + (QString::number(column)) + ")");
 
     for (int i=0; i<_MainWindow->getChartNumber(_MainWindow->getCurrentTabIndex())-1; i++){
         ChartSettings* ChartTab = _MainWindow->getChartTab(i);
-        if(newTitle == ChartTab->getTitleTag()){
-            ChartTab->setTitleTag(newTitle);
-            ChartTab->getChart()->setTitle(CurrentTable->item(row, column)->text());
-        }
+        /*La cella modificata è puntata dalla tag del titolo*/
+        if(cellPos == ChartTab->getTitleTag()) ChartTab->getChart()->setTitle(CurrentTable->item(row, column)->text());
+        /*La cella modificata è all'interno del range puntato dal data range*/
+        QPair<QPair<int, int>, QPair<int, int>> currentRange = ChartTab->getDataRange();
+        if((row>=currentRange.first.first && row<=currentRange.second.first) && (column>=currentRange.first.second && column<=currentRange.second.second)){
+            //dico alla chart tab di reparsare i dati contenuti nel range della tag data range
+            recollectData(i);
+            qDebug() << "elemento dentro il data range";
+        };
     }
 };
 
@@ -328,10 +358,10 @@ QString Controller::positionTag(QModelIndexList* IndexList){
     //Ritorna una Qstringa del seguente tipo
     //{(r1,c1) : (r2,c2)}
     //dove ri e ci sono rispettivamente la riga e la colonna del primo e dell'ultimo elemento
-    return QString("{("+QString::number((*IndexList)[0].row())+","+QString::number((*IndexList)[0].column())+") : ("+QString::number((*IndexList)[(*IndexList).size()-1].row())+","+QString::number((*IndexList)[(*IndexList).size()-1].column())+")}");
+    return QString("{( "+QString::number((*IndexList)[0].row()+1)+" , "+QString::number((*IndexList)[0].column()+1)+" )->( "+QString::number((*IndexList)[(*IndexList).size()-1].row()+1)+" , "+QString::number((*IndexList)[(*IndexList).size()-1].column()+1)+" )}");
 }
 
-bool Controller::isNumeric(QString string){
+bool Controller::isNumeric(QString string) const{
     QRegExp regex("^[0-9]\\d*(\\.\\d+)?$");
     return regex.exactMatch(string);
 };

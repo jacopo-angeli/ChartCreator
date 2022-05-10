@@ -16,35 +16,19 @@
 #include <QFrame>
 ChartSettings::ChartSettings(QWidget * parent) : QWidget(parent), _Settings(new QGroupBox(this)), _ChartView(new QChartView(this)), _Chart(new QChart()), _Title(new QLabel("Unset")), _Description(new QLabel("Unset")), _DataRange(new QLabel("Unset")){
 
-
-//    QPieSeries *series = new QPieSeries();
-//        series->append("Jane", 1);
-//        series->append("Joe", 2);
-//        series->append("Andy", 3);
-//        series->append("Barbara", 4);
-//        series->append("Axel", 5);
-    //![1]
-
-//    //![2]
-//        QPieSlice *slice = series->slices().at(1);
-//        slice->setExploded();
-//        slice->setLabelVisible();
-//        slice->setPen(QPen(Qt::darkGreen, 2));
-//        slice->setBrush(Qt::green);
-//    //![2]
-
-//    //![3]
-//        _Chart->addSeries(series);
-//        _Chart->setTitle("Simple piechart example");
-//        _Chart->legend()->hide();
-//    //![3]
-
-//    //![4]
-        _ChartView->setChart(_Chart);
-        _Chart->setAnimationOptions(QChart::AllAnimations);
-        _ChartView->setRenderHint(QPainter::Antialiasing);
-
-
+    QLineSeries *series1 = new QLineSeries();
+    QLineSeries *series2 = new QLineSeries();
+    *series1 << QPointF(1, 50) << QPointF(2, 70) << QPointF(3, 40) << QPointF(4, 35) << QPointF(5, 61);
+    *series2 << QPointF(1, 55) << QPointF(2, 75) << QPointF(3, 45) << QPointF(4, 40) << QPointF(5, 66);
+    series1->setName("Line1");
+    _Chart->addSeries(series1);
+        _Chart->addSeries(series2);
+        _Chart->createDefaultAxes();
+        _Chart->setTitle("Simple line chart example");
+    QBarSet * set0 = new QBarSet("");
+            QBarSeries *series111= new QBarSeries();
+    series111->append(set0);
+    _ChartView->setChart(_Chart);
 
     QVBoxLayout* mainL = new QVBoxLayout;
 
@@ -174,7 +158,7 @@ void ChartSettings::setTitleTag(QString text){
     else _Title->setText(text);
 }
 
-QString ChartSettings::getTitleTag(){
+QString ChartSettings::getTitleTag() const{
     return _Title->text();
 }
 
@@ -183,6 +167,19 @@ void ChartSettings::setDataRangeTag(QString newTag){
     else _DataRange->setText("Unset");
 }
 
-QString ChartSettings::getDataRangeTag(){
+QString ChartSettings::getDataRangeTag() const{
     return _DataRange->text();
 }
+
+QPair<QPair<int, int>, QPair<int, int>> ChartSettings::getDataRange() const{
+    QString tag = getDataRangeTag();
+    QList<QString> tagSplitted = tag.split(' ');
+    if(tag!="Unset"){
+        QPair<int, int> fP = QPair<int, int>(tagSplitted[1].toInt(),tagSplitted[3].toInt());
+        QPair<int, int> lP = QPair<int, int>(tagSplitted[5].toInt(),tagSplitted[7].toInt());
+        return QPair<QPair<int, int>, QPair<int, int>>(fP, lP);
+    }
+    return QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0));
+}
+
+
