@@ -1,6 +1,6 @@
 #ifndef CHARTSETTINGS_H
 #define CHARTSETTINGS_H
-
+#include "chart.h"
 #include <QObject>
 #include <QWidget>
 #include <QWidgetAction>
@@ -23,7 +23,7 @@ class ChartSettings : public QWidget
 private:
     QGroupBox *_Settings;
     QChartView *_ChartView;
-    QChart *_Chart;
+    Chart *_Chart;
     QLabel *_Title;
     QLabel *_Description;
     QLabel *_DataRange;
