@@ -89,8 +89,7 @@ void Controller::fileSave(int tableIndex, QString fileName){
             ChartSettings* chartTab = _MainWindow->getChartTab(i);
             //Problemi nel save di un file senza focus
             charts["title"] = chartTab->getChart()->title();
-            charts["colorPalette"] = chartTab->getChart()->palette();
-            switch(chartTab->getChart())
+            //a seconda del tipo devo poi tirarmi giù le diverse label
         }
 
         fullfile["charts"] = charts;
@@ -380,3 +379,16 @@ bool Controller::isNumeric(QString string) const{
     QRegExp regex("^[0-9]\\d*(\\.\\d+)?$");
     return regex.exactMatch(string);
 };
+//QString ChartSettings::getDataRangeTag() const{
+//    return _DataRange->text();
+//}
+//QPair<QPair<int, int>, QPair<int, int>> ChartSettings::getDataRange() const{
+//    QString tag = getDataRangeTag();
+//    QList<QString> tagSplitted = tag.split(' ');
+//    if(tag!="Unset"){
+//        QPair<int, int> fP = QPair<int, int>(tagSplitted[1].toInt(),tagSplitted[3].toInt());
+//        QPair<int, int> lP = QPair<int, int>(tagSplitted[5].toInt(),tagSplitted[7].toInt());
+//        return QPair<QPair<int, int>, QPair<int, int>>(fP, lP);
+//    }
+//    return QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0));
+//}
