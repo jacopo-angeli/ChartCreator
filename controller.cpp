@@ -88,8 +88,8 @@ void Controller::fileSave(int tableIndex, QString fileName){
         for(auto i = 0; i<chartNumber; i++){
             ChartSettings* chartTab = _MainWindow->getChartTab(i);
             //Problemi nel save di un file senza focus
-            charts["title"] = ;
-            charts["colorPalette"] = ;
+            charts["title"] = chartTab->getChart()->title();
+            charts["colorPalette"] = chartTab->getChart()->palette();
             switch(chartTab->getChart())
         }
 

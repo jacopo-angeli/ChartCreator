@@ -16,8 +16,6 @@
 #include <QFrame>
 ChartSettings::ChartSettings(Chart * chart,QWidget * parent) : QWidget(parent),  _Settings(new QGroupBox(this)), _ChartView(new QChartView(this)), _Chart(chart), _Title(new QLabel("Unset")), _Color(new QComboBox())
 {
-<<<<<<< HEAD
-=======
     _ChartView->setChart(_Chart);
     QHBoxLayout * hor1=new QHBoxLayout();
     QHBoxLayout * hor2=new QHBoxLayout();
@@ -51,6 +49,5 @@ ChartSettings::ChartSettings(Chart * chart,QWidget * parent) : QWidget(parent), 
     _Settings->setLayout(hor1);
     _Settings->setLayout(hor2);
     main->addWidget(_Settings);
->>>>>>> ac59bbe3e5508d9f2b8336f25728a1a9d64a2621
 }
 
