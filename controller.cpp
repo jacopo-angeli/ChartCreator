@@ -58,11 +58,12 @@ void Controller::fileSave(int tableIndex, QString fileName){
     QFile file(filePath);
     if (file.open(QIODevice::ReadWrite | QIODevice::Truncate)) {
         QTextStream stream(&file);
-        QJsonObject obj;
-        //Salvataggio della tabella TODO:Usare Dynamic_Cast al posto di static e fare un controllo sul ritorno? Piccati fuoco
+        QJsonObject fullfile;
         QTableWidget* table = _MainWindow->getFullTable(tableIndex);
-        obj.insert("ColNumber", table->columnCount());
-        obj.insert("RowNumber", table->rowCount());
+
+        QJsonObject tableJSON;
+        tableJSON["ColNumber"] = table->columnCount();
+        tableJSON["RowNumber"] = table->rowCount();
 
         table->selectAll();
         QList<QTableWidgetItem*> ItemList = table->selectedItems();
@@ -71,16 +72,30 @@ void Controller::fileSave(int tableIndex, QString fileName){
         int i=0;
         for(auto it = ItemList.begin(); it != ItemList.end(); it++){
             QJsonObject cell;
-            cell.insert("row", (*it)->row());
-            cell.insert("column", (*it)->column());
-            cell.insert("value", (*it)->text());
+            cell["row"] = (*it)->row();
+            cell["column"] = (*it)->column();
+            cell["value"] = (*it)->text();
             QFont f = (*it)->font();
-            cell.insert("fontSize",f.pointSize());
-            obj.insert(QString::number(i), cell);
+            cell["fontSize"] = f.pointSize();
+            tableJSON[QString::number(i)] = cell;
             i++;
         }
+        fullfile["table"] = tableJSON;
+
+        int chartNumber = _MainWindow->getChartNumber(_MainWindow->getCurrentChartTabIndex())-1;
+        QJsonObject charts;
+        charts["chartNumber"] = chartNumber;
+        for(auto i = 0; i<chartNumber; i++){
+            ChartSettings* chartTab = _MainWindow->getChartTab(i);
+            //Problemi nel save di un file senza focus
+            charts["title"] = chartTab->getChart()->title();
+            charts["colorPalette"] = chartTab->getChart()->palette();
+            switch(chartTab->getChart())
+        }
+
+        fullfile["charts"] = charts;
         //TODO : Salvare anche i grafici aperti?
-        stream<<QJsonDocument(obj).toJson();
+        stream<<QJsonDocument(fullfile).toJson();
         file.close();
     }else{
         qDebug() << "Cannot Open file : "<<filePath;
@@ -186,23 +201,23 @@ void Controller::mainWindowCloseEvent(){
 };
 
 void Controller::BarChartCreation(){
-
+    _MainWindow->chartTypeSelected(Flags::BARS);
 };
 
 void Controller::CandleStickChartCreation(){
-
+    _MainWindow->chartTypeSelected(Flags::CANDLESTICK);
 };
 
 void Controller::LineChartCreation(){
-
+    _MainWindow->chartTypeSelected(Flags::LINES);
 };
 
 void Controller::PieChartCreation(){
-    _MainWindow->chartTypeSelected(Flags::PIECHART);
+    _MainWindow->chartTypeSelected(Flags::PIE);
 };
 
-void Controller::HistogramChartCreation(){
-
+void Controller::AreaChartCreation(){
+    _MainWindow->chartTypeSelected(Flags::AREA);
 };
 
 void Controller::pickTitle(){

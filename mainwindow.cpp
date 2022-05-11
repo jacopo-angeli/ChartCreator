@@ -391,10 +391,29 @@ void MainWindow::openFile(QString TabName, QTableWidget* Table){
 
 void MainWindow::chartTypeSelected(Flags type){
     switch(type){
-        case(Flags::PIECHART):{
-            if(dynamic_cast<QTabWidget*>(_Files->widget(_Files->currentIndex())->layout()->itemAt(1)->widget())){
-                QTabWidget *ChartListCurrentIndex = static_cast<QTabWidget*>(_Files->widget(_Files->currentIndex())->layout()->itemAt(1)->widget());
-                ChartListCurrentIndex->insertTab(0, new ChartSettings(this),QIcon("../OOPPROJECT/icons/NewGraph.png"), QString(""));//TODO Settare il parent per i connect adeguatamente
+        case(Flags::CANDLESTICK):{
+            if(QTabWidget *ChartListCurrentIndex = dynamic_cast<QTabWidget*>(_Files->widget(_Files->currentIndex())->layout()->itemAt(1)->widget())){
+//                QTabWidget *ChartListCurrentIndex = static_cast<QTabWidget*>(_Files->widget(_Files->currentIndex())->layout()->itemAt(1)->widget());
+                ChartListCurrentIndex->insertTab(0, new CandleStickSettings(this),QIcon("../OOPPROJECT/icons/NewGraph.png"), QString(""));//TODO Settare il parent per i connect adeguatamente
+                ChartListCurrentIndex->setCurrentIndex(0);
+            }
+            else{
+                //errore run-time
+            }
+        }
+            break;
+        case(Flags::AREA) : case(Flags::LINES): case(Flags::PIE):{
+            if(QTabWidget *ChartListCurrentIndex = dynamic_cast<QTabWidget*>(_Files->widget(_Files->currentIndex())->layout()->itemAt(1)->widget())){
+//                QTabWidget *ChartListCurrentIndex = static_cast<QTabWidget*>(_Files->widget(_Files->currentIndex())->layout()->itemAt(1)->widget());
+                ChartListCurrentIndex->insertTab(0, new AreaLinePieSettings(this),QIcon("../OOPPROJECT/icons/NewGraph.png"), QString(""));//TODO Settare il parent per i connect adeguatamente
+                ChartListCurrentIndex->setCurrentIndex(0);
+            }
+        }
+            break;
+        case(Flags::BARS):{
+            if(QTabWidget *ChartListCurrentIndex = dynamic_cast<QTabWidget*>(_Files->widget(_Files->currentIndex())->layout()->itemAt(1)->widget())){
+//                QTabWidget *ChartListCurrentIndex = static_cast<QTabWidget*>(_Files->widget(_Files->currentIndex())->layout()->itemAt(1)->widget());
+                ChartListCurrentIndex->insertTab(0, new BarSettings(this),QIcon("../OOPPROJECT/icons/NewGraph.png"), QString(""));//TODO Settare il parent per i connect adeguatamente
                 ChartListCurrentIndex->setCurrentIndex(0);
             }
         }
@@ -424,26 +443,3 @@ int MainWindow::getMaxMenuSize(QMenu *MenuBar){
     return v;
 }
 
-int MainWindow::getTextSize()
-{
-    QTableWidget* currentTable = static_cast<QTableWidget*>(_Files->widget(_Files->currentIndex()));
-    int size=0;
-    QList<QTableWidgetItem*> ItemList = currentTable->selectedItems();
-    if(!(ItemList.isEmpty())){
-        for (auto it = ItemList.begin(); it!=ItemList.end(); it++){
-            QTableWidgetItem *element = *it;
-            if(element){
-                QFont tmp = element->font();
-                if(size == 0){
-                    size = tmp.pointSize();
-                }else{
-                    if(tmp.pointSize() != size){
-                        size = 0;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    return size;
-}

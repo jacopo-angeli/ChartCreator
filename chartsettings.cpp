@@ -51,4 +51,3 @@ ChartSettings::ChartSettings(Chart * chart,QWidget * parent) : QWidget(parent), 
     main->addWidget(_Settings);
 }
 
-

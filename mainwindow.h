@@ -37,8 +37,6 @@ private:
     QSpinBox* _TxtDim;
 
     int getMaxMenuSize(QMenu*);
-    int getTextSize();
-    bool TableParser(const QString&);
 public:
     MainWindow(QWidget* =nullptr);
     void addRow(Flags = Flags::TOP);

@@ -30,7 +30,7 @@ ChartSelection::ChartSelection(QWidget* parent): QWidget(parent){
 
 
     QToolButton *LineC = new QToolButton();
-    LineC->setText("Line Charts");
+    LineC->setText("Line Chart");
     LineC->setIcon(QIcon("../OOPPROJECT/icons/LineChart.png"));
     LineC->setMinimumWidth(150);
     LineC->setMinimumHeight(150);
@@ -39,7 +39,7 @@ ChartSelection::ChartSelection(QWidget* parent): QWidget(parent){
     connect(LineC, SIGNAL(clicked()), parent, SLOT(LineChartCreation()));
 
     QToolButton *PieC = new QToolButton();
-    PieC->setText("Pie Charts");
+    PieC->setText("Pie Chart");
     PieC->setIcon(QIcon("../OOPPROJECT/icons/PieChart.png"));
     PieC->setMinimumWidth(150);
     PieC->setMinimumHeight(150);
@@ -47,14 +47,14 @@ ChartSelection::ChartSelection(QWidget* parent): QWidget(parent){
     PieC->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     connect(PieC, SIGNAL(clicked()), parent, SLOT(PieChartCreation()));
 
-    QToolButton *HistogramC = new QToolButton();
-    HistogramC->setText("Histogram Charts");
-    HistogramC->setIcon(QIcon("../OOPPROJECT/icons/HistogramChart.png"));
-    HistogramC->setMinimumWidth(150);
-    HistogramC->setMinimumHeight(150);
-    HistogramC->setIconSize(QSize(100,100));
-    HistogramC->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-    connect(HistogramC, SIGNAL(clicked()), parent, SLOT(HistogramChartCreation()));
+    QToolButton *AreaC = new QToolButton();
+    AreaC->setText("Area Chart");
+    AreaC->setIcon(QIcon("../OOPPROJECT/icons/AreaChart.png"));
+    AreaC->setMinimumWidth(150);
+    AreaC->setMinimumHeight(150);
+    AreaC->setIconSize(QSize(100,100));
+    AreaC->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    connect(AreaC, SIGNAL(clicked()), parent, SLOT(AreaChartCreation()));
 
     FrstRow->addStretch();
     FrstRow->addWidget(BarC);
@@ -63,7 +63,7 @@ ChartSelection::ChartSelection(QWidget* parent): QWidget(parent){
     FrstRow->addStretch();
     ScndRow->addStretch();
     ScndRow->addWidget(PieC);
-    ScndRow->addWidget(HistogramC);
+    ScndRow->addWidget(AreaC);
     ScndRow->addStretch();
 
     setLayout(MainLayout);
