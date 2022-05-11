@@ -186,23 +186,23 @@ void Controller::mainWindowCloseEvent(){
 };
 
 void Controller::BarChartCreation(){
-
+    _MainWindow->chartTypeSelected(Flags::BARS);
 };
 
 void Controller::CandleStickChartCreation(){
-
+    _MainWindow->chartTypeSelected(Flags::CANDLESTICK);
 };
 
 void Controller::LineChartCreation(){
-
+    _MainWindow->chartTypeSelected(Flags::LINES);
 };
 
 void Controller::PieChartCreation(){
-    _MainWindow->chartTypeSelected(Flags::PIECHART);
+    _MainWindow->chartTypeSelected(Flags::PIE);
 };
 
-void Controller::HistogramChartCreation(){
-
+void Controller::AreaChartCreation(){
+    _MainWindow->chartTypeSelected(Flags::AREA);
 };
 
 void Controller::pickTitle(){

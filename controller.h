@@ -18,7 +18,6 @@ private:
     QMap<QString, QString> _ActiveFiles;
 
     QTableWidget* fileParser(const QString);
-    bool TableParser(const QString&);
     void lastSessionRestore();
     void fileSave(int, QString = "");
     void fileOpen(QString = "");
@@ -62,7 +61,7 @@ public slots:
     void CandleStickChartCreation();
     void LineChartCreation();
     void PieChartCreation();
-    void HistogramChartCreation();
+    void AreaChartCreation();
 
     /*Real-Time Chart Changes*/
     void pickTitle();

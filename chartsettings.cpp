@@ -17,6 +17,4 @@
 ChartSettings::ChartSettings(QWidget * parent) : QWidget(parent),  _Settings(new QGroupBox(this)), _ChartView(new QChartView(this)), _Chart(new Chart()), _Title(new QLabel("Unset")), _Color(new QComboBox())
 {
 
-}
-
 

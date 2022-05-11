@@ -12,7 +12,10 @@ enum class Flags{
     ALL,
     DELETE,
     ADD,
-    PIECHART
-
+    PIE,
+    LINES,
+    BARS,
+    AREA,
+    CANDLESTICK
 };
 #endif // FLAGS_H
