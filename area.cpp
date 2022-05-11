@@ -1,6 +1,7 @@
 #include "area.h"
 
-Area::Area()
+Area::Area(QGraphicsItem* parent): Chart(parent)
 {
 
 }
+

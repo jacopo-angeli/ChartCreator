@@ -11,6 +11,7 @@ CONFIG += c++11
 SOURCES += \
     area.cpp \
     candlestick.cpp \
+    candlesticksettings.cpp \
     chart.cpp \
     chartselection.cpp \
     chartsettings.cpp \
@@ -26,6 +27,7 @@ SOURCES += \
 HEADERS += \
     area.h \
     candlestick.h \
+    candlesticksettings.h \
     chart.h \
     chartselection.h \
     chartsettings.h \

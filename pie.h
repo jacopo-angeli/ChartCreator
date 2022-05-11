@@ -6,7 +6,8 @@ class Pie : public Chart
 {
     Q_OBJECT
 public:
-    Pie();
+    Pie(QGraphicsItem* = nullptr);
+    virtual void changeData(QList<QTableWidgetItem*>);
 };
 
 #endif // PIE_H

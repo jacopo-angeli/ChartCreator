@@ -6,7 +6,8 @@ class Histogram : public Chart
 {
     Q_OBJECT
 public:
-    Histogram();
+    Histogram(QGraphicsItem* =nullptr);
+    virtual void changeData(QList<QTableWidgetItem*>);
 };
 
 #endif // HISTOGRAM_H

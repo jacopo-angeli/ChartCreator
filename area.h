@@ -6,7 +6,8 @@ class Area : public Chart
 {
     Q_OBJECT
 public:
-    Area();
+    Area(QGraphicsItem* =nullptr);
+    virtual void changeData(QList<QTableWidgetItem*>);
 };
 
 #endif // AREA_H

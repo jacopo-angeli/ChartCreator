@@ -1,6 +1,6 @@
 #include "histogram.h"
 
-Histogram::Histogram()
+Histogram::Histogram(QGraphicsItem* parent): Chart(parent)
 {
 
 }

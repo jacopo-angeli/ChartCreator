@@ -1,6 +1,6 @@
 #include "pie.h"
 
-Pie::Pie()
+Pie::Pie(QGraphicsItem* parent): Chart(parent)
 {
 
 }
