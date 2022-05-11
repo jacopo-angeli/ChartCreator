@@ -1,6 +1,6 @@
 #include "candlesticksettings.h"
 #include "candlestick.h"
-CandleStickSettings::CandleStickSettings(QWidget* parent) : ChartSettings(parent), _Chart(new CandleStick), _OpeningPrices(new QLabel("Unset")), _ClosingPrices(new QLabel("Unset")), _BottomPrices(new QLabel("Unset")), _LowestPrices(new QLabel("Unset")), _HighestPrices(new QLabel("Unset")),_Categories(new QLabel("Unset"))
+CandleStickSettings::CandleStickSettings(QWidget* parent) : ChartSettings(new CandleStick(),parent), _OpeningPrices(new QLabel("Unset")), _ClosingPrices(new QLabel("Unset")), _BottomPrices(new QLabel("Unset")), _LowestPrices(new QLabel("Unset")), _HighestPrices(new QLabel("Unset")),_Categories(new QLabel("Unset"))
 {
 
     //layouts
