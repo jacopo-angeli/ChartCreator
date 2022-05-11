@@ -6,7 +6,10 @@ class CandleStick : public Chart
 {
     Q_OBJECT
 public:
-    CandleStick();
+    CandleStick(QGraphicsItem* =nullptr);
+    virtual void changeData(QList<QTableWidgetItem*>);
+
+
 };
 
 #endif // CANDLESTICK_H

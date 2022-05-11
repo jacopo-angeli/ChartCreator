@@ -1,6 +1,6 @@
 #include "line.h"
 
-Line::Line()
+Line::Line(QGraphicsItem* parent): Chart(parent)
 {
 
 }

@@ -1,6 +1,6 @@
 #include "candlestick.h"
 
-CandleStick::CandleStick()
+CandleStick::CandleStick(QGraphicsItem * parent): Chart(parent)
 {
 
 }
