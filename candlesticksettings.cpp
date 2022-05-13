@@ -64,14 +64,6 @@ CandleStickSettings::CandleStickSettings(QWidget* parent) : ChartSettings(new Ca
     txt6->setMaximumHeight(50);
     txt6->setMaximumWidth(250);
 
-    /*
-    QLabel* _OpeningPrices;
-    QLabel* _ClosingPrices;
-    QLabel* _BottomPrices;
-    QLabel* _LowestPrices;
-    QLabel* _HighestPrices;
-    QLabel* _Categories;
-    */
     //setting layout
     hor1->addWidget(_OpeningPrices);
     hor1->addWidget(btn1);

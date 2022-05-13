@@ -50,4 +50,19 @@ ChartSettings::ChartSettings(Chart * chart,QWidget * parent) : QWidget(parent), 
     _Settings->setLayout(hor2);
     main->addWidget(_Settings);
 }
+QChart* ChartSettings::getChart()
+{
+    return _ChartView->chart();
+}
 
+void ChartSettings::setTitleTag(QString q)
+{
+    _Title->setText(q);
+}
+
+QString ChartSettings:: getTitleTag() const
+{
+    return _Title->text();
+}
+
+//TODO GETCOLORPALETTE
