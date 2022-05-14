@@ -393,8 +393,8 @@ void MainWindow::chartTypeSelected(Flags type){
     switch(type){
         case(Flags::CANDLESTICK):{
             if(QTabWidget *ChartListCurrentIndex = dynamic_cast<QTabWidget*>(_Files->widget(_Files->currentIndex())->layout()->itemAt(1)->widget())){
-//                QTabWidget *ChartListCurrentIndex = static_cast<QTabWidget*>(_Files->widget(_Files->currentIndex())->layout()->itemAt(1)->widget());
-                ChartListCurrentIndex->insertTab(0, new CandleStickSettings(this), QIcon("../OOPPROJECT/icons/NewGraph.png"), QString(""));//TODO Settare il parent per i connect adeguatamente
+                qDebug() << "CandleStick opened";
+                ChartListCurrentIndex->insertTab(0, new CandleStickSettings(_Files->widget(_Files->currentIndex())->layout()->itemAt(1)->widget()), QIcon("../OOPPROJECT/icons/NewGraph.png"), QString(""));
                 ChartListCurrentIndex->setCurrentIndex(0);
             }
             else{
@@ -405,7 +405,7 @@ void MainWindow::chartTypeSelected(Flags type){
         case(Flags::AREA) : case(Flags::LINES): case(Flags::PIE):{
             if(QTabWidget *ChartListCurrentIndex = dynamic_cast<QTabWidget*>(_Files->widget(_Files->currentIndex())->layout()->itemAt(1)->widget())){
 //                QTabWidget *ChartListCurrentIndex = static_cast<QTabWidget*>(_Files->widget(_Files->currentIndex())->layout()->itemAt(1)->widget());
-                ChartListCurrentIndex->insertTab(0, new AreaLinePieSettings(type, _Files),QIcon("../OOPPROJECT/icons/NewGraph.png"), QString(""));//TODO Settare il parent per i connect adeguatamente
+                ChartListCurrentIndex->insertTab(0, new AreaLinePieSettings(type, _Files->widget(1)),QIcon("../OOPPROJECT/icons/NewGraph.png"), QString(""));//TODO Settare il parent per i connect adeguatamente
                 ChartListCurrentIndex->setCurrentIndex(0);
             }
         }

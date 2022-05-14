@@ -14,12 +14,12 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QFrame>
-ChartSettings::ChartSettings(Chart * chart,QWidget * parent) : QWidget(parent),  _Settings(new QGroupBox(this)), _ChartView(new QChartView(this)), _Chart(chart), _Title(new QLabel("Unset")), _Color(new QComboBox())
+ChartSettings::ChartSettings(QWidget * parent) : QWidget(parent),  _Settings(new QGroupBox(this)), _ChartView(new QChartView(this)), _Chart(nullptr), _Title(new QLabel("Title")), _Color(new QComboBox())
 {
-    _ChartView->setChart(_Chart);
     QHBoxLayout * hor1=new QHBoxLayout();
     QHBoxLayout * hor2=new QHBoxLayout();
     QVBoxLayout * main=new QVBoxLayout();
+    QVBoxLayout * settingsLayout=new QVBoxLayout();
 
     main->addWidget(_ChartView);
 
@@ -43,12 +43,17 @@ ChartSettings::ChartSettings(Chart * chart,QWidget * parent) : QWidget(parent), 
     hor1->addWidget(_Title);
     hor1->addWidget(btn1);
     hor1->addWidget(txt1);
+    //Creare label per combobox
     hor2->addWidget(_Color);
     hor2->addWidget(btn2);
     hor2->addWidget(txt2);
-    _Settings->setLayout(hor1);
-    _Settings->setLayout(hor2);
+    settingsLayout->addLayout(hor1);
+    settingsLayout->addLayout(hor2);
+    _Settings->setLayout(settingsLayout);
     main->addWidget(_Settings);
+
+    //!!
+    setLayout(main);
 }
 QChart* ChartSettings::getChart()
 {

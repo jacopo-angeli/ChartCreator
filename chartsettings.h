@@ -22,13 +22,13 @@ class ChartSettings : public QWidget
         Q_OBJECT
 protected:
     QGroupBox *_Settings;
+    QChartView *_ChartView;
     Chart *_Chart;
 private:
-    QChartView *_ChartView;
     QLabel *_Title;
     QComboBox * _Color;
 public:
-    ChartSettings(Chart* =nullptr, QWidget* = nullptr);
+    ChartSettings(QWidget* = nullptr);
     QChart* getChart();
 
     void setTitleTag(QString = "");

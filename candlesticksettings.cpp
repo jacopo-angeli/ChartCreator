@@ -1,6 +1,6 @@
 #include "candlesticksettings.h"
 #include "candlestick.h"
-CandleStickSettings::CandleStickSettings(QWidget* parent) : ChartSettings(new CandleStick(),parent), _OpeningPrices(new QLabel("Unset")), _ClosingPrices(new QLabel("Unset")), _BottomPrices(new QLabel("Unset")), _LowestPrices(new QLabel("Unset")), _HighestPrices(new QLabel("Unset")),_Categories(new QLabel("Unset"))
+CandleStickSettings::CandleStickSettings(QWidget* parent) : ChartSettings(parent), _OpeningPrices(new QLabel("Opening Prices")), _ClosingPrices(new QLabel("Closing Prices")), _BottomPrices(new QLabel("Bottom Prices")), _LowestPrices(new QLabel("Lowest Prices")), _HighestPrices(new QLabel("Highest Prices")), _Categories(new QLabel("Categories"))
 {
 
     //layouts
@@ -89,11 +89,13 @@ CandleStickSettings::CandleStickSettings(QWidget* parent) : ChartSettings(new Ca
     hor6->addWidget(btn6);
     hor6->addWidget(txt6);
 
-    _Settings->setLayout(hor1);
-    _Settings->setLayout(hor2);
-    _Settings->setLayout(hor3);
-    _Settings->setLayout(hor4);
-    _Settings->setLayout(hor5);
-    _Settings->setLayout(hor6);
+    static_cast<QVBoxLayout*>(_Settings->layout())->addLayout(hor1);
+    static_cast<QVBoxLayout*>(_Settings->layout())->addLayout(hor2);
+    static_cast<QVBoxLayout*>(_Settings->layout())->addLayout(hor3);
+    static_cast<QVBoxLayout*>(_Settings->layout())->addLayout(hor4);
+    static_cast<QVBoxLayout*>(_Settings->layout())->addLayout(hor5);
+    static_cast<QVBoxLayout*>(_Settings->layout())->addLayout(hor6);
 
+    _Chart = new CandleStick();
+    _ChartView->setChart(_Chart);
 }

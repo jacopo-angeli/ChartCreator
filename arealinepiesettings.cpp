@@ -2,7 +2,7 @@
 #include "area.h"
 #include "line.h"
 #include "pie.h"
-AreaLinePieSettings::AreaLinePieSettings(Chart * chart, QWidget * parent): ChartSettings(chart, parent), _DataRange(new QLabel("Unset")), _labels(new QLabel("Unset")), _ParseMethod(new QButtonGroup(_Settings))
+AreaLinePieSettings::AreaLinePieSettings(Chart * chart, QWidget * parent): ChartSettings(parent), _DataRange(new QLabel("Unset")), _labels(new QLabel("Unset")), _ParseMethod(new QButtonGroup(_Settings))
 {
     QHBoxLayout * hor1=new QHBoxLayout();
     QHBoxLayout * hor2=new QHBoxLayout();
