@@ -4,6 +4,9 @@
 #include "flags.h"
 #include "chartselection.h"
 #include "chartsettings.h"
+#include "arealinepiesettings.h"
+#include "candlesticksettings.h"
+#include "barsettings.h"
 
 #include <QJsonDocument>
 #include <QWidget>

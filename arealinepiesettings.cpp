@@ -56,7 +56,24 @@ AreaLinePieSettings::AreaLinePieSettings(Chart * chart, QWidget * parent): Chart
     _Settings->setLayout(hor2);
     _Settings->setLayout(hor3);
 }
-//TODO COSTRUTTORE CON FLAGS
+
+AreaLinePieSettings::AreaLinePieSettings(Flags type, QWidget* parent): AreaLinePieSettings(nullptr, parent){
+    switch(type){
+        case (Flags::AREA):{
+            _Chart = new Area();
+        }
+            break;
+        case (Flags::LINES):{
+            _Chart = new Line();
+        }
+            break;
+        case (Flags::PIE):{
+            _Chart = new Pie();
+        }
+        default:
+            break;
+    }
+}
 
 void AreaLinePieSettings:: setDataRangeTag(QString q)
 {

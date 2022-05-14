@@ -10,7 +10,7 @@ class AreaLinePieSettings : public ChartSettings
      Q_OBJECT
 public:
     AreaLinePieSettings(Chart * =nullptr, QWidget * = nullptr);
-    AreaLinePieSettings(Flags type);
+    AreaLinePieSettings(Flags type, QWidget * = nullptr);
     void setDataRangeTag(QString);
     QString getDataRangeTag() const;
     QPair <QPair<int , int>, QPair<int, int>> getDataRange() const;

@@ -11,6 +11,7 @@ CONFIG += c++11
 SOURCES += \
     area.cpp \
     arealinepiesettings.cpp \
+    bar.cpp \
     barsettings.cpp \
     candlestick.cpp \
     candlesticksettings.cpp \
@@ -20,7 +21,6 @@ SOURCES += \
     chartwindow.cpp \
     controller.cpp \
     graphwindow.cpp \
-    histogram.cpp \
     line.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -29,6 +29,7 @@ SOURCES += \
 HEADERS += \
     area.h \
     arealinepiesettings.h \
+    bar.h \
     barsettings.h \
     candlestick.h \
     candlesticksettings.h \
@@ -39,7 +40,6 @@ HEADERS += \
     controller.h \
     flags.h \
     graphwindow.h \
-    histogram.h \
     line.h \
     mainwindow.h \
     pie.h
