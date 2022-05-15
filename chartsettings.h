@@ -33,6 +33,7 @@ public:
 
     void setTitleTag(QString = "");
     QString getTitleTag() const;
+    QPair<int, int> getTitlePosition() const;
 };
 
 #endif // CHARTSETTINGS_H

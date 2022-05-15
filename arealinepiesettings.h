@@ -9,15 +9,21 @@ class AreaLinePieSettings : public ChartSettings
 {
      Q_OBJECT
 public:
-    AreaLinePieSettings(Chart * =nullptr, QWidget * = nullptr);
+    AreaLinePieSettings(QWidget * = nullptr);
     AreaLinePieSettings(Flags type, QWidget * = nullptr);
+
     void setDataRangeTag(QString);
-    QString getDataRangeTag() const;
     QPair <QPair<int , int>, QPair<int, int>> getDataRange() const;
-    //TODO GetParseMethod don't know return type
-    private:
+    QString getDataRangeTag() const;
+
+    void setLabelsTag(QString);
+    QPair <QPair<int , int>, QPair<int, int>> getLabelsRange() const;
+    QString getLabelsTag() const;
+
+    bool getParseMethod() const;
+private:
     QLabel* _DataRange;
-    QLabel* _labels;
+    QLabel* _Labels;
     QButtonGroup* _ParseMethod;
 };
 

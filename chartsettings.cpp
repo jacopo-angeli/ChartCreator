@@ -14,59 +14,56 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QFrame>
-ChartSettings::ChartSettings(QWidget * parent) : QWidget(parent),  _Settings(new QGroupBox(this)), _ChartView(new QChartView(this)), _Chart(nullptr), _Title(new QLabel("Title")), _Color(new QComboBox())
-{
-    QHBoxLayout * hor1=new QHBoxLayout();
-    QHBoxLayout * hor2=new QHBoxLayout();
+ChartSettings::ChartSettings(QWidget * parent) : QWidget(parent),  _Settings(new QGroupBox(this)), _ChartView(new QChartView(this)), _Chart(nullptr), _Title(new QLabel("Unset")), _Color(new QComboBox()){
     QVBoxLayout * main=new QVBoxLayout();
-    QVBoxLayout * settingsLayout=new QVBoxLayout();
-
     main->addWidget(_ChartView);
 
-    QPushButton* btn1=new QPushButton("PICK");
-    btn1->setMaximumHeight(50);
-    btn1->setMaximumWidth(250);
-
-    QPushButton* btn2=new QPushButton("PICK");
-    btn2->setMaximumHeight(50);
-    btn2->setMaximumWidth(250);
-
-    QLabel* txt1=new QLabel("text");
-    txt1->setMaximumHeight(50);
-    txt1->setMaximumWidth(250);
-
-    QLabel* txt2=new QLabel("text");
-    txt2->setMaximumHeight(50);
-    txt2->setMaximumWidth(250);
-
-    //horizontal
-    hor1->addWidget(_Title);
-    hor1->addWidget(btn1);
+    //Title Row
+    QHBoxLayout * hor1=new QHBoxLayout();
+    QLabel* txt1=new QLabel("Title");
     hor1->addWidget(txt1);
-    //Creare label per combobox
+    QPushButton* btn1=new QPushButton("PICK");
+    hor1->addWidget(btn1);
+    connect(btn1, SIGNAL(clicked()), parent, SLOT(pickTitle()));
+    hor1->addWidget(_Title);
+
+    //Color Setting Row
+    QHBoxLayout * hor2=new QHBoxLayout();
+    QLabel* colorLabel=new QLabel("Color Palette");
+    _Color->addItem("Light");
+    _Color->addItem("Blue Cerulean");
+    _Color->addItem("Dark");
+    _Color->addItem("Brown Sand");
+    _Color->addItem("Blue Natural");
+    _Color->addItem("High Contrast");
+    _Color->addItem("Blue Icy");
+    hor2->addWidget(colorLabel);
     hor2->addWidget(_Color);
-    hor2->addWidget(btn2);
-    hor2->addWidget(txt2);
+
+    //Size Adjustments
+    txt1->setFixedWidth(120);
+    btn1->setFixedWidth(120);
+    colorLabel->setFixedWidth(120);
+    _Color->setFixedWidth(300);
+    hor2->addStretch();
+
+
+    QVBoxLayout * settingsLayout=new QVBoxLayout();
     settingsLayout->addLayout(hor1);
     settingsLayout->addLayout(hor2);
     _Settings->setLayout(settingsLayout);
     main->addWidget(_Settings);
 
-    //!!
     setLayout(main);
 }
-QChart* ChartSettings::getChart()
-{
+QChart* ChartSettings::getChart(){
     return _ChartView->chart();
 }
-
-void ChartSettings::setTitleTag(QString q)
-{
-    _Title->setText(q);
+void ChartSettings::setTitleTag(QString q){
+    if(q=="") _Title->setText("Unset");
+    else _Title->setText(q);
 }
-
-QString ChartSettings:: getTitleTag() const
-{
+QString ChartSettings:: getTitleTag() const{
     return _Title->text();
 }
 

@@ -382,13 +382,4 @@ bool Controller::isNumeric(QString string) const{
 //QString ChartSettings::getDataRangeTag() const{
 //    return _DataRange->text();
 //}
-//QPair<QPair<int, int>, QPair<int, int>> ChartSettings::getDataRange() const{
-//    QString tag = getDataRangeTag();
-//    QList<QString> tagSplitted = tag.split(' ');
-//    if(tag!="Unset"){
-//        QPair<int, int> fP = QPair<int, int>(tagSplitted[1].toInt(),tagSplitted[3].toInt());
-//        QPair<int, int> lP = QPair<int, int>(tagSplitted[5].toInt(),tagSplitted[7].toInt());
-//        return QPair<QPair<int, int>, QPair<int, int>>(fP, lP);
-//    }
-//    return QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0));
-//}
+
