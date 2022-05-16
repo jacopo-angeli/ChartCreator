@@ -15,9 +15,11 @@ BarSettings::BarSettings(QWidget * parent): AreaLinePieSettings(parent), _Catego
     _ChartView->setChart(_Chart);
     static_cast<QVBoxLayout*>(_Settings->layout())->addLayout(hor1);
 }
-void BarSettings::setCategoriesTag(QString q){
-    _Categories->setText(q);
+
+void BarSettings::setCategoriesPositions(QPair<QPair<int, int>, QPair<int, int>> pos){
+
 }
-QString BarSettings::getCategoriesTag() const{
-    return _Categories->text();
+
+QPair<QPair<int, int>, QPair<int, int> > BarSettings::getCategoriesPositions() const{
+
 }

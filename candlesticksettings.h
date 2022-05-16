@@ -9,22 +9,19 @@ class CandleStickSettings : public ChartSettings
     Q_OBJECT
 public:
     CandleStickSettings(QWidget * = nullptr);
-    void setOpeningPricesTag(QString = "");
+    void setOpeningPricesPositions(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0)));
     QPair<QPair<int, int>, QPair<int, int>> getOpeningPricesPosition() const;
-    void setClosingPricesTag(QString = "");
+    void setClosingPricesPositions(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0)));
     QPair<QPair<int, int>, QPair<int, int>> getClosingPricesPositions() const;
-    void setBottomPricesTag(QString = "");
-    QPair<QPair<int, int>, QPair<int, int>> getBottomPricesPositions() const;
-    void setLowestPricesTag(QString = "");
+    void setLowestPricesPositions(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0)));
     QPair<QPair<int, int>, QPair<int, int>> getLowestPricesPositions() const;
-    void setHighestPricesTag(QString = "");
+    void setHighestPricesPositions(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0)));
     QPair<QPair<int, int>, QPair<int, int>> getHighestPricesPositions() const;
-    void setCategoriesTag(QString = "");
-    QPair<QPair<int, int>, QPair<int, int>> getCategoriesPositions() const;
+    virtual void setCategoriesPositions(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0)));
+    virtual QPair<QPair<int, int>, QPair<int, int>> getCategoriesPositions() const;
 private:
     QLabel* _OpeningPrices;
     QLabel* _ClosingPrices;
-    QLabel* _BottomPrices;
     QLabel* _LowestPrices;
     QLabel* _HighestPrices;
     QLabel* _Categories;

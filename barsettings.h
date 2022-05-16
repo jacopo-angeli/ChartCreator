@@ -9,8 +9,8 @@ class BarSettings: public AreaLinePieSettings
     Q_OBJECT
 public:
     BarSettings(QWidget* =nullptr);
-    void setCategoriesTag(QString);
-    QString getCategoriesTag() const;
+    virtual void setCategoriesPositions(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0)));
+    virtual QPair<QPair<int, int>, QPair<int, int>> getCategoriesPositions() const;
 private:
     QLabel* _Categories;
 };

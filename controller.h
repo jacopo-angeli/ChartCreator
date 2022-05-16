@@ -65,7 +65,13 @@ public slots:
 
     /*Real-Time Chart Changes*/
     void pickTitle();
-    void pickSeries();
+    void pickOpeningPrices();
+    void pickClosingPrices();
+    void pickLowestPrices();
+    void pickHighestPrices();
+    void pickDataRange();
+    void pickLabels();
+    void pickCategories();
     void ChartRefresh(int, int);
 };
 

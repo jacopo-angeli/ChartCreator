@@ -31,9 +31,11 @@ public:
     ChartSettings(QWidget* = nullptr);
     QChart* getChart();
 
-    void setTitleTag(QString = "");
-    QString getTitleTag() const;
+    void setTitlePosition(QPair<int, int> = QPair<int, int>(0,0));
     QPair<int, int> getTitlePosition() const;
+
+    virtual void setCategoriesPositions(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0))) =0;
+    virtual QPair<QPair<int, int>, QPair<int, int>> getCategoriesPositions() const =0;
 };
 
 #endif // CHARTSETTINGS_H

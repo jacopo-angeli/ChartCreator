@@ -63,8 +63,12 @@ AreaLinePieSettings::AreaLinePieSettings(Flags type, QWidget* parent): AreaLineP
     }
 }
 
-void AreaLinePieSettings:: setDataRangeTag(QString q){
-    _DataRange->setText(q);
+void AreaLinePieSettings:: setDataRange(QPair<QPair<int, int>, QPair<int, int>> pos){
+    //Check se pos.first>0
+        //crei la stringa
+            // {( pos.first.first , pos.first.second )->( pos.second.first , pos.second.second )}
+        //e setti il tag
+    //settare il tag a "Unset" _Labels -> setText("Unset") (Controllare se è diverso da "Unset")
 }
 
 bool AreaLinePieSettings::getParseMethod() const{
@@ -73,7 +77,7 @@ bool AreaLinePieSettings::getParseMethod() const{
 }
 
 QPair <QPair<int , int>, QPair<int, int>> AreaLinePieSettings::getDataRange() const{
-    QString tag = getDataRangeTag();
+    QString tag = _DataRange->text();
     QList<QString> tagSplitted = tag.split(' ');
     if(tag!="Unset"){
         QPair<int, int> fP = QPair<int, int>(tagSplitted[1].toInt(),tagSplitted[3].toInt());
@@ -83,10 +87,29 @@ QPair <QPair<int , int>, QPair<int, int>> AreaLinePieSettings::getDataRange() co
     return QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0));
 }
 
-QString AreaLinePieSettings::getDataRangeTag() const{
-    return _DataRange->text();
+void AreaLinePieSettings::setLabels(QPair<QPair<int, int>, QPair<int, int>> pos){
+    //Check se pos.first>0
+        //crei la stringa
+            // {( pos.first.first , pos.first.second )->( pos.second.first , pos.second.second )}
+        //e setti il tag
+    //settare il tag a "Unset" _Labels -> setText("Unset") (Controllare se è diverso da "Unset")
 }
 
-QString AreaLinePieSettings::getLabelsTag() const{
-    return _Labels->text();
+QPair<QPair<int, int>, QPair<int, int>> AreaLinePieSettings::getLabelsRange() const{
+    QString tag = _Labels->text();
+    QList<QString> tagSplitted = tag.split(' ');
+    if(tag!="Unset"){
+        QPair<int, int> fP = QPair<int, int>(tagSplitted[1].toInt(),tagSplitted[3].toInt());
+        QPair<int, int> lP = QPair<int, int>(tagSplitted[5].toInt(),tagSplitted[7].toInt());
+        return QPair<QPair<int, int>, QPair<int, int>>(fP, lP);
+    }
+    return QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0));
+}
+
+void AreaLinePieSettings::setCategoriesPositions(QPair<QPair<int, int>, QPair<int, int> >){
+    //throwiamo un sacchetto di eccezioni perchè non dovrebbe essere mai chiamata
+}
+
+QPair<QPair<int, int>, QPair<int, int> > AreaLinePieSettings::getCategoriesPositions() const{
+    //throwiamo un sacchetto di eccezioni perchè non dovrebbe essere mai chiamata
 }

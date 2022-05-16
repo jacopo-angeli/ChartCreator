@@ -232,66 +232,187 @@ void Controller::pickTitle(){
                     //Aggiorna il titolo del grafico con il contenuto della prima cella della selezione
     QTableWidget* CurrentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
     if(CurrentTable->selectedItems().size() == 0){
-        _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->setTitleTag();
+        _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->setTitlePosition();
         _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->getChart()->setTitle("");
     }else{
         QTableWidgetItem* cellSelected = CurrentTable->selectedItems()[0];
-        QString newPosition = QString("(" + QString::number(cellSelected->row()+1) + ", " + QString::number(cellSelected->column()+1) + ")");
-        if(newPosition != _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->getTitleTag()){
-            _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->setTitleTag(newPosition);
+        QPair<int, int> newPosition = QPair<int, int>((cellSelected->row()+1),(cellSelected->column()+1));
+        if(newPosition != _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->getTitlePosition()){
+            _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->setTitlePosition(newPosition);
             _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->getChart()->setTitle(cellSelected->text());
         }else{
-            _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->setTitleTag();
+            _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->setTitlePosition();
             _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->getChart()->setTitle("");
         }
     }
 }
-
-void Controller::pickSeries(){
-    // BUG:Selezione vuota crasha!
-    //Controllo le posizione e se sono diverse le aggiorno e aggiorno anche il grafico
-    //Guardo la modalità di scorrimento degli elementi
-        //Se è orizzontale
-            //Scorro gli elementi per colonna, il primo elemento di ogni riga è il nome della fetta
-            //Tutti gli altri elementi della riga vengono sommati e vengono collegati al nome della fetta
-        //Se è verticale
-
-    //per testare considero la modalità per colonne
-    //Scorro gli elementi per colonna, il primo elemento di ogni riga è il nome della fetta
-    //Tutti gli altri elementi della riga vengono sommati e vengono collegati al nome della fetta
-//   QTableWidget* CurrentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
-//   QModelIndexList selectedIndexes = CurrentTable->selectionModel()->selectedIndexes();
-//   ChartSettings* CurrentChartSettingPtr = _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex());
-//   QString newPosTag = positionTag(&selectedIndexes);
-//   if(newPosTag != CurrentChartSettingPtr->getDataRangeTag()){
-//       QPieSeries* series = new QPieSeries();
-//       //NOTE:la funzione item di QTableWidget usa gli indici a partire da 0 !!!
-//       int firstRow = (selectedIndexes[0].row());
-//       int lastRow = (selectedIndexes[selectedIndexes.size()-1]).row();
-//       int firstColumn = (selectedIndexes[0].column());
-//       int lastColumn = (selectedIndexes[selectedIndexes.size()-1]).column();
-//       for(int i=firstRow; i<=lastRow; i++){
-//           QString sliceName = CurrentTable->item(i, firstColumn)->text();
-//           int sliceValue = 0;
-//           for(int j=firstColumn+1; j<=lastColumn; j++){
-//               if(CurrentTable->item(i, j)){
-//                   if(isNumeric(CurrentTable->item(i, j)->text())){
-//                       sliceValue+=CurrentTable->item(i, j)->text().toInt();
-//                   }else{
-//                       //Segnalare all'utente che non c'è consistenza nel formato dei dati selezionati
-//                   }
-//               }
-//           }
-//           series->append(sliceName, sliceValue);
-//       }
-//       CurrentChartSettingPtr->getChart()->removeAllSeries();
-//       //Removes and deletes all series objects that have been added to the chart. https://doc.qt.io/qt-5/qchart.html#removeAllSeries
-//       CurrentChartSettingPtr->getChart()->addSeries(series);
-//       CurrentChartSettingPtr->setDataRangeTag(newPosTag);
-//   }else{
-//       _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->getChart()->removeAllSeries();
-//       CurrentChartSettingPtr->setDataRangeTag();
-//   }
+void Controller::pickOpeningPrices(){
+    //Controllare se è il caso di effetuare modifiche
+    //Effettuarle sul modello
+    //Aggiornare la vista
+    //Controlla la corrente porzione di tabella selezionata
+        //Se la selezione è vuota
+            //Sostituisce la tag con "Unset" e il titolo con il titolo di default
+        //Se la selezione non è vuota
+            //Confronta le posizioni della selezione con la tag contenente le attuali posizioni
+                //Se le posizioni sono uguali
+                    //Sostituisce la tag con "Unset" e modifica il grafico
+                //Se le posizioni sono diverse
+                    //Aggiorna la tag con le nuove posizioni
+                    //Aggiorna il grafico
+    QTableWidget* CurrentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+    CandleStickSettings* currentChartTab = static_cast<CandleStickSettings*>(_MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex()));
+    if(CurrentTable->selectedItems().size() == 0){
+        currentChartTab->setOpeningPricesPositions();
+//        currentChartTab->getChart()->setOpeningPrice(); (static_castare a CandleStick)
+    }else{
+        QList<QTableWidgetItem*> cellSelected = CurrentTable->selectedItems();
+        QPair<QPair<int, int>, QPair<int, int>> newPositions = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>((cellSelected[0]->row()+1),(cellSelected[0]->column()+1)),QPair<int, int>((cellSelected.last()->row()+1),(cellSelected.last()->column()+1)));
+        if(newPositions != currentChartTab->getOpeningPricesPosition()){
+            currentChartTab->setOpeningPricesPositions(newPositions);
+    //        currentChartTab->getChart()->setOpeningPrice(cellSelected); (static_castare a CandleStick)
+        }else{
+            currentChartTab->setOpeningPricesPositions();
+    //        currentChartTab->getChart()->setOpeningPrice(); (static_castare a CandleStick)
+        }
+    }
+}
+void Controller::pickClosingPrices(){
+    //Controlla la corrente porzione di tabella selezionata
+        //Se la selezione è vuota
+            //Sostituisce la tag con "Unset" e il titolo con il titolo di default
+        //Se la selezione non è vuota
+            //Confronta le posizioni della selezione con la tag contenente le attuali posizioni
+                //Se le posizioni sono uguali
+                    //Sostituisce la tag con "Unset" e modifica il grafico
+                //Se le posizioni sono diverse
+                    //Aggiorna la tag con le nuove posizioni
+                    //Aggiorna il grafico
+    QTableWidget* CurrentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+    CandleStickSettings* currentChartTab = static_cast<CandleStickSettings*>(_MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex()));
+    if(CurrentTable->selectedItems().size() == 0){
+        currentChartTab->setClosingPricesPositions();
+//        currentChartTab->getChart()->setClosingPrices(); (static_castare a CandleStick)
+    }else{
+        QList<QTableWidgetItem*> cellSelected = CurrentTable->selectedItems();
+        QPair<QPair<int, int>, QPair<int, int>> newPositions = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>((cellSelected[0]->row()+1),(cellSelected[0]->column()+1)),QPair<int, int>((cellSelected.last()->row()+1),(cellSelected.last()->column()+1)));
+        if(newPositions != currentChartTab->getClosingPricesPositions()){
+            currentChartTab->setClosingPricesPositions(newPositions);
+    //        currentChartTab->getChart()->setClosingPrices(cellSelected); (static_castare a CandleStick)
+        }else{
+            currentChartTab->setClosingPricesPositions();
+    //        currentChartTab->getChart()->setClosingPrices(); (static_castare a CandleStick)
+        }
+    }
+}
+void Controller::pickLowestPrices(){
+    //Controlla la corrente porzione di tabella selezionata
+        //Se la selezione è vuota
+            //Sostituisce la tag con "Unset" e il titolo con il titolo di default
+        //Se la selezione non è vuota
+            //Confronta le posizioni della selezione con la tag contenente le attuali posizioni
+                //Se le posizioni sono uguali
+                    //Sostituisce la tag con "Unset" e modifica il grafico
+                //Se le posizioni sono diverse
+                    //Aggiorna la tag con le nuove posizioni
+                    //Aggiorna il grafico
+    QTableWidget* CurrentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+    CandleStickSettings* currentChartTab = static_cast<CandleStickSettings*>(_MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex()));
+    if(CurrentTable->selectedItems().size() == 0){
+        currentChartTab->setLowestPricesPositions();
+//        currentChartTab->getChart()->setLowestPrices(); (static_castare a CandleStick)
+    }else{
+        QList<QTableWidgetItem*> cellSelected = CurrentTable->selectedItems();
+        QPair<QPair<int, int>, QPair<int, int>> newPositions = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>((cellSelected[0]->row()+1),(cellSelected[0]->column()+1)),QPair<int, int>((cellSelected.last()->row()+1),(cellSelected.last()->column()+1)));
+        if(newPositions != currentChartTab->getLowestPricesPositions()){
+            currentChartTab->setLowestPricesPositions(newPositions);
+    //        currentChartTab->getChart()->setLowestPrices(cellSelected); (static_castare a CandleStick)
+        }else{
+            currentChartTab->setLowestPricesPositions();
+    //        currentChartTab->getChart()->setLowestPrices(); (static_castare a CandleStick)
+        }
+    }
+}
+void Controller::pickHighestPrices(){
+    //Controlla la corrente porzione di tabella selezionata
+        //Se la selezione è vuota
+            //Sostituisce la tag con "Unset" e il titolo con il titolo di default
+        //Se la selezione non è vuota
+            //Confronta le posizioni della selezione con la tag contenente le attuali posizioni
+                //Se le posizioni sono uguali
+                    //Sostituisce la tag con "Unset" e modifica il grafico
+                //Se le posizioni sono diverse
+                    //Aggiorna la tag con le nuove posizioni
+                    //Aggiorna il grafico
+    QTableWidget* CurrentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+    CandleStickSettings* currentChartTab = static_cast<CandleStickSettings*>(_MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex()));
+    if(CurrentTable->selectedItems().size() == 0){
+        currentChartTab->setHighestPricesPositions();
+    //    currentChartTab->getChart()->setHighestPrices(); (static_castare a CandleStick)
+    }else{
+        QList<QTableWidgetItem*> cellSelected = CurrentTable->selectedItems();
+        QPair<QPair<int, int>, QPair<int, int>> newPositions = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>((cellSelected[0]->row()+1),(cellSelected[0]->column()+1)),QPair<int, int>((cellSelected.last()->row()+1),(cellSelected.last()->column()+1)));
+        if(newPositions != currentChartTab->getHighestPricesPositions()){
+            currentChartTab->setHighestPricesPositions(newPositions);
+    //        currentChartTab->getChart()->setHighestPrices(cellSelected); (static_castare a CandleStick)
+        }else{
+            currentChartTab->setHighestPricesPositions();
+    //        currentChartTab->getChart()->setHighestPrices(); (static_castare a CandleStick)
+        }
+    }
+}
+void Controller::pickDataRange(){
+    //Controlla la corrente porzione di tabella selezionata
+        //Se la selezione è vuota
+            //Sostituisce la tag con "Unset" e il titolo con il titolo di default
+        //Se la selezione non è vuota
+            //Confronta le posizioni della selezione con la tag contenente le attuali posizioni
+                //Se le posizioni sono uguali
+                    //Sostituisce la tag con "Unset" e modifica il grafico
+                //Se le posizioni sono diverse
+                    //Aggiorna la tag con le nuove posizioni
+                    //Aggiorna il grafico
+}
+void Controller::pickLabels(){
+    //Controlla la corrente porzione di tabella selezionata
+        //Se la selezione è vuota
+            //Sostituisce la tag con "Unset" e il titolo con il titolo di default
+        //Se la selezione non è vuota
+            //Confronta le posizioni della selezione con la tag contenente le attuali posizioni
+                //Se le posizioni sono uguali
+                    //Sostituisce la tag con "Unset" e modifica il grafico
+                //Se le posizioni sono diverse
+                    //Aggiorna la tag con le nuove posizioni
+                    //Aggiorna il grafico
+}
+void Controller::pickCategories(){
+    //Controlla la corrente porzione di tabella selezionata
+        //Se la selezione è vuota
+            //Sostituisce la tag con "Unset" e il titolo con il titolo di default
+        //Se la selezione non è vuota
+            //Confronta le posizioni della selezione con la tag contenente le attuali posizioni
+                //Se le posizioni sono uguali
+                    //Sostituisce la tag con "Unset" e modifica il grafico
+                //Se le posizioni sono diverse
+                    //Aggiorna la tag con le nuove posizioni
+                    //Aggiorna il grafico
+    QTableWidget* CurrentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+    //Devo capire che tipo di chart tab ho per chiamare la funzione corretta
+    ChartSettings* currentChartTab =_MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex());
+    if(CurrentTable->selectedItems().size() == 0){
+        currentChartTab->setCategoriesPositions();
+    //    currentChartTab->getChart()->setHighestPrices(); (static_castare a CandleStick)
+    }else{
+        QList<QTableWidgetItem*> cellSelected = CurrentTable->selectedItems();
+        QPair<QPair<int, int>, QPair<int, int>> newPositions = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>((cellSelected[0]->row()+1),(cellSelected[0]->column()+1)),QPair<int, int>((cellSelected.last()->row()+1),(cellSelected.last()->column()+1)));
+        if(newPositions != currentChartTab->getCategoriesPositions()){
+            currentChartTab->setCategoriesPositions(newPositions);
+    //        currentChartTab->getChart()->setHighestPrices(cellSelected); (static_castare a CandleStick)
+        }else{
+            currentChartTab->setCategoriesPositions();
+    //        currentChartTab->getChart()->setHighestPrices(); (static_castare a CandleStick)
+        }
+    }
 }
 
 void Controller::ChartRefresh(int row, int column){

@@ -59,12 +59,11 @@ ChartSettings::ChartSettings(QWidget * parent) : QWidget(parent),  _Settings(new
 QChart* ChartSettings::getChart(){
     return _ChartView->chart();
 }
-void ChartSettings::setTitleTag(QString q){
-    if(q=="") _Title->setText("Unset");
-    else _Title->setText(q);
+void ChartSettings::setTitlePosition(QPair<int, int> pos){
+//    QString cellPos = QString("(" + (QString::number(pos.first)) + ", " + (QString::number(pos.second)) + ")");
 }
-QString ChartSettings:: getTitleTag() const{
-    return _Title->text();
+QPair<int, int> ChartSettings:: getTitlePosition() const{
+
 }
 
 //TODO GETCOLORPALETTE

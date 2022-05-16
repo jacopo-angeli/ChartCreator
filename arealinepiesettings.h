@@ -12,13 +12,14 @@ public:
     AreaLinePieSettings(QWidget * = nullptr);
     AreaLinePieSettings(Flags type, QWidget * = nullptr);
 
-    void setDataRangeTag(QString);
+    void setDataRange(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0)));
     QPair <QPair<int , int>, QPair<int, int>> getDataRange() const;
-    QString getDataRangeTag() const;
 
-    void setLabelsTag(QString);
+    void setLabels(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0)));
     QPair <QPair<int , int>, QPair<int, int>> getLabelsRange() const;
-    QString getLabelsTag() const;
+
+    virtual void setCategoriesPositions(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0)));
+    virtual QPair<QPair<int, int>, QPair<int, int>> getCategoriesPositions() const;
 
     bool getParseMethod() const;
 private:

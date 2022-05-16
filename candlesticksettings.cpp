@@ -1,6 +1,6 @@
 #include "candlesticksettings.h"
 #include "candlestick.h"
-CandleStickSettings::CandleStickSettings(QWidget* parent) : ChartSettings(parent), _OpeningPrices(new QLabel("Unset")), _ClosingPrices(new QLabel("Unset")), _BottomPrices(new QLabel("Unset")), _LowestPrices(new QLabel("Unset")), _HighestPrices(new QLabel("Unset")), _Categories(new QLabel("Unset")){
+CandleStickSettings::CandleStickSettings(QWidget* parent) : ChartSettings(parent), _OpeningPrices(new QLabel("Unset")), _ClosingPrices(new QLabel("Unset")), _LowestPrices(new QLabel("Unset")), _HighestPrices(new QLabel("Unset")), _Categories(new QLabel("Unset")){
     //layouts
     QHBoxLayout * hor1=new QHBoxLayout();
     QHBoxLayout * hor2=new QHBoxLayout();
@@ -48,10 +48,6 @@ CandleStickSettings::CandleStickSettings(QWidget* parent) : ChartSettings(parent
     hor2->addWidget(btn2);
     hor2->addWidget(_ClosingPrices);
 
-    hor3->addWidget(txt3);
-    hor3->addWidget(btn3);
-    hor3->addWidget(_BottomPrices);
-
     hor4->addWidget(txt4);
     hor4->addWidget(btn4);
     hor4->addWidget(_LowestPrices);
@@ -73,4 +69,54 @@ CandleStickSettings::CandleStickSettings(QWidget* parent) : ChartSettings(parent
 
     _Chart = new CandleStick();
     _ChartView->setChart(_Chart);
+}
+
+void CandleStickSettings::setOpeningPricesPositions(QPair<QPair<int, int>, QPair<int, int> >)
+{
+
+}
+
+QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getOpeningPricesPosition() const
+{
+
+}
+
+void CandleStickSettings::setClosingPricesPositions(QPair<QPair<int, int>, QPair<int, int> >)
+{
+
+}
+
+QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getClosingPricesPositions() const
+{
+
+}
+
+void CandleStickSettings::setLowestPricesPositions(QPair<QPair<int, int>, QPair<int, int> >)
+{
+
+}
+
+QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getLowestPricesPositions() const
+{
+
+}
+
+void CandleStickSettings::setHighestPricesPositions(QPair<QPair<int, int>, QPair<int, int> >)
+{
+
+}
+
+QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getHighestPricesPositions() const
+{
+
+}
+
+void CandleStickSettings::setCategoriesPositions(QPair<QPair<int, int>, QPair<int, int> >)
+{
+
+}
+
+QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getCategoriesPositions() const
+{
+
 }
