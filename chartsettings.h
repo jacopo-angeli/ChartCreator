@@ -34,8 +34,8 @@ public:
     void setTitlePosition(QPair<int, int> = QPair<int, int>(0,0));
     QPair<int, int> getTitlePosition() const;
 
-    virtual void setCategoriesPositions(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0))) =0;
-    virtual QPair<QPair<int, int>, QPair<int, int>> getCategoriesPositions() const =0;
+    virtual void setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0))) =0;
+    virtual QPair<QPair<int, int>, QPair<int, int>> getCategoriesRange() const =0;
 };
 
 #endif // CHARTSETTINGS_H

@@ -71,52 +71,52 @@ CandleStickSettings::CandleStickSettings(QWidget* parent) : ChartSettings(parent
     _ChartView->setChart(_Chart);
 }
 
-void CandleStickSettings::setOpeningPricesPositions(QPair<QPair<int, int>, QPair<int, int> >)
+void CandleStickSettings::setOpeningPricesRange(QPair<QPair<int, int>, QPair<int, int> >)
 {
 
 }
 
-QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getOpeningPricesPosition() const
+QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getOpeningPricesRange() const
 {
 
 }
 
-void CandleStickSettings::setClosingPricesPositions(QPair<QPair<int, int>, QPair<int, int> >)
+void CandleStickSettings::setClosingPricesRange(QPair<QPair<int, int>, QPair<int, int> >)
 {
 
 }
 
-QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getClosingPricesPositions() const
+QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getClosingPricesRange() const
 {
 
 }
 
-void CandleStickSettings::setLowestPricesPositions(QPair<QPair<int, int>, QPair<int, int> >)
+void CandleStickSettings::setLowestPricesRange(QPair<QPair<int, int>, QPair<int, int> >)
 {
 
 }
 
-QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getLowestPricesPositions() const
+QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getLowestPricesRange() const
 {
 
 }
 
-void CandleStickSettings::setHighestPricesPositions(QPair<QPair<int, int>, QPair<int, int> >)
+void CandleStickSettings::setHighestPricesRange(QPair<QPair<int, int>, QPair<int, int> >)
 {
 
 }
 
-QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getHighestPricesPositions() const
+QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getHighestPricesRange() const
 {
 
 }
 
-void CandleStickSettings::setCategoriesPositions(QPair<QPair<int, int>, QPair<int, int> >)
+void CandleStickSettings::setCategoriesRange(QPair<QPair<int, int>, QPair<int, int> >)
 {
 
 }
 
-QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getCategoriesPositions() const
+QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getCategoriesRange() const
 {
 
 }

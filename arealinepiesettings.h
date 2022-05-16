@@ -15,11 +15,11 @@ public:
     void setDataRange(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0)));
     QPair <QPair<int , int>, QPair<int, int>> getDataRange() const;
 
-    void setLabels(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0)));
+    void setLabelsRange(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0)));
     QPair <QPair<int , int>, QPair<int, int>> getLabelsRange() const;
 
-    virtual void setCategoriesPositions(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0)));
-    virtual QPair<QPair<int, int>, QPair<int, int>> getCategoriesPositions() const;
+    virtual void setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0)));
+    virtual QPair<QPair<int, int>, QPair<int, int>> getCategoriesRange() const;
 
     bool getParseMethod() const;
 private:

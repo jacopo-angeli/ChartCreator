@@ -16,10 +16,10 @@ BarSettings::BarSettings(QWidget * parent): AreaLinePieSettings(parent), _Catego
     static_cast<QVBoxLayout*>(_Settings->layout())->addLayout(hor1);
 }
 
-void BarSettings::setCategoriesPositions(QPair<QPair<int, int>, QPair<int, int>> pos){
+void BarSettings::setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>> pos){
 
 }
 
-QPair<QPair<int, int>, QPair<int, int> > BarSettings::getCategoriesPositions() const{
+QPair<QPair<int, int>, QPair<int, int> > BarSettings::getCategoriesRange() const{
 
 }

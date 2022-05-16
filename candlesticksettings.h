@@ -9,16 +9,16 @@ class CandleStickSettings : public ChartSettings
     Q_OBJECT
 public:
     CandleStickSettings(QWidget * = nullptr);
-    void setOpeningPricesPositions(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0)));
-    QPair<QPair<int, int>, QPair<int, int>> getOpeningPricesPosition() const;
-    void setClosingPricesPositions(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0)));
-    QPair<QPair<int, int>, QPair<int, int>> getClosingPricesPositions() const;
-    void setLowestPricesPositions(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0)));
-    QPair<QPair<int, int>, QPair<int, int>> getLowestPricesPositions() const;
-    void setHighestPricesPositions(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0)));
-    QPair<QPair<int, int>, QPair<int, int>> getHighestPricesPositions() const;
-    virtual void setCategoriesPositions(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0)));
-    virtual QPair<QPair<int, int>, QPair<int, int>> getCategoriesPositions() const;
+    void setOpeningPricesRange(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0)));
+    QPair<QPair<int, int>, QPair<int, int>> getOpeningPricesRange() const;
+    void setClosingPricesRange(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0)));
+    QPair<QPair<int, int>, QPair<int, int>> getClosingPricesRange() const;
+    void setLowestPricesRange(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0)));
+    QPair<QPair<int, int>, QPair<int, int>> getLowestPricesRange() const;
+    void setHighestPricesRange(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0)));
+    QPair<QPair<int, int>, QPair<int, int>> getHighestPricesRange() const;
+    virtual void setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0)));
+    virtual QPair<QPair<int, int>, QPair<int, int>> getCategoriesRange() const;
 private:
     QLabel* _OpeningPrices;
     QLabel* _ClosingPrices;

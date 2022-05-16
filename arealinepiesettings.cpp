@@ -87,7 +87,7 @@ QPair <QPair<int , int>, QPair<int, int>> AreaLinePieSettings::getDataRange() co
     return QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0));
 }
 
-void AreaLinePieSettings::setLabels(QPair<QPair<int, int>, QPair<int, int>> pos){
+void AreaLinePieSettings::setLabelsRange(QPair<QPair<int, int>, QPair<int, int>> pos){
     //Check se pos.first>0
         //crei la stringa
             // {( pos.first.first , pos.first.second )->( pos.second.first , pos.second.second )}
@@ -106,10 +106,10 @@ QPair<QPair<int, int>, QPair<int, int>> AreaLinePieSettings::getLabelsRange() co
     return QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0));
 }
 
-void AreaLinePieSettings::setCategoriesPositions(QPair<QPair<int, int>, QPair<int, int> >){
+void AreaLinePieSettings::setCategoriesRange(QPair<QPair<int, int>, QPair<int, int> >){
     //throwiamo un sacchetto di eccezioni perchè non dovrebbe essere mai chiamata
 }
 
-QPair<QPair<int, int>, QPair<int, int> > AreaLinePieSettings::getCategoriesPositions() const{
+QPair<QPair<int, int>, QPair<int, int> > AreaLinePieSettings::getCategoriesRange() const{
     //throwiamo un sacchetto di eccezioni perchè non dovrebbe essere mai chiamata
 }
