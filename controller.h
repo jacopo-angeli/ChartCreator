@@ -25,7 +25,6 @@ private:
     bool isDate(QString);
     bool isInRange(QPair<int,int>, QPair<QPair<int,int>,QPair<int,int>>);
     bool isInRange(QPair<int,int>, QPair<int,int>);
-    void recollectData(int) const;
 public:
     Controller();
 public slots:

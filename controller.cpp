@@ -1,4 +1,5 @@
 #include "controller.h"
+#include "candlestick.h"
 
 #include <QJsonDocument>
 #include <QJsonParseError>
@@ -15,37 +16,6 @@ Controller::Controller(): _MainWindow(new MainWindow(this)),  _ActiveFiles(QMap<
     _MainWindow->setAnimated(true);
     _MainWindow->show();
 }
-
-void Controller::recollectData(int index) const{
-//    QTableWidget* CurrentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
-//    ChartSettings* chartPage = _MainWindow->getChartTab(index);
-//    QPair<QPair<int, int>, QPair<int, int>> dataRange = chartPage->getDataRange();
-//    QPieSeries* series = new QPieSeries();
-//    //scorrimento per righe al momento
-//    //recollecto per il pie chart
-//    //idea fare recollect data diversa per ogni chart settings window e passare come parametri la modalità di scorrimento e l'array di elementidella tabella presi usanto get data range
-//    for(int i=dataRange.first.first-1; i<dataRange.second.first; i++){
-//        //NOTE:la funzione item di QTableWidget usa gli indici a partire da 0 !!!
-//        QString sliceName = CurrentTable->item(i, dataRange.first.second-1)->text();
-//        int sliceValue = 0;
-//        for(int j=dataRange.first.second-1; j<dataRange.second.second; j++){
-//            if(CurrentTable->item(i, j)){
-//                if(isNumeric(CurrentTable->item(i, j)->text())){
-//                    sliceValue+=CurrentTable->item(i, j)->text().toInt();
-//                }else{
-//                    //Segnalare all'utente che non c'è consistenza nel formato dei dati selezionati
-//                }
-//            }
-//        }
-//        qDebug() << i <<"crash test";
-//        series->append(sliceName, sliceValue);
-//    }
-
-//    chartPage->getChart()->removeAllSeries();
-//    //Removes and deletes all series objects that have been added to the chart. https://doc.qt.io/qt-5/qchart.html#removeAllSeries
-//    chartPage->getChart()->addSeries(series);
-}
-
 
 void Controller::fileSave(int tableIndex, QString fileName){
     QString filePath = "";
@@ -267,15 +237,15 @@ void Controller::pickOpeningPrices(){
     CandleStickSettings* currentChartTab = static_cast<CandleStickSettings*>(_MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex()));
     if(selections.size() == 0){
         currentChartTab->setOpeningPricesRange();
-    //    currentChartTab->getChart()->setOpeningPrices();
+        static_cast<CandleStick*>(currentChartTab->getChart())->clearOpeningPrices();
     }else{
         QPair<QPair<int, int>, QPair<int, int>> newPositions = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>((selections.first().row()+1),(selections.first().column()+1)),QPair<int, int>((selections.last().row()+1),(selections.last().column()+1)));
         if(newPositions != currentChartTab->getOpeningPricesRange()){
             currentChartTab->setOpeningPricesRange(newPositions);
-    //        currentChartTab->getChart()->setOpeningPrices(CurrentTable, newPositions);
+            static_cast<CandleStick*>(currentChartTab->getChart())->setOpeningPrices(CurrentTable, selections);
         }else{
             currentChartTab->setOpeningPricesRange();
-    //        currentChartTab->getChart()->setOpeningPrices();
+            static_cast<CandleStick*>(currentChartTab->getChart())->clearOpeningPrices();
         }
     }
 }
@@ -295,15 +265,15 @@ void Controller::pickClosingPrices(){
     CandleStickSettings* currentChartTab = static_cast<CandleStickSettings*>(_MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex()));
     if(selections.size() == 0){
         currentChartTab->setClosingPricesRange();
-    //    currentChartTab->getChart()->setClosingPrices();
+        static_cast<CandleStick*>(currentChartTab->getChart())->clearClosingPrices();
     }else{
         QPair<QPair<int, int>, QPair<int, int>> newPositions = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>((selections.first().row()+1),(selections.first().column()+1)),QPair<int, int>((selections.last().row()+1),(selections.last().column()+1)));
         if(newPositions != currentChartTab->getClosingPricesRange()){
             currentChartTab->setClosingPricesRange(newPositions);
-    //        currentChartTab->getChart()->setClosingPrices(CurrentTable, newPositions);
+            static_cast<CandleStick*>(currentChartTab->getChart())->setClosingPrices(CurrentTable, selections);
         }else{
             currentChartTab->setClosingPricesRange();
-    //        currentChartTab->getChart()->clearClosingPrices();
+            static_cast<CandleStick*>(currentChartTab->getChart())->clearClosingPrices();
         }
     }
 }
@@ -323,15 +293,15 @@ void Controller::pickLowestPrices(){
     CandleStickSettings* currentChartTab = static_cast<CandleStickSettings*>(_MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex()));
     if(selections.size() == 0){
         currentChartTab->setLowestPricesRange();
-    //    currentChartTab->getChart()->setHighestPrices();
+        static_cast<CandleStick*>(currentChartTab->getChart())->clearLowestPrices();
     }else{
         QPair<QPair<int, int>, QPair<int, int>> newPositions = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>((selections.first().row()+1),(selections.first().column()+1)),QPair<int, int>((selections.last().row()+1),(selections.last().column()+1)));
         if(newPositions != currentChartTab->getLowestPricesRange()){
             currentChartTab->setLowestPricesRange(newPositions);
-    //        currentChartTab->getChart()->setLowestPrices(CurrentTable, newPositions);
+            static_cast<CandleStick*>(currentChartTab->getChart())->setLowestPrices(CurrentTable, selections);
         }else{
             currentChartTab->setLowestPricesRange();
-    //        currentChartTab->getChart()->clearHighestPrices();
+            static_cast<CandleStick*>(currentChartTab->getChart())->clearLowestPrices();
         }
     }
 }
@@ -351,15 +321,15 @@ void Controller::pickHighestPrices(){
     CandleStickSettings* currentChartTab = static_cast<CandleStickSettings*>(_MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex()));
     if(selections.size() == 0){
         currentChartTab->setHighestPricesRange();
-    //    currentChartTab->getChart()->setHighestPrices();
+        static_cast<CandleStick*>(currentChartTab->getChart())->clearHighestPrices();
     }else{
         QPair<QPair<int, int>, QPair<int, int>> newPositions = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>((selections.first().row()+1),(selections.first().column()+1)),QPair<int, int>((selections.last().row()+1),(selections.last().column()+1)));
         if(newPositions != currentChartTab->getHighestPricesRange()){
             currentChartTab->setHighestPricesRange(newPositions);
-    //        currentChartTab->getChart()->setHighestPrices(CurrentTable, newPositions);
+            static_cast<CandleStick*>(currentChartTab->getChart())->setHighestPrices(CurrentTable, selections);
         }else{
             currentChartTab->setHighestPricesRange();
-    //        currentChartTab->getChart()->clearHighestPrices();
+            static_cast<CandleStick*>(currentChartTab->getChart())->clearHighestPrices();
         }
     }
 }
@@ -403,15 +373,23 @@ void Controller::pickCategories(){
     ChartSettings* currentChartTab =_MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex());
     if(selections.size() == 0){
         currentChartTab->setCategoriesRange();
-    //    currentChartTab->getChart()->setHighestPrices(); (static_castare a CandleStick)
+        if(CandleStick* candleStickChart = dynamic_cast<CandleStick*>(currentChartTab->getChart()))
+            static_cast<CandleStick*>(currentChartTab->getChart())->clearCategories();
+//        else
+//            static_cast<Bar*>(currentChartTab->getChart())->clearCategories();
     }else{
         QPair<QPair<int, int>, QPair<int, int>> newPositions = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>((selections.first().row()+1),(selections.first().column()+1)),QPair<int, int>((selections.last().row()+1),(selections.last().column()+1)));
         if(newPositions != currentChartTab->getCategoriesRange()){
-            currentChartTab->setCategoriesRange(newPositions);
-    //        currentChartTab->getChart()->setHighestPrices(CurrentTable, newPositions); (static_castare a CandleStick)
+            if(CandleStick* candleStickChart = dynamic_cast<CandleStick*>(currentChartTab->getChart()))
+                static_cast<CandleStick*>(currentChartTab->getChart())->setCategories(CurrentTable, selections);
+    //        else
+    //            static_cast<Bar*>(currentChartTab->getChart())->setCategories(CurrentTable, selections);
         }else{
             currentChartTab->setCategoriesRange();
-    //        currentChartTab->getChart()->clearHighestPrices(); (static_castare a CandleStick)
+            if(CandleStick* candleStickChart = dynamic_cast<CandleStick*>(currentChartTab->getChart()))
+                static_cast<CandleStick*>(currentChartTab->getChart())->clearCategories();
+    //        else
+    //            static_cast<Bar*>(currentChartTab->getChart())->clearCategories();
         }
     }
 }

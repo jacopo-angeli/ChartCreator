@@ -7,37 +7,37 @@ CandleStickSettings::CandleStickSettings(QWidget* parent) : ChartSettings(parent
     QHBoxLayout * hor3=new QHBoxLayout();
     QHBoxLayout * hor4=new QHBoxLayout();
     QHBoxLayout * hor5=new QHBoxLayout();
-    QHBoxLayout * hor6=new QHBoxLayout();
 
     //buttons
     QPushButton* btn1=new QPushButton("PICK");
     btn1->setFixedWidth(120);
+    connect(btn1, SIGNAL(clicked()), parent, SLOT(pickOpeningPrices()));
     QPushButton* btn2=new QPushButton("PICK");
     btn2->setFixedWidth(120);
+    connect(btn2, SIGNAL(clicked()), parent, SLOT(pickClosingPrices()));
     QPushButton* btn3=new QPushButton("PICK");
     btn3->setFixedWidth(120);
+    connect(btn3, SIGNAL(clicked()), parent, SLOT(pickLowestPrices()));
     QPushButton* btn4=new QPushButton("PICK");
     btn4->setFixedWidth(120);
+    connect(btn4, SIGNAL(clicked()), parent, SLOT(pickHighestPrices()));
     QPushButton* btn5=new QPushButton("PICK");
     btn5->setFixedWidth(120);
-    QPushButton* btn6=new QPushButton("PICK");
-    btn6->setFixedWidth(120);
+    connect(btn5, SIGNAL(clicked()), parent, SLOT(pickCategories()));
 
     //text labels
 
     QLabel* txt1=new QLabel("Opening Prices");
     QLabel* txt2=new QLabel("Closing Prices");
-    QLabel* txt3=new QLabel("Bottom Prices");
-    QLabel* txt4=new QLabel("Lowest Prices");
-    QLabel* txt5=new QLabel("Highest Prices");
-    QLabel* txt6=new QLabel("Categories");
+    QLabel* txt3=new QLabel("Lowest Prices");
+    QLabel* txt4=new QLabel("Highest Prices");
+    QLabel* txt5=new QLabel("Categories");
 
     txt1->setFixedWidth(120);
     txt2->setFixedWidth(120);
     txt3->setFixedWidth(120);
     txt4->setFixedWidth(120);
     txt5->setFixedWidth(120);
-    txt6->setFixedWidth(120);
 
     //setting layout
     hor1->addWidget(txt1);
@@ -48,75 +48,65 @@ CandleStickSettings::CandleStickSettings(QWidget* parent) : ChartSettings(parent
     hor2->addWidget(btn2);
     hor2->addWidget(_ClosingPrices);
 
+    hor3->addWidget(txt3);
+    hor3->addWidget(btn3);
+    hor3->addWidget(_LowestPrices);
+
     hor4->addWidget(txt4);
     hor4->addWidget(btn4);
-    hor4->addWidget(_LowestPrices);
+    hor4->addWidget(_HighestPrices);
 
     hor5->addWidget(txt5);
     hor5->addWidget(btn5);
-    hor5->addWidget(_HighestPrices);
-
-    hor6->addWidget(txt6);
-    hor6->addWidget(btn6);
-    hor6->addWidget(_Categories);
+    hor5->addWidget(_Categories);
 
     static_cast<QVBoxLayout*>(_Settings->layout())->addLayout(hor1);
     static_cast<QVBoxLayout*>(_Settings->layout())->addLayout(hor2);
     static_cast<QVBoxLayout*>(_Settings->layout())->addLayout(hor3);
     static_cast<QVBoxLayout*>(_Settings->layout())->addLayout(hor4);
     static_cast<QVBoxLayout*>(_Settings->layout())->addLayout(hor5);
-    static_cast<QVBoxLayout*>(_Settings->layout())->addLayout(hor6);
 
     _Chart = new CandleStick();
     _ChartView->setChart(_Chart);
+    _ChartView->setRenderHint(QPainter::Antialiasing);
 }
 
-void CandleStickSettings::setOpeningPricesRange(QPair<QPair<int, int>, QPair<int, int> >)
-{
-
-}
-
-QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getOpeningPricesRange() const
-{
+void CandleStickSettings::setOpeningPricesRange(QPair<QPair<int, int>, QPair<int, int> >){
 
 }
 
-void CandleStickSettings::setClosingPricesRange(QPair<QPair<int, int>, QPair<int, int> >)
-{
+QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getOpeningPricesRange() const{
 
 }
 
-QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getClosingPricesRange() const
-{
+void CandleStickSettings::setClosingPricesRange(QPair<QPair<int, int>, QPair<int, int> >){
 
 }
 
-void CandleStickSettings::setLowestPricesRange(QPair<QPair<int, int>, QPair<int, int> >)
-{
+QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getClosingPricesRange() const{
 
 }
 
-QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getLowestPricesRange() const
-{
+void CandleStickSettings::setLowestPricesRange(QPair<QPair<int, int>, QPair<int, int> >){
 
 }
 
-void CandleStickSettings::setHighestPricesRange(QPair<QPair<int, int>, QPair<int, int> >)
-{
+QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getLowestPricesRange() const{
 
 }
 
-QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getHighestPricesRange() const
-{
+void CandleStickSettings::setHighestPricesRange(QPair<QPair<int, int>, QPair<int, int> >){
 
 }
 
-void CandleStickSettings::setCategoriesRange(QPair<QPair<int, int>, QPair<int, int> >)
-{
+QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getHighestPricesRange() const{
 
 }
 
-QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getCategoriesRange() const
-{
+void CandleStickSettings::setCategoriesRange(QPair<QPair<int, int>, QPair<int, int> >){
+
+}
+
+QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getCategoriesRange() const{
 
 }
