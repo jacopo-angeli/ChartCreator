@@ -29,7 +29,7 @@ private:
     QComboBox * _Color;
 public:
     ChartSettings(QWidget* = nullptr);
-    QChart* getChart();
+    Chart* getChart();
 
     void setTitlePosition(QPair<int, int> = QPair<int, int>(0,0));
     QPair<int, int> getTitlePosition() const;

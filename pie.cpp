@@ -5,7 +5,13 @@ Pie::Pie(QGraphicsItem* parent): Chart(parent)
 
 }
 
-void Pie::changeData(QList<QTableWidgetItem *>)
+void Pie::setSeries(QTableWidget *, const QModelIndexList &, Flags)
 {
 
 }
+
+void Pie::clearSeries()
+{
+
+}
+

@@ -5,7 +5,12 @@ Line::Line(QGraphicsItem* parent): Chart(parent)
 
 }
 
-void Line::changeData(QList<QTableWidgetItem *>)
+void Line::setSeries(QTableWidget *, const QModelIndexList &, Flags)
+{
+
+}
+
+void Line::clearSeries()
 {
 
 }

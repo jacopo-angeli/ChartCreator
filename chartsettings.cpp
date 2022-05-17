@@ -17,6 +17,12 @@
 ChartSettings::ChartSettings(QWidget * parent) : QWidget(parent),  _Settings(new QGroupBox(this)), _ChartView(new QChartView(this)), _Chart(nullptr), _Title(new QLabel("Unset")), _Color(new QComboBox()){
     QVBoxLayout * main=new QVBoxLayout();
     main->addWidget(_ChartView);
+    //ResetButton
+    QHBoxLayout * hor0=new QHBoxLayout();
+    QPushButton* btn0=new QPushButton("Reset Chart");
+    btn0->setFixedWidth(120);
+    hor0->addWidget(btn0);
+    hor0->addStretch();
 
     //Title Row
     QHBoxLayout * hor1=new QHBoxLayout();
@@ -30,13 +36,15 @@ ChartSettings::ChartSettings(QWidget * parent) : QWidget(parent),  _Settings(new
     //Color Setting Row
     QHBoxLayout * hor2=new QHBoxLayout();
     QLabel* colorLabel=new QLabel("Color Palette");
-    _Color->addItem("Light");
+    _Color->addItem("Default");
     _Color->addItem("Blue Cerulean");
     _Color->addItem("Dark");
     _Color->addItem("Brown Sand");
     _Color->addItem("Blue Natural");
     _Color->addItem("High Contrast");
     _Color->addItem("Blue Icy");
+    _Color->addItem("Qt");
+    connect(_Color, SIGNAL(currentIndexChanged(int)), parent, SLOT(themeChanged(int)));
     hor2->addWidget(colorLabel);
     hor2->addWidget(_Color);
 
@@ -47,8 +55,8 @@ ChartSettings::ChartSettings(QWidget * parent) : QWidget(parent),  _Settings(new
     _Color->setFixedWidth(300);
     hor2->addStretch();
 
-
     QVBoxLayout * settingsLayout=new QVBoxLayout();
+    settingsLayout->addLayout(hor0);
     settingsLayout->addLayout(hor1);
     settingsLayout->addLayout(hor2);
     _Settings->setLayout(settingsLayout);
@@ -56,8 +64,8 @@ ChartSettings::ChartSettings(QWidget * parent) : QWidget(parent),  _Settings(new
 
     setLayout(main);
 }
-QChart* ChartSettings::getChart(){
-    return _ChartView->chart();
+Chart* ChartSettings::getChart(){
+    return _Chart;
 }
 void ChartSettings::setTitlePosition(QPair<int, int> pos){
 //    QString cellPos = QString("(" + (QString::number(pos.first)) + ", " + (QString::number(pos.second)) + ")");

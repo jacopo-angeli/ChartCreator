@@ -14,7 +14,8 @@ private:
     void refresh();
 public:
     CandleStick(QGraphicsItem* =nullptr);
-    virtual void changeData(QList<QTableWidgetItem*>);
+    virtual void setSeries(QTableWidget*, const QModelIndexList&, Flags =Flags::ROW);
+    virtual void clearSeries();
     void setOpeningPrices(QTableWidget*, const QModelIndexList&);
     void clearOpeningPrices();
     void setClosingPrices(QTableWidget*, const QModelIndexList&);

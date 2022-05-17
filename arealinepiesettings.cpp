@@ -9,14 +9,17 @@ AreaLinePieSettings::AreaLinePieSettings(QWidget * parent): ChartSettings(parent
 
     QPushButton* btn1=new QPushButton("PICK");
     btn1->setFixedWidth(120);
+    connect(btn1, SIGNAL(clicked()), parent, SLOT(pickDataRange()));
     QPushButton* btn2=new QPushButton("PICK");
     btn2->setFixedWidth(120);
 
     QRadioButton* row=new QRadioButton("Row Parsing");
-    row->setFixedWidth(120);
+    row->setFixedWidth(150);
+    row->setIcon(QIcon("../OOPPROJECT/icons/RowParse.png"));
     QRadioButton* col=new QRadioButton("Colum Parsing");
-    row->setFixedWidth(120);
-    col->click(); //segno checked per evitare
+    col->setFixedWidth(150);
+    col->setIcon(QIcon("../OOPPROJECT/icons/ColumnParse.png"));
+    row->click(); //segno checked per evitare
     _ParseMethod->addButton(row); //con questo li maneggio con i signal
     _ParseMethod->addButton(col); //successivamente aggiungendoli al layout singolarmente e poi a _Settings ne gestisco la grafica
 
@@ -39,6 +42,7 @@ AreaLinePieSettings::AreaLinePieSettings(QWidget * parent): ChartSettings(parent
     hor3->addWidget(parseMethodLabel);
     hor3->addWidget(row); //parse method
     hor3->addWidget(col);
+    hor3->addStretch();
 
     static_cast<QVBoxLayout*>(_Settings->layout())->addLayout(hor1);
     static_cast<QVBoxLayout*>(_Settings->layout())->addLayout(hor2);
@@ -61,6 +65,8 @@ AreaLinePieSettings::AreaLinePieSettings(Flags type, QWidget* parent): AreaLineP
         default:
             break;
     }
+    _ChartView->setChart(_Chart);
+    _ChartView->setRenderHint(QPainter::Antialiasing);
 }
 
 void AreaLinePieSettings:: setDataRange(QPair<QPair<int, int>, QPair<int, int>> pos){
@@ -71,9 +77,9 @@ void AreaLinePieSettings:: setDataRange(QPair<QPair<int, int>, QPair<int, int>> 
     //settare il tag a "Unset" _Labels -> setText("Unset") (Controllare se è diverso da "Unset")
 }
 
-bool AreaLinePieSettings::getParseMethod() const{
-    if(_ParseMethod->checkedButton()->text() == "Row Parsing") return false;
-    else return true;
+Flags AreaLinePieSettings::getParseMethod() const{
+    if(_ParseMethod->checkedButton()->text() == "Row Parsing") return Flags::ROW;
+    else return Flags::COLUMN;
 }
 
 QPair <QPair<int , int>, QPair<int, int>> AreaLinePieSettings::getDataRange() const{

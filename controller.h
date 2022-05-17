@@ -73,6 +73,7 @@ public slots:
     void pickLabels();
     void pickCategories();
     void ChartRefresh(int, int);
+    void themeChanged(int);
 };
 
 #endif // CONTROLLER_H

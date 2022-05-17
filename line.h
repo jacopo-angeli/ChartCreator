@@ -7,7 +7,8 @@ class Line : public Chart
     Q_OBJECT
 public:
     Line(QGraphicsItem* =nullptr);
-    virtual void changeData(QList<QTableWidgetItem*>);
+    virtual void setSeries(QTableWidget*, const QModelIndexList&, Flags = Flags::ROW);
+    virtual void clearSeries();
 };
 
 #endif // LINE_H

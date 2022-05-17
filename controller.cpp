@@ -344,6 +344,22 @@ void Controller::pickDataRange(){
                 //Se le posizioni sono diverse
                     //Aggiorna la tag con le nuove posizioni
                     //Aggiorna il grafico
+    QTableWidget* CurrentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+    QModelIndexList selections = CurrentTable->selectionModel()->selectedIndexes();
+    AreaLinePieSettings* currentChartTab = static_cast<AreaLinePieSettings*>(_MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex()));
+    if(selections.size() == 0){
+        currentChartTab->setDataRange();
+        currentChartTab->getChart()->clearSeries();
+    }else{
+        QPair<QPair<int, int>, QPair<int, int>> newPositions = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>((selections.first().row()+1),(selections.first().column()+1)),QPair<int, int>((selections.last().row()+1),(selections.last().column()+1)));
+        if(newPositions != currentChartTab->getDataRange()){
+            currentChartTab->setDataRange(newPositions);
+            currentChartTab->getChart()->setSeries(CurrentTable, selections, currentChartTab->getParseMethod());
+        }else{
+            currentChartTab->setDataRange();
+            currentChartTab->getChart()->clearSeries();
+        }
+    }
 }
 void Controller::pickLabels(){
     //Controlla la corrente porzione di tabella selezionata
@@ -439,6 +455,39 @@ void Controller::ChartRefresh(int row, int column){
                 return;
         }
     }
+}
+
+void Controller::themeChanged(int index){
+    //Viene cambiato il theme del chart presente nella current tab di _Charts della current tab di _Files
+    switch(index){
+        case(0):
+            _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->getChart()->setTheme(QChart::ChartThemeLight);
+        break;
+        case(1):
+            _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->getChart()->setTheme(QChart::ChartThemeBlueCerulean);
+        break;
+        case(2):
+            _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->getChart()->setTheme(QChart::ChartThemeDark);
+        break;
+        case(3):
+            _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->getChart()->setTheme(QChart::ChartThemeBrownSand);
+        break;
+        case(4):
+            _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->getChart()->setTheme(QChart::ChartThemeBlueNcs);
+        break;
+        case(5):
+            _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->getChart()->setTheme(QChart::ChartThemeHighContrast);
+        break;
+        case(6):
+            _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->getChart()->setTheme(QChart::ChartThemeBlueIcy);
+        break;
+        case(7):
+            _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->getChart()->setTheme(QChart::ChartThemeQt);
+        break;
+        default:
+        break;
+    }
+
 };
 
 QTableWidget* Controller::fileParser(const QString filePath){
