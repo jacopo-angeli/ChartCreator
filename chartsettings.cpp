@@ -14,14 +14,6 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QFrame>
-QJsonValue ChartSettings::getTitleJson() const{
-    return _Title->text();
-}
-
-QJsonValue ChartSettings::getColorJson() const{
-    return _Color->currentIndex();
-}
-
 ChartSettings::ChartSettings(QWidget * parent) : QWidget(parent),  _Settings(new QGroupBox(this)), _ChartView(new QChartView(this)), _Chart(nullptr), _Title(new QLabel("Unset")), _Color(new QComboBox()){
     QVBoxLayout * main=new QVBoxLayout();
     main->addWidget(_ChartView);
@@ -80,7 +72,7 @@ ChartSettings::ChartSettings(QWidget * parent) : QWidget(parent),  _Settings(new
 
     setLayout(main);
 }
-Chart* ChartSettings::getChart(){
+Chart* ChartSettings::getChart() const{
     return _Chart;
 }
 void ChartSettings::setTitlePosition(QPair<int, int> pos){
@@ -93,7 +85,18 @@ void ChartSettings::setColorIndex(int index){
     if(index>0 && index<7)
         _Color->setCurrentIndex(index);
 }
-QPair<QPair<int, int>, QPair<int, int> > ChartSettings::tagToPair(QString tag){
+QJsonObject ChartSettings::toJSON() const{
+    QJsonObject JsonObj = QJsonObject();
+    JsonObj["TitlePosition"]=_Title->text();
+    JsonObj["ColorIndex"]=_Color->currentIndex();
+    return JsonObj;
+}
+void ChartSettings::fromJSON(const QJsonObject & chartJSON){
+    if(chartJSON["TitlePosition"].toString() != "Unset")
+        setTitlePosition(tagToPair(chartJSON["TitlePosition"].toString()));
+    setColorIndex(chartJSON["TitlePosition"].toInt());
+}
+QPair<QPair<int, int>, QPair<int, int> > ChartSettings::tagToPairPair(const QString& tag) const{
     QList<QString> tagSplitted = tag.split(' ');
     if(tag!="Unset"){
         QPair<int, int> fP = QPair<int, int>(tagSplitted[1].toInt(),tagSplitted[3].toInt());
@@ -101,6 +104,14 @@ QPair<QPair<int, int>, QPair<int, int> > ChartSettings::tagToPair(QString tag){
         return QPair<QPair<int, int>, QPair<int, int>>(fP, lP);
     }
     return QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0));
+}
+
+QPair<int, int> ChartSettings::tagToPair(const QString& tag) const{
+    QList<QString> tagSplitted = tag.split(' ');
+    if(tag!="Unset"){
+        return QPair<int, int>(tagSplitted[1].toInt(),tagSplitted[3].toInt());
+    }
+    return QPair<int, int>(0, 0);
 };
 
 

@@ -113,19 +113,31 @@ QPair<QPair<int, int>, QPair<int, int>> AreaLinePieSettings::getLabelsRange() co
     return QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0));
 }
 
-void AreaLinePieSettings::setCategoriesRange(QPair<QPair<int, int>, QPair<int, int> >){
-    //throwiamo un sacchetto di eccezioni perchè non dovrebbe essere mai chiamata
-}
-
+void AreaLinePieSettings::setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>){}
 QPair<QPair<int, int>, QPair<int, int> > AreaLinePieSettings::getCategoriesRange() const{
-    //throwiamo un sacchetto di eccezioni perchè non dovrebbe essere mai chiamata
+    return QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0));
 }
 
 QJsonObject AreaLinePieSettings::toJSON() const{
-
+    QJsonObject JsonObj = ChartSettings::toJSON();
+    if(dynamic_cast<Pie*>(getChart())){
+        JsonObj["type"]="Pie";
+    }else if(dynamic_cast<Area*>(getChart())){
+        JsonObj["type"]="Area";
+    }else{
+        JsonObj["type"]="Line";
+    }
+    JsonObj["DataRange"]=_DataRange->text();
+    JsonObj["LabelsRange"]=_Labels->text();
+    return JsonObj;
 }
 
-void AreaLinePieSettings::fromJSON(const QJsonObject& )
-{
-
+void AreaLinePieSettings::fromJSON(const QJsonObject& chartJSON){
+    ChartSettings::fromJSON(chartJSON);
+    if(chartJSON["CategoriesRange"].toString() != "Unset")
+        setCategoriesRange(tagToPairPair(chartJSON["CategoriesRange"].toString()));
+    if(chartJSON["DataRange"].toString() != "Unset")
+        setDataRange(tagToPairPair(chartJSON["CategoriesRange"].toString()));
+    if(chartJSON["LablesRange"].toString() != "Unset")
+        setDataRange(tagToPairPair(chartJSON["LabRange"].toString()));
 }

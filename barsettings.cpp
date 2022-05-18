@@ -25,10 +25,14 @@ QPair<QPair<int, int>, QPair<int, int> > BarSettings::getCategoriesRange() const
 }
 
 QJsonObject BarSettings::toJSON() const{
-
+    QJsonObject JsonObj = AreaLinePieSettings::toJSON();
+    JsonObj["Type"]="BarSettings";
+    JsonObj["CategoriesRange"]=_Categories->text();
+    return JsonObj;
 }
 
-void BarSettings::fromJSON(const QJsonObject &)
-{
-
+void BarSettings::fromJSON(const QJsonObject & chartJSON){
+    AreaLinePieSettings::fromJSON(chartJSON);
+    if(chartJSON["CategoriesRange"].toString() != "Unset")
+        setCategoriesRange(tagToPairPair(chartJSON["CategoriesRange"].toString()));
 }
