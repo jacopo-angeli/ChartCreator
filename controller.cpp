@@ -177,7 +177,6 @@ void Controller::pickTitle(){
                 //Se le posizioni sono diverse
                     //Aggiorna la tag con l'attuale posizione della prima cella della selezione
                     //Aggiorna il titolo del grafico con il contenuto della prima cella della selezione
-    qDebug() << "pickTitle";
     QTableWidget* CurrentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
     QModelIndexList selections = CurrentTable->selectionModel()->selectedIndexes();
     if(selections.size() == 0){
@@ -185,16 +184,12 @@ void Controller::pickTitle(){
         _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->getChart()->setTitle("");
     }else{
         QPair<int, int> newPosition = QPair<int, int>((selections.first().row()+1),(selections.first().column()+1));
-        QTableWidgetItem* cellSelected = CurrentTable->item(newPosition.first, newPosition.second);
-        qDebug() << "pickTitle selection equal1";
-        qDebug() << _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex());
+        QTableWidgetItem* cellSelected = CurrentTable->item(newPosition.first-1, newPosition.second-1);
         if(newPosition != _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->getTitlePosition()){
-            qDebug() << "pickTitle selection equal2";
             _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->setTitlePosition(newPosition);
             if(cellSelected)
                 _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->getChart()->setTitle(cellSelected->text());
         }else{
-            qDebug() << "pickTitle selection equal3";
             _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->setTitlePosition();
             _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->getChart()->setTitle("");
         }

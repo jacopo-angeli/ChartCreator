@@ -79,7 +79,7 @@ void AreaLinePieSettings:: setDataRange(QPair<QPair<int, int>, QPair<int, int>> 
     QString tag=QString();
     if((pos.first.first)>0)
     {
-        tag=QString("{("+QString::number(pos.first.first)+ "," +QString::number(pos.first.second)+")->("+ QString::number(pos.second.first)+ "," + QString::number(pos.second.second));
+        tag=QString("{( "+QString::number(pos.first.first)+ " , " +QString::number(pos.first.second)+" )->( "+ QString::number(pos.second.first)+ " , " + QString::number(pos.second.second) + " )}");
     }
     else
     {
@@ -113,7 +113,7 @@ void AreaLinePieSettings::setLabelsRange(QPair<QPair<int, int>, QPair<int, int>>
     QString tag=QString();
     if((pos.first.first)>0)
     {
-        tag=QString("{("+QString::number(pos.first.first)+ "," +QString::number(pos.first.second)+")->("+ QString::number(pos.second.first)+ "," + QString::number(pos.second.second));
+        tag=QString("{( "+QString::number(pos.first.first)+ " , " +QString::number(pos.first.second)+" )->( "+ QString::number(pos.second.first)+ " , " + QString::number(pos.second.second) + " )}");
     }
     else
     {
