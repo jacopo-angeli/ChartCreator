@@ -10,7 +10,7 @@ void Pie::setSeries(QTableWidget *, const QModelIndexList &, Flags)
 
 }
 
-void Pie::clearSeries()
+void Pie::clearData()
 {
 
 }

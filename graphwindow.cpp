@@ -86,7 +86,6 @@ void GraphWindow::PieChartCreator(){
     //clearing and rebuilding _ChartWindow
     showChartWindow();
 }
-
 void GraphWindow::BarChart(){
     if(_Chart) delete _Chart;
     _Chart=new QChart();
@@ -182,7 +181,6 @@ void GraphWindow::BarToolBar(){
     _UpperToolBar->addWidget(ChangeChart);
     _UpperToolBar->setStyleSheet("QToolBar{background-color:rgb(160,160,160); border-radius:10%; padding:5px;} QToolButton{font-size:11pt; border: 1.5px solid transparent;} QToolButton:hover{border:1.5px solid black; border-radius: 10%;}");
 }
-
 void GraphWindow::LineChart(QString title){
     if(_Chart) delete _Chart;
     _Chart=new QChart();
@@ -262,7 +260,6 @@ void GraphWindow::LineToolBar(){
     _UpperToolBar->addWidget(TickCounter);
     _UpperToolBar->setStyleSheet("QToolBar{background-color:rgb(255,255,255); border-radius:10%; padding:5px;} QToolButton{font-size:11pt; border: 1.5px solid transparent;} QToolButton:hover{border:1.5px solid black; border-radius: 10%;}");
 }
-
 void GraphWindow::PieToolBar(){
     if(_UpperToolBar)delete _UpperToolBar;
     _UpperToolBar = new QToolBar();
@@ -341,7 +338,6 @@ void GraphWindow::explodeSlice(){
         }
     }
 }
-
 void GraphWindow::SaveAsPng(){
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save Chart"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),tr("Images (*.png)"));
     if(!(fileName.contains(".png"))) fileName.append(".png");
@@ -368,12 +364,10 @@ std::pair<int, int> GraphWindow::getValueRange() const{
     }
     return std::make_pair(min, max);
 }
-
 void GraphWindow::ChartSelection(){
     _ChartWindow->close();
     this->show();
 }
-
 void GraphWindow::showChartWindow(){
     if(_ChartWindow->layout()) delete _ChartWindow->layout();
     if(_ChartView) delete _ChartView;
@@ -395,4 +389,3 @@ void GraphWindow::showChartWindow(){
 
     _ChartWindow->show();
 }
-

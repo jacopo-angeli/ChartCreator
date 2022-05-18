@@ -10,7 +10,7 @@ void Line::setSeries(QTableWidget *, const QModelIndexList &, Flags)
 
 }
 
-void Line::clearSeries()
+void Line::clearData()
 {
 
 }

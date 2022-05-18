@@ -10,7 +10,7 @@ class Chart : public QChart
 public:
     Chart(QGraphicsItem* =nullptr);
     virtual void setSeries(QTableWidget*, const QModelIndexList&, Flags = Flags::ROW)=0;
-    virtual void clearSeries()=0;
+    virtual void clearData()=0;
 };
 
 #endif // CHART_H

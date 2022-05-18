@@ -5,25 +5,29 @@ Area::Area(QGraphicsItem* parent): Chart(parent), _series(QList<QLineSeries*>())
 }
 
 void Area::setSeries(QTableWidget* table, const QModelIndexList& indexes, Flags parseDirection){
-    QLineSeries *series = new QLineSeries();
+    clearData();
     switch(parseDirection){
         case(Flags::ROW):{
-            int pC=0;
-            for(int i=indexes.first().row(); i<=indexes.last().row();i++){
+            for(int i=indexes.last().row(); i>=indexes.first().row();i--){
+                QLineSeries *series = new QLineSeries();
+                int pC=0;
                 for(int j=indexes.first().column(); j<=indexes.last().column();j++){
                     QTableWidgetItem* item = table->item(i, j);
                     if(item) *series << QPointF(++pC,item->text().toInt());
                 }
+                if(series->count() > 0) _series.append(series);
             }
         }
         break;
         case(Flags::COLUMN):{
-            int pC=0;
-            for(int j=indexes.first().column(); j<=indexes.last().column();j++){
+            for(int j=indexes.last().column(); j>=indexes.first().column();j--){
+                QLineSeries *series = new QLineSeries();
+                int pC=0;
                 for(int i=indexes.first().row(); i<=indexes.last().row();i++){
                     QTableWidgetItem* item = table->item(i, j);
                     if(item) *series << QPointF(++pC,item->text().toInt());
                 }
+                if(series->count() > 0) _series.append(series);
             }
         }
         break;
@@ -31,12 +35,12 @@ void Area::setSeries(QTableWidget* table, const QModelIndexList& indexes, Flags 
             //Lancia eccezioni
         break;
     }
-    if(series->count() > 0) _series.append(series);
     refresh();
 }
 
-void Area::clearSeries(){
+void Area::clearData(){
     _series.clear();
+    removeAllSeries();
 }
 
 void Area::refresh(){

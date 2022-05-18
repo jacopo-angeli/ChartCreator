@@ -63,7 +63,7 @@ public slots:
     void PieChartCreation();
     void AreaChartCreation();
 
-    /*Real-Time Chart Changes*/
+    /*Chart*/
     void pickTitle();
     void pickOpeningPrices();
     void pickClosingPrices();
@@ -73,7 +73,10 @@ public slots:
     void pickLabels();
     void pickCategories();
     void ChartRefresh(int, int);
+    void parseMethodChange(QAbstractButton*);
     void themeChanged(int);
+    void chartReset();
+    void chartCreationGuide();
 };
 
 #endif // CONTROLLER_H

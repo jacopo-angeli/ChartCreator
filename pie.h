@@ -8,7 +8,7 @@ class Pie : public Chart
 public:
     Pie(QGraphicsItem* = nullptr);
     virtual void setSeries(QTableWidget*, const QModelIndexList&, Flags = Flags::ROW);
-    virtual void clearSeries();
+    virtual void clearData();
 };
 
 #endif // PIE_H

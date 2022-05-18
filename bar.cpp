@@ -10,7 +10,7 @@ void Bar::setSeries(QTableWidget *, const QModelIndexList &, Flags)
 
 }
 
-void Bar::clearSeries()
+void Bar::clearData()
 {
 
 }

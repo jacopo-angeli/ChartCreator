@@ -1,22 +1,17 @@
 #include "controller.h"
 #include "candlestick.h"
-
 #include <QJsonDocument>
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QJsonArray>
-
 #include<string>
-
-
 Controller::Controller(): _MainWindow(new MainWindow(this)),  _ActiveFiles(QMap<QString, QString>()){
     lastSessionRestore();
     _MainWindow->setWindowState(Qt::WindowMaximized);
     _MainWindow->setAnimated(true);
     _MainWindow->show();
 }
-
 void Controller::fileSave(int tableIndex, QString fileName){
     QString filePath = "";
     if(fileName==""){
@@ -24,6 +19,7 @@ void Controller::fileSave(int tableIndex, QString fileName){
         if(!(filePath.contains(".crt"))) filePath.append(".crt");
         _MainWindow->setCurrentTabTitle(QString("../"+(filePath.split("/")).last()));
     }else filePath=_ActiveFiles[fileName];
+
     //TODO: File name change while modifing it problem
     QFile file(filePath);
     if (file.open(QIODevice::ReadWrite | QIODevice::Truncate)) {
@@ -32,8 +28,6 @@ void Controller::fileSave(int tableIndex, QString fileName){
         QTableWidget* table = _MainWindow->getFullTable(tableIndex);
 
         QJsonObject tableJSON;
-        tableJSON["ColNumber"] = table->columnCount();
-        tableJSON["RowNumber"] = table->rowCount();
 
         table->selectAll();
         QList<QTableWidgetItem*> ItemList = table->selectedItems();
@@ -56,14 +50,11 @@ void Controller::fileSave(int tableIndex, QString fileName){
         QJsonObject charts;
         charts["chartNumber"] = chartNumber;
         for(auto i = 0; i<chartNumber; i++){
-            ChartSettings* chartTab = _MainWindow->getChartTab(i);
-            //Problemi nel save di un file senza focus
-            charts["title"] = chartTab->getChart()->title();
-            //a seconda del tipo devo poi tirarmi giù le diverse label
+            ChartSettings* chartTab = _MainWindow->getChartTab(i, tableIndex);
+            charts[QString::number(i)] = chartTab->toJSON();
         }
 
         fullfile["charts"] = charts;
-        //TODO : Salvare anche i grafici aperti?
         stream<<QJsonDocument(fullfile).toJson();
         file.close();
     }else{
@@ -101,7 +92,6 @@ void Controller::SelectionReset(){
 void Controller::RowDelete(){
     _MainWindow->deleteContent();
 };
-
 void Controller::ColumnDelete(){
     _MainWindow->deleteContent(Flags::COLUMN);
 };
@@ -117,11 +107,9 @@ void Controller::RightAlign(){
 void Controller::SpinBox(){
     _MainWindow->setSpinBox(10);
 };
-
 void Controller::SetTextSize(){
     _MainWindow->setTextSize(_MainWindow->getSpinValue());
 };
-
 void Controller::TabClose(int index){
     QString tabName = _MainWindow->getTabName(index);
     QMessageBox::StandardButton Reply;
@@ -131,23 +119,18 @@ void Controller::TabClose(int index){
     _ActiveFiles.remove(tabName);
     _MainWindow->closeTab(index);
 };
-
 void Controller::openFile(){
     fileOpen();
 };
-
 void Controller::saveACopy(){
     fileSave(_MainWindow->getCurrentTabIndex());
 };
-
 void Controller::newTab(){
     _MainWindow->newTab();
 };
-
 void Controller::saveFile(){
     fileSave(_MainWindow->getCurrentTabIndex(), _MainWindow->getTabName()=="Untitled" ? "" : _MainWindow->getTabName());
 };
-
 void Controller::mainWindowCloseEvent(){
     QFile file(QDir::currentPath()+"/cnfg.json");
     if (file.open(QIODevice::ReadWrite | QIODevice::Truncate)) {
@@ -168,27 +151,21 @@ void Controller::mainWindowCloseEvent(){
     }
     _MainWindow->close();
 };
-
 void Controller::BarChartCreation(){
     _MainWindow->chartTypeSelected(Flags::BARS);
 };
-
 void Controller::CandleStickChartCreation(){
     _MainWindow->chartTypeSelected(Flags::CANDLESTICK);
 };
-
 void Controller::LineChartCreation(){
     _MainWindow->chartTypeSelected(Flags::LINES);
 };
-
 void Controller::PieChartCreation(){
     _MainWindow->chartTypeSelected(Flags::PIE);
 };
-
 void Controller::AreaChartCreation(){
     _MainWindow->chartTypeSelected(Flags::AREA);
 };
-
 void Controller::pickTitle(){
     //Controlla la corrente porzione di tabella selezionata
         //Se la selezione è vuota
@@ -349,7 +326,7 @@ void Controller::pickDataRange(){
     AreaLinePieSettings* currentChartTab = static_cast<AreaLinePieSettings*>(_MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex()));
     if(selections.size() == 0){
         currentChartTab->setDataRange();
-        currentChartTab->getChart()->clearSeries();
+        currentChartTab->getChart()->clearData();
     }else{
         QPair<QPair<int, int>, QPair<int, int>> newPositions = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>((selections.first().row()+1),(selections.first().column()+1)),QPair<int, int>((selections.last().row()+1),(selections.last().column()+1)));
         if(newPositions != currentChartTab->getDataRange()){
@@ -357,7 +334,7 @@ void Controller::pickDataRange(){
             currentChartTab->getChart()->setSeries(CurrentTable, selections, currentChartTab->getParseMethod());
         }else{
             currentChartTab->setDataRange();
-            currentChartTab->getChart()->clearSeries();
+            currentChartTab->getChart()->clearData();
         }
     }
 }
@@ -409,7 +386,6 @@ void Controller::pickCategories(){
         }
     }
 }
-
 void Controller::ChartRefresh(int row, int column){
     //Scorro tutte la tab di _Chart
     //Se l'elemento selezionato è nella posizione della cella del titolo
@@ -456,7 +432,25 @@ void Controller::ChartRefresh(int row, int column){
         }
     }
 }
+void Controller::parseMethodChange(QAbstractButton* btnClicked){
+    //Controllo se la label del data range è diversa da unset
+        //Sè e definita, seleziono gli elementi corrispondenti
+        //Se il testo del pulsante è "Row Parsing"
+            //Dico al grafico di aggiornare i dati con il flag di default
+        //Altrimenti
+            //Dico al grafico di recuperare i dati con il flag COLUMN
+    //Altrimenti ritorno
+    AreaLinePieSettings* currentChartTab = static_cast<AreaLinePieSettings*>(_MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex()));
+    QPair<QPair<int,int>, QPair<int,int>> dataRange = currentChartTab->getDataRange();
+    if(dataRange.first.first == 0) return; //Label "Unset"
 
+    QTableWidget* CurrentTable= _MainWindow->getFullTable(_MainWindow->getCurrentChartTabIndex());
+    CurrentTable->setRangeSelected(QTableWidgetSelectionRange(dataRange.first.first, dataRange.first.second, dataRange.second.first, dataRange.second.second), true);
+    QModelIndexList indexes = CurrentTable->selectionModel()->selectedIndexes();
+    CurrentTable->clearSelection();
+    if(btnClicked->text() == "Row Parsing") currentChartTab->getChart()->setSeries(CurrentTable, indexes);
+    else currentChartTab->getChart()->setSeries(CurrentTable, indexes, Flags::COLUMN);
+}
 void Controller::themeChanged(int index){
     //Viene cambiato il theme del chart presente nella current tab di _Charts della current tab di _Files
     switch(index){
@@ -488,8 +482,13 @@ void Controller::themeChanged(int index){
         break;
     }
 
-};
+}
+void Controller::chartReset(){
+    _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->getChart()->clearData();
+}
+void Controller::chartCreationGuide(){
 
+};
 QTableWidget* Controller::fileParser(const QString filePath){
     QFile file(filePath);
     QTableWidget* parsedTable = nullptr;
@@ -517,7 +516,6 @@ QTableWidget* Controller::fileParser(const QString filePath){
     }
     return parsedTable;
 };
-
 void Controller::lastSessionRestore(){
     QFile file(QDir::currentPath()+"/cnfg.json");
     if (file.open(QIODevice::ReadOnly)){
@@ -527,31 +525,83 @@ void Controller::lastSessionRestore(){
         QJsonObject lastArrayState = doc.object();
         for(int i=0; i<lastArrayState.size()-1; i++){
             QJsonObject keyValuePair = lastArrayState.value(QString("File ")+QString::number(i)).toObject();
-            fileOpen(keyValuePair.value("path").toString());
+//            fileOpen(keyValuePair.value("path").toString());
         }
     }
 };
-
 void Controller::fileOpen(QString filePath){
     if (filePath == "") filePath = QFileDialog::getOpenFileName(_MainWindow, QString("Open file"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation), tr("ChartCreator (*.crt)"));
     if(_MainWindow->getFilePosition(QString("../"+(filePath.split("/")).last())) < 0){
+        qDebug() << "fileOpen:" << filePath;
         if (!(filePath.isEmpty()) && filePath.endsWith(QString(".crt"))){
-            _MainWindow->openFile(QString("../"+(filePath.split("/")).last()), fileParser(filePath));
-            _ActiveFiles.insert(QString("../"+(filePath.split("/")).last()), filePath);
+            //Apro il file
+            QFile file(filePath);
+            if (file.open(QIODevice::ReadOnly)){
+                QByteArray data = file.readAll();
+                file.close();
+                QJsonDocument doc = QJsonDocument::fromJson(data);
+                QJsonObject fullTab = doc.object();
+                //Aggiungo una nuova tab pulita a _Files
+                _MainWindow->newTab();
+                //newTab mi porta la current tab nella posizione corretta
+                //Setto il titolo con il nome del file
+                _MainWindow->setCurrentTabTitle(QString("../"+(filePath.split("/")).last()));
+
+
+                //per ogni entries creo un chart del tipo corrispondente su mainwindow
+                QJsonObject chartList = fullTab["charts"].toObject();
+                qDebug() << chartList.size();
+                int chartNumber = chartList.size();
+                for(int i=0; i<chartNumber; i++){
+                    qDebug() << i << "^ iteration";
+                    QJsonObject chart = chartList[QString::number(i)].toObject();
+                    qDebug() << chartList.size();
+                    QString type = chart["type"].toString();
+                    if(type == "CandleStick"){
+                        _MainWindow->chartTypeSelected(Flags::CANDLESTICK);
+                    }else if(type == "Bar"){
+                        _MainWindow->chartTypeSelected(Flags::BARS);
+                    }else{
+                        if(type == "Area")
+                            _MainWindow->chartTypeSelected(Flags::AREA);
+                        else if(type == "Line")
+                            _MainWindow->chartTypeSelected(Flags::LINES);
+                        else
+                            _MainWindow->chartTypeSelected(Flags::PIE);
+                    }
+                    _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->fromJSON(chart);
+                }
+
+                //riempio le celle salvate sul json così trigghero il refresh dei grafici
+                QTableWidget* table = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+
+                QJsonObject cellList = fullTab["table"].toObject();
+                for(int i=0; i<cellList.size(); i++){
+                    QJsonObject cell = cellList[QString::number(i)].toObject();
+                    QTableWidgetItem* newCell = new QTableWidgetItem();
+                    newCell->setText(cell["value"].toString());
+                    QFont f = newCell->font();
+                    f.setPointSize(cell["fontSize"].toInt());
+                    newCell->setFont(f);
+                    table->setItem(cell["row"].toInt(), cell["column"].toInt(), newCell);
+                }
+
+
+                //inserisco su _ActiveFiles il nuovo file
+                _ActiveFiles.insert(QString("../"+(filePath.split("/")).last()), filePath);
+
+            }
         }
     }
 }
-
 bool Controller::isNumeric(QString string) const{
     QRegExp regex("^[0-9]\\d*(\\.\\d+)?$");
     return regex.exactMatch(string);
 }
-
 bool Controller::isInRange(QPair<int, int> pos, QPair<QPair<int, int>, QPair<int, int>> range){
     if((pos.first>=range.first.first && pos.first<=range.second.first) && (pos.second>=range.first.second && pos.second<=range.second.second)) return true;
     return false;
 }
-
 bool Controller::isInRange(QPair<int, int> pos1, QPair<int, int> pos2){
     return pos1 == pos2;
-};
+}

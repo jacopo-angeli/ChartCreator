@@ -182,7 +182,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Files(new QTabWid
 
 
     setCentralWidget(_Files);
-    this->layout()->setSpacing(0);
 
     ToolBar->addWidget(NewRow);
     ToolBar->addWidget(NewColumn);
@@ -200,7 +199,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Files(new QTabWid
 
 void MainWindow::addRow(Flags dir)
 {
-    QTableWidget* currentTable = static_cast<QTableWidget*>(_Files->widget(_Files->currentIndex()));
+    QTableWidget* currentTable = getFullTable(getCurrentTabIndex());
     switch (dir) {
         case (Flags::TOP):
             currentTable->insertRow(currentTable->currentRow());
@@ -214,7 +213,7 @@ void MainWindow::addRow(Flags dir)
 }
 
 void MainWindow::addColumn(Flags dir){
-    QTableWidget* currentTable = static_cast<QTableWidget*>(_Files->widget(_Files->currentIndex()));
+    QTableWidget* currentTable = getFullTable(getCurrentTabIndex());
     switch (dir) {
         case (Flags::LEFT):
             currentTable->insertColumn(currentTable->currentColumn()+1);
@@ -227,13 +226,9 @@ void MainWindow::addColumn(Flags dir){
     }
 }
 
-void MainWindow::clearTable(){
-    QTableWidget* currentTable = static_cast<QTableWidget*>(_Files->widget(_Files->currentIndex()));
-    currentTable->clearContents();
-}
 
 void MainWindow::clearContent(Flags Content){
-    QTableWidget* currentTable = static_cast<QTableWidget*>(_Files->widget(_Files->currentIndex()));
+    QTableWidget* currentTable = getFullTable(getCurrentTabIndex());
     switch (Content) {
         case (Flags::SELECTION): {
             QList<QTableWidgetItem*> ItemList = currentTable->selectedItems();
@@ -274,7 +269,7 @@ void MainWindow::clearContent(Flags Content){
 }
 
 void MainWindow::deleteContent(Flags Content){
-    QTableWidget* currentTable = static_cast<QTableWidget*>(_Files->widget(_Files->currentIndex()));
+    QTableWidget* currentTable = getFullTable(getCurrentTabIndex());
     switch (Content) {
         case (Flags::COLUMN):
             //TODO:Multiple columns selection handle
@@ -290,7 +285,7 @@ void MainWindow::deleteContent(Flags Content){
 }
 
 void MainWindow::textAlign(Flags dir){
-    QTableWidget* currentTable = static_cast<QTableWidget*>(_Files->widget(_Files->currentIndex()));
+    QTableWidget* currentTable = getFullTable(getCurrentTabIndex());
     QList<QTableWidgetItem*> ItemList = currentTable->selectedItems();
     switch (dir) {
         case(Flags::LEFT):{
@@ -326,7 +321,7 @@ void MainWindow::setSpinBox(int value){
 void MainWindow::setTextSize(int pointSize){
     QFont TFont= _Files->widget(_Files->currentIndex())->layout()->itemAt(0)->widget()->font();
     TFont.setPointSize(pointSize);
-    QList<QTableWidgetItem*> ItemList = static_cast<QTableWidget*>(_Files->widget(_Files->currentIndex())->layout()->itemAt(0)->widget())->selectedItems();
+    QList<QTableWidgetItem*> ItemList = getFullTable(getCurrentTabIndex())->selectedItems();
     for (auto it = ItemList.begin(); it!=ItemList.end(); it++){
         QTableWidgetItem *element = *it;
         element->setFont(TFont);
@@ -346,6 +341,11 @@ QString MainWindow::getTabName(int index){
     else return _Files->tabText(index);
 }
 
+/**
+ * @brief MainWindow::getFullTable
+ * @param index
+ * @return return pointer to the QTableWidget widget of the tab in _Files[index]
+ */
 QTableWidget* MainWindow::getFullTable(int index){
     return static_cast<QTableWidget*>(_Files->widget(index)->layout()->itemAt(0)->widget());
 }
@@ -358,9 +358,12 @@ int MainWindow::getChartNumber(int index){
     return static_cast<QTabWidget*>(_Files->widget(index)->layout()->itemAt(1)->widget())->count();
 }
 
-ChartSettings* MainWindow::getChartTab(int index){
-    //Ritorna la tab di indice index della sezione tab della current tab di Files
-    return static_cast<ChartSettings*>(static_cast<QTabWidget*>(_Files->widget(_Files->currentIndex())->layout()->itemAt(1)->widget())->widget(index));
+ChartSettings* MainWindow::getChartTab(int chartTabIndex, int fileTabIndex){
+    //Se fileTabIndex<0
+        //Ritorna la tab di indice index della sezione chartTab della current tab di Files
+    //Altrimenti
+        //Ritorna la tab di indice index della sezione chartTab della tab di indice fileTabIndex di Files
+    return static_cast<ChartSettings*>(static_cast<QTabWidget*>(_Files->widget(fileTabIndex<0 ? _Files->currentIndex() : fileTabIndex)->layout()->itemAt(1)->widget())->widget(chartTabIndex));
 }
 
 int MainWindow::getFilePosition(QString fileName){
@@ -379,12 +382,6 @@ void MainWindow::setCurrentTabTitle(QString fileName){
 
 void MainWindow::closeTab(int index){
     _Files->removeTab(index);
-}
-
-void MainWindow::openFile(QString TabName, QTableWidget* Table){
-    _Files->addTab(Table, TabName);
-    _Files->setCurrentIndex(_Files->count()-1);
-    connect(static_cast<QTableWidget*>(_Files->widget(_Files->count()-1)), SIGNAL(itemSelectionChanged()), parent(), SLOT(SpinBox()));
 }
 
 void MainWindow::chartTypeSelected(Flags type){
@@ -420,9 +417,32 @@ void MainWindow::chartTypeSelected(Flags type){
 }
 
 void MainWindow::newTab(){
-    _Files->addTab(new QTableWidget(50,50), QString("Untitled"));
+    QWidget *FileW = new QWidget();
+
+    QHBoxLayout *FileL = new QHBoxLayout;
+    FileL->setSpacing(0);
+
+    QTabWidget *ChartList = new QTabWidget(this);
+    ChartList->setTabPosition(QTabWidget::West);
+    ChartList->addTab(new ChartSelection(static_cast<QWidget*>(parent())), QString(""));
+    ChartList->setTabIcon(0, QIcon("../OOPPROJECT/icons/NewGraph.png"));
+    ChartList->setTabsClosable(true);
+
+    QTableWidget *ValueTab = new QTableWidget(50, 50, this);
+
+    FileL->addWidget(ValueTab);
+    FileL->addWidget(ChartList);
+
+    FileW->setLayout(FileL);
+
+    _Files->addTab(FileW, QString("Untitled"));
+
+    _Files->setTabsClosable(true);
+
+    connect(_Files, SIGNAL(tabCloseRequested(int)), parent(), SLOT(TabClose(int)));
+    connect(static_cast<QTableWidget*>(_Files->widget(0)->layout()->itemAt(0)->widget()), SIGNAL(itemSelectionChanged()), parent(), SLOT(SpinBox()));
+    connect(static_cast<QTableWidget*>(_Files->widget(0)->layout()->itemAt(0)->widget()), SIGNAL(cellChanged(int,int)), parent(), SLOT(ChartRefresh(int,int)));
     _Files->setCurrentIndex(_Files->count()-1);
-    connect(static_cast<QTableWidget*>(_Files->widget(_Files->count()-1)), SIGNAL(itemSelectionChanged()), parent(), SLOT(SpinBox()));
 }
 
 void MainWindow::closeEvent(QCloseEvent *){

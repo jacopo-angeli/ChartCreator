@@ -23,3 +23,12 @@ void BarSettings::setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>> pos
 QPair<QPair<int, int>, QPair<int, int> > BarSettings::getCategoriesRange() const{
 
 }
+
+QJsonObject BarSettings::toJSON() const{
+
+}
+
+void BarSettings::fromJSON(const QJsonObject &)
+{
+
+}

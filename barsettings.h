@@ -11,6 +11,8 @@ public:
     BarSettings(QWidget* =nullptr);
     virtual void setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0)));
     virtual QPair<QPair<int, int>, QPair<int, int>> getCategoriesRange() const;
+    virtual QJsonObject toJSON() const;
+    virtual void fromJSON(const QJsonObject&);
 private:
     QLabel* _Categories;
 };

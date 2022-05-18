@@ -22,6 +22,7 @@ AreaLinePieSettings::AreaLinePieSettings(QWidget * parent): ChartSettings(parent
     row->click(); //segno checked per evitare
     _ParseMethod->addButton(row); //con questo li maneggio con i signal
     _ParseMethod->addButton(col); //successivamente aggiungendoli al layout singolarmente e poi a _Settings ne gestisco la grafica
+    connect(_ParseMethod, SIGNAL(buttonClicked(QAbstractButton*)), parent, SLOT(parseMethodChange(QAbstractButton*)));
 
     QLabel* txt1=new QLabel("Data Range");
     txt1->setFixedWidth(120);
@@ -118,4 +119,13 @@ void AreaLinePieSettings::setCategoriesRange(QPair<QPair<int, int>, QPair<int, i
 
 QPair<QPair<int, int>, QPair<int, int> > AreaLinePieSettings::getCategoriesRange() const{
     //throwiamo un sacchetto di eccezioni perchè non dovrebbe essere mai chiamata
+}
+
+QJsonObject AreaLinePieSettings::toJSON() const{
+
+}
+
+void AreaLinePieSettings::fromJSON(const QJsonObject& )
+{
+
 }

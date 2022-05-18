@@ -44,7 +44,6 @@ public:
     MainWindow(QWidget* =nullptr);
     void addRow(Flags = Flags::TOP);
     void addColumn(Flags = Flags::LEFT);
-    void clearTable();
     void clearContent(Flags = Flags::SELECTION);
     void deleteContent(Flags = Flags::ROW);
     void textAlign(Flags = Flags::LEFT);
@@ -60,12 +59,11 @@ public:
     int getChartNumber(int);
     QString getTabName(int =-1);
     QTableWidget* getFullTable(int);
-    ChartSettings* getChartTab(int);
+    ChartSettings* getChartTab(int, int =-1);
     void setCurrentTabTitle(QString);
 
     void closeTab(int);
 
-    void openFile(QString,QTableWidget*);
     void chartTypeSelected(Flags);
     void newTab();
 

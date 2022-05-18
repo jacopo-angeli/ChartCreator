@@ -9,7 +9,7 @@ void CandleStick::setSeries(QTableWidget *, const QModelIndexList &, Flags)
 
 }
 
-void CandleStick::clearSeries()
+void CandleStick::clearData()
 {
 
 }

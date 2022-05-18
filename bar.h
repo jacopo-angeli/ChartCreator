@@ -8,7 +8,7 @@ class Bar : public Chart
 public:
     Bar(QGraphicsItem* =nullptr);
     virtual void setSeries(QTableWidget*, const QModelIndexList&, Flags = Flags::ROW);
-    virtual void clearSeries();
+    virtual void clearData();
 };
 
 #endif // BAR_H
