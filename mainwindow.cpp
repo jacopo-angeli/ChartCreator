@@ -353,8 +353,13 @@ QTableWidget* MainWindow::getFullTable(int index){
 int MainWindow::getCurrentChartTabIndex(){
     return (static_cast<QTabWidget*>(_Files->widget(_Files->currentIndex())->layout()->itemAt(1)->widget())->currentIndex());
 }
-
+/**
+ * @brief MainWindow::getChartNumber
+ * @param index : indice della tab di cui voglio sapere il numero di chart
+ * @return
+ */
 int MainWindow::getChartNumber(int index){
+    qDebug() << static_cast<QTabWidget*>(_Files->widget(index)->layout()->itemAt(1)->widget())->count();
     return static_cast<QTabWidget*>(_Files->widget(index)->layout()->itemAt(1)->widget())->count();
 }
 

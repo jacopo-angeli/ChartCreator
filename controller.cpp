@@ -46,7 +46,7 @@ void Controller::fileSave(int tableIndex, QString fileName){
         }
         fullfile["table"] = tableJSON;
 
-        int chartNumber = _MainWindow->getChartNumber(_MainWindow->getCurrentChartTabIndex())-1;
+        int chartNumber = _MainWindow->getChartNumber(_MainWindow->getCurrentTabIndex())-1;
         QJsonObject charts;
         charts["chartNumber"] = chartNumber;
         for(auto i = 0; i<chartNumber; i++){
@@ -177,6 +177,7 @@ void Controller::pickTitle(){
                 //Se le posizioni sono diverse
                     //Aggiorna la tag con l'attuale posizione della prima cella della selezione
                     //Aggiorna il titolo del grafico con il contenuto della prima cella della selezione
+    qDebug() << "pickTitle";
     QTableWidget* CurrentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
     QModelIndexList selections = CurrentTable->selectionModel()->selectedIndexes();
     if(selections.size() == 0){
@@ -185,11 +186,15 @@ void Controller::pickTitle(){
     }else{
         QPair<int, int> newPosition = QPair<int, int>((selections.first().row()+1),(selections.first().column()+1));
         QTableWidgetItem* cellSelected = CurrentTable->item(newPosition.first, newPosition.second);
+        qDebug() << "pickTitle selection equal1";
+        qDebug() << _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex());
         if(newPosition != _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->getTitlePosition()){
+            qDebug() << "pickTitle selection equal2";
             _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->setTitlePosition(newPosition);
             if(cellSelected)
                 _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->getChart()->setTitle(cellSelected->text());
         }else{
+            qDebug() << "pickTitle selection equal3";
             _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->setTitlePosition();
             _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->getChart()->setTitle("");
         }
@@ -551,12 +556,10 @@ void Controller::fileOpen(QString filePath){
                 //per ogni entries creo un chart del tipo corrispondente su mainwindow
                 QJsonObject chartList = fullTab["charts"].toObject();
                 qDebug() << chartList.size();
-                int chartNumber = chartList.size();
-                for(int i=0; i<chartNumber; i++){
-                    qDebug() << i << "^ iteration";
+                for(int i=0; i<chartList["chartNumber"].toInt(); i++){
                     QJsonObject chart = chartList[QString::number(i)].toObject();
-                    qDebug() << chartList.size();
-                    QString type = chart["type"].toString();
+                    qDebug() <<i;
+                    QString type = chart["Type"].toString();
                     if(type == "CandleStick"){
                         _MainWindow->chartTypeSelected(Flags::CANDLESTICK);
                     }else if(type == "Bar"){

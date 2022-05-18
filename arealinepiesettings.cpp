@@ -141,11 +141,11 @@ QPair<QPair<int, int>, QPair<int, int> > AreaLinePieSettings::getCategoriesRange
 QJsonObject AreaLinePieSettings::toJSON() const{
     QJsonObject JsonObj = ChartSettings::toJSON();
     if(dynamic_cast<Pie*>(getChart())){
-        JsonObj["type"]="Pie";
+        JsonObj["Type"]="Pie";
     }else if(dynamic_cast<Area*>(getChart())){
-        JsonObj["type"]="Area";
+        JsonObj["Type"]="Area";
     }else{
-        JsonObj["type"]="Line";
+        JsonObj["Type"]="Line";
     }
     JsonObj["DataRange"]=_DataRange->text();
     JsonObj["LabelsRange"]=_Labels->text();
@@ -153,11 +153,11 @@ QJsonObject AreaLinePieSettings::toJSON() const{
 }
 
 void AreaLinePieSettings::fromJSON(const QJsonObject& chartJSON){
+    qDebug() << "AreaLinePieSettings::fromJSON";
     ChartSettings::fromJSON(chartJSON);
-    if(chartJSON["CategoriesRange"].toString() != "Unset")
-        setCategoriesRange(tagToPairPair(chartJSON["CategoriesRange"].toString()));
     if(chartJSON["DataRange"].toString() != "Unset")
-        setDataRange(tagToPairPair(chartJSON["CategoriesRange"].toString()));
-    if(chartJSON["LablesRange"].toString() != "Unset")
-        setDataRange(tagToPairPair(chartJSON["LabRange"].toString()));
+        setDataRange(tagToPairPair(chartJSON["DataRange"].toString()));
+    if(chartJSON["LabelsRange"].toString() != "Unset")
+        setDataRange(tagToPairPair(chartJSON["LabelsRange"].toString()));
+    qDebug() << "end AreaLinePieSettings::fromJSON";
 }

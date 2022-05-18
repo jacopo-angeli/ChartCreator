@@ -76,7 +76,7 @@ Chart* ChartSettings::getChart() const{
     return _Chart;
 }
 void ChartSettings::setTitlePosition(QPair<int, int> pos){
-     _Title->setText("(" + (QString::number(pos.first)) + ", " + (QString::number(pos.second)) + ")");
+     _Title->setText("( " + (QString::number(pos.first)) + " , " + (QString::number(pos.second)) + " )");
 }
 QPair<int, int> ChartSettings:: getTitlePosition() const{
     QString tag = _Title->text();
@@ -98,9 +98,11 @@ QJsonObject ChartSettings::toJSON() const{
     return JsonObj;
 }
 void ChartSettings::fromJSON(const QJsonObject & chartJSON){
+    qDebug() << "start ChartSettings::fromJSON";
     if(chartJSON["TitlePosition"].toString() != "Unset")
         setTitlePosition(tagToPair(chartJSON["TitlePosition"].toString()));
     setColorIndex(chartJSON["TitlePosition"].toInt());
+    qDebug() << "end ChartSettings::fromJSON";
 }
 QPair<QPair<int, int>, QPair<int, int> > ChartSettings::tagToPairPair(const QString& tag) const{
     QList<QString> tagSplitted = tag.split(' ');

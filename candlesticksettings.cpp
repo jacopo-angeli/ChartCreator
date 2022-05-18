@@ -193,16 +193,17 @@ QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getCategoriesRange
 
 QJsonObject CandleStickSettings::toJSON() const{
      QJsonObject JsonObj = ChartSettings::toJSON();
-     JsonObj["type"]="CandleStick";
+     JsonObj["Type"]="CandleStick";
      JsonObj["OpeningPricesRange"]=_OpeningPrices->text();
      JsonObj["ClosingPricesRange"]=_ClosingPrices->text();
-     JsonObj["LowestPriceRange"]=_LowestPrices->text();
+     JsonObj["LowestPricesRange"]=_LowestPrices->text();
      JsonObj["HighestPricesRange"]=_HighestPrices->text();
      JsonObj["CategoriesRange"]=_Categories->text();
      return JsonObj;
 }
 
 void CandleStickSettings::fromJSON(const QJsonObject& chartJSON){
+
     ChartSettings::fromJSON(chartJSON);
     if(chartJSON["CategoriesRange"].toString() != "Unset")
         setCategoriesRange(tagToPairPair(chartJSON["CategoriesRange"].toString()));
