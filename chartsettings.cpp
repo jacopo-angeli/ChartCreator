@@ -84,10 +84,16 @@ Chart* ChartSettings::getChart(){
     return _Chart;
 }
 void ChartSettings::setTitlePosition(QPair<int, int> pos){
-//    QString cellPos = QString("(" + (QString::number(pos.first)) + ", " + (QString::number(pos.second)) + ")");
+     _Title->setText("(" + (QString::number(pos.first)) + ", " + (QString::number(pos.second)) + ")");
 }
 QPair<int, int> ChartSettings:: getTitlePosition() const{
-
+    QString tag = _Title->text();
+    QList<QString> tagSplitted = tag.split(' ');
+    if(tag!="Unset")
+    {
+        return QPair<int, int>(tagSplitted[1].toInt(),tagSplitted[3].toInt());
+    }
+    return QPair<int,int>(0,0);
 }
 void ChartSettings::setColorIndex(int index){
     if(index>0 && index<7)

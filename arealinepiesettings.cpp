@@ -76,6 +76,16 @@ void AreaLinePieSettings:: setDataRange(QPair<QPair<int, int>, QPair<int, int>> 
             // {( pos.first.first , pos.first.second )->( pos.second.first , pos.second.second )}
         //e setti il tag
     //settare il tag a "Unset" _Labels -> setText("Unset") (Controllare se è diverso da "Unset")
+    QString tag=QString();
+    if((pos.first.first)==0)
+    {
+        tag=QString("{("+QString::number(pos.first.first)+ "," +QString::number(pos.first.second)+")->("+ QString::number(pos.second.first)+ "," + QString::number(pos.second.second));
+    }
+    else
+    {
+        tag=("Unset");
+    }
+    _DataRange->setText(tag);
 }
 
 Flags AreaLinePieSettings::getParseMethod() const{
@@ -100,6 +110,16 @@ void AreaLinePieSettings::setLabelsRange(QPair<QPair<int, int>, QPair<int, int>>
             // {( pos.first.first , pos.first.second )->( pos.second.first , pos.second.second )}
         //e setti il tag
     //settare il tag a "Unset" _Labels -> setText("Unset") (Controllare se è diverso da "Unset")
+    QString tag=QString();
+    if((pos.first.first)==0)
+    {
+        tag=QString("{("+QString::number(pos.first.first)+ "," +QString::number(pos.first.second)+")->("+ QString::number(pos.second.first)+ "," + QString::number(pos.second.second));
+    }
+    else
+    {
+        tag=("Unset");
+    }
+    _Labels->setText(tag);
 }
 
 QPair<QPair<int, int>, QPair<int, int>> AreaLinePieSettings::getLabelsRange() const{
