@@ -20,7 +20,6 @@ SOURCES += \
     chartsettings.cpp \
     chartwindow.cpp \
     controller.cpp \
-    graphwindow.cpp \
     line.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -39,7 +38,6 @@ HEADERS += \
     chartwindow.h \
     controller.h \
     flags.h \
-    graphwindow.h \
     line.h \
     mainwindow.h \
     pie.h
