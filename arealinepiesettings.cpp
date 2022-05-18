@@ -77,7 +77,7 @@ void AreaLinePieSettings:: setDataRange(QPair<QPair<int, int>, QPair<int, int>> 
         //e setti il tag
     //settare il tag a "Unset" _Labels -> setText("Unset") (Controllare se è diverso da "Unset")
     QString tag=QString();
-    if((pos.first.first)==0)
+    if((pos.first.first)>0)
     {
         tag=QString("{("+QString::number(pos.first.first)+ "," +QString::number(pos.first.second)+")->("+ QString::number(pos.second.first)+ "," + QString::number(pos.second.second));
     }
@@ -111,7 +111,7 @@ void AreaLinePieSettings::setLabelsRange(QPair<QPair<int, int>, QPair<int, int>>
         //e setti il tag
     //settare il tag a "Unset" _Labels -> setText("Unset") (Controllare se è diverso da "Unset")
     QString tag=QString();
-    if((pos.first.first)==0)
+    if((pos.first.first)>0)
     {
         tag=QString("{("+QString::number(pos.first.first)+ "," +QString::number(pos.first.second)+")->("+ QString::number(pos.second.first)+ "," + QString::number(pos.second.second));
     }

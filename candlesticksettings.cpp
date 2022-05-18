@@ -71,44 +71,124 @@ CandleStickSettings::CandleStickSettings(QWidget* parent) : ChartSettings(parent
     _ChartView->setRenderHint(QPainter::Antialiasing);
 }
 
-void CandleStickSettings::setOpeningPricesRange(QPair<QPair<int, int>, QPair<int, int> >){
-
+void CandleStickSettings::setOpeningPricesRange(QPair<QPair<int, int>, QPair<int, int>>pos){
+    QString tag=QString();
+    if((pos.first.first)>0)
+    {
+        tag=QString("{("+QString::number(pos.first.first)+ "," +QString::number(pos.first.second)+")->("+ QString::number(pos.second.first)+ "," + QString::number(pos.second.second));
+    }
+    else
+    {
+        tag=("Unset");
+    }
+    _OpeningPrices->setText(tag);
 }
 
 QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getOpeningPricesRange() const{
-
+    QString tag = _OpeningPrices->text();
+    QList<QString> tagSplitted = tag.split(' ');
+    if(tag!="Unset"){
+        QPair<int, int> fP = QPair<int, int>(tagSplitted[1].toInt(),tagSplitted[3].toInt());
+        QPair<int, int> lP = QPair<int, int>(tagSplitted[5].toInt(),tagSplitted[7].toInt());
+        return QPair<QPair<int, int>, QPair<int, int>>(fP, lP);
+    }
+    return QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0));
 }
 
-void CandleStickSettings::setClosingPricesRange(QPair<QPair<int, int>, QPair<int, int> >){
-
+void CandleStickSettings::setClosingPricesRange(QPair<QPair<int, int>, QPair<int, int>>pos){
+    QString tag=QString();
+    if((pos.first.first)>0)
+    {
+        tag=QString("{("+QString::number(pos.first.first)+ "," +QString::number(pos.first.second)+")->("+ QString::number(pos.second.first)+ "," + QString::number(pos.second.second));
+    }
+    else
+    {
+        tag=("Unset");
+    }
+    _ClosingPrices->setText(tag);
 }
 
 QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getClosingPricesRange() const{
-
+    QString tag = _ClosingPrices->text();
+    QList<QString> tagSplitted = tag.split(' ');
+    if(tag!="Unset"){
+        QPair<int, int> fP = QPair<int, int>(tagSplitted[1].toInt(),tagSplitted[3].toInt());
+        QPair<int, int> lP = QPair<int, int>(tagSplitted[5].toInt(),tagSplitted[7].toInt());
+        return QPair<QPair<int, int>, QPair<int, int>>(fP, lP);
+    }
+    return QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0));
 }
 
-void CandleStickSettings::setLowestPricesRange(QPair<QPair<int, int>, QPair<int, int> >){
-
+void CandleStickSettings::setLowestPricesRange(QPair<QPair<int, int>, QPair<int, int>>pos){
+    QString tag=QString();
+    if((pos.first.first)>0)
+    {
+        tag=QString("{("+QString::number(pos.first.first)+ "," +QString::number(pos.first.second)+")->("+ QString::number(pos.second.first)+ "," + QString::number(pos.second.second));
+    }
+    else
+    {
+        tag=("Unset");
+    }
+    _LowestPrices->setText(tag);
 }
 
 QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getLowestPricesRange() const{
-
+    QString tag = _LowestPrices->text();
+    QList<QString> tagSplitted = tag.split(' ');
+    if(tag!="Unset"){
+        QPair<int, int> fP = QPair<int, int>(tagSplitted[1].toInt(),tagSplitted[3].toInt());
+        QPair<int, int> lP = QPair<int, int>(tagSplitted[5].toInt(),tagSplitted[7].toInt());
+        return QPair<QPair<int, int>, QPair<int, int>>(fP, lP);
+    }
+    return QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0));
 }
 
-void CandleStickSettings::setHighestPricesRange(QPair<QPair<int, int>, QPair<int, int> >){
-
+void CandleStickSettings::setHighestPricesRange(QPair<QPair<int, int>, QPair<int, int>>pos){
+    QString tag=QString();
+    if((pos.first.first)>0)
+    {
+        tag=QString("{("+QString::number(pos.first.first)+ "," +QString::number(pos.first.second)+")->("+ QString::number(pos.second.first)+ "," + QString::number(pos.second.second));
+    }
+    else
+    {
+        tag=("Unset");
+    }
+    _HighestPrices->setText(tag);
 }
 
 QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getHighestPricesRange() const{
-
+    QString tag = _HighestPrices->text();
+    QList<QString> tagSplitted = tag.split(' ');
+    if(tag!="Unset"){
+        QPair<int, int> fP = QPair<int, int>(tagSplitted[1].toInt(),tagSplitted[3].toInt());
+        QPair<int, int> lP = QPair<int, int>(tagSplitted[5].toInt(),tagSplitted[7].toInt());
+        return QPair<QPair<int, int>, QPair<int, int>>(fP, lP);
+    }
+    return QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0));
 }
 
-void CandleStickSettings::setCategoriesRange(QPair<QPair<int, int>, QPair<int, int> >){
-
+void CandleStickSettings::setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>pos){
+    QString tag=QString();
+    if((pos.first.first)>0)
+    {
+        tag=QString("{("+QString::number(pos.first.first)+ "," +QString::number(pos.first.second)+")->("+ QString::number(pos.second.first)+ "," + QString::number(pos.second.second));
+    }
+    else
+    {
+        tag=("Unset");
+    }
+    _Categories->setText(tag);
 }
 
 QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getCategoriesRange() const{
-
+    QString tag = _HighestPrices->text();
+    QList<QString> tagSplitted = tag.split(' ');
+    if(tag!="Unset"){
+        QPair<int, int> fP = QPair<int, int>(tagSplitted[1].toInt(),tagSplitted[3].toInt());
+        QPair<int, int> lP = QPair<int, int>(tagSplitted[5].toInt(),tagSplitted[7].toInt());
+        return QPair<QPair<int, int>, QPair<int, int>>(fP, lP);
+    }
+    return QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0));
 }
 
 QJsonObject CandleStickSettings::toJSON() const{

@@ -17,11 +17,27 @@ BarSettings::BarSettings(QWidget * parent): AreaLinePieSettings(parent), _Catego
 }
 
 void BarSettings::setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>> pos){
-
+    QString tag=QString();
+    if((pos.first.first)>0)
+    {
+        tag=QString("{("+QString::number(pos.first.first)+ "," +QString::number(pos.first.second)+")->("+ QString::number(pos.second.first)+ "," + QString::number(pos.second.second));
+    }
+    else
+    {
+        tag=("Unset");
+    }
+    _Categories->setText(tag);
 }
 
 QPair<QPair<int, int>, QPair<int, int> > BarSettings::getCategoriesRange() const{
-
+    QString tag = _Categories->text();
+    QList<QString> tagSplitted = tag.split(' ');
+    if(tag!="Unset"){
+        QPair<int, int> fP = QPair<int, int>(tagSplitted[1].toInt(),tagSplitted[3].toInt());
+        QPair<int, int> lP = QPair<int, int>(tagSplitted[5].toInt(),tagSplitted[7].toInt());
+        return QPair<QPair<int, int>, QPair<int, int>>(fP, lP);
+    }
+    return QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0));
 }
 
 QJsonObject BarSettings::toJSON() const{
