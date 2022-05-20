@@ -13,7 +13,7 @@ public:
     virtual void setSeries(QTableWidget*, const QModelIndexList&, Flags = Flags::ROW);
     virtual void clearData();
 private:
-    QList<QLineSeries*> _series;
+    QList<QList<double>> _values;
 };
 
 #endif // AREA_H

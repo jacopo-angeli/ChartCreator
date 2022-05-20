@@ -598,7 +598,7 @@ void Controller::lastSessionRestore(){
         QJsonObject lastArrayState = doc.object();
         for(int i=0; i<lastArrayState.size()-1; i++){
             QJsonObject keyValuePair = lastArrayState.value(QString("File ")+QString::number(i)).toObject();
-//            fileOpen(keyValuePair.value("path").toString());
+            fileOpen(keyValuePair.value("path").toString());
         }
     }
 };
