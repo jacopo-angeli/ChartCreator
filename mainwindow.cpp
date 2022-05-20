@@ -359,7 +359,6 @@ int MainWindow::getCurrentChartTabIndex(){
  * @return
  */
 int MainWindow::getChartNumber(int index){
-    qDebug() << static_cast<QTabWidget*>(_Files->widget(index)->layout()->itemAt(1)->widget())->count();
     return static_cast<QTabWidget*>(_Files->widget(index)->layout()->itemAt(1)->widget())->count();
 }
 
@@ -393,7 +392,6 @@ void MainWindow::chartTypeSelected(Flags type){
     switch(type){
         case(Flags::CANDLESTICK):{
             if(QTabWidget *ChartListCurrentIndex = dynamic_cast<QTabWidget*>(_Files->widget(_Files->currentIndex())->layout()->itemAt(1)->widget())){
-                qDebug() << "CandleStick opened";
                 ChartListCurrentIndex->insertTab(0, new CandleStickSettings(static_cast<QWidget*>(parent())), QIcon("../OOPPROJECT/icons/NewGraph.png"), QString(""));
                 ChartListCurrentIndex->setCurrentIndex(0);
             }
@@ -445,8 +443,8 @@ void MainWindow::newTab(){
     _Files->setTabsClosable(true);
 
     connect(_Files, SIGNAL(tabCloseRequested(int)), parent(), SLOT(TabClose(int)));
-    connect(static_cast<QTableWidget*>(_Files->widget(0)->layout()->itemAt(0)->widget()), SIGNAL(itemSelectionChanged()), parent(), SLOT(SpinBox()));
-    connect(static_cast<QTableWidget*>(_Files->widget(0)->layout()->itemAt(0)->widget()), SIGNAL(cellChanged(int,int)), parent(), SLOT(ChartRefresh(int,int)));
+    connect(static_cast<QTableWidget*>(_Files->widget(_Files->count()-1)->layout()->itemAt(0)->widget()), SIGNAL(itemSelectionChanged()), parent(), SLOT(SpinBox()));
+    connect(static_cast<QTableWidget*>(_Files->widget(_Files->count()-1)->layout()->itemAt(0)->widget()), SIGNAL(cellChanged(int,int)), parent(), SLOT(ChartRefresh(int,int)));
     _Files->setCurrentIndex(_Files->count()-1);
 }
 

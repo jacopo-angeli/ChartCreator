@@ -14,3 +14,8 @@ void Bar::clearData()
 {
 
 }
+
+void Bar::refresh()
+{
+
+}

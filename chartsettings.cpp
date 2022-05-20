@@ -98,11 +98,10 @@ QJsonObject ChartSettings::toJSON() const{
     return JsonObj;
 }
 void ChartSettings::fromJSON(const QJsonObject & chartJSON){
-    qDebug() << "start ChartSettings::fromJSON";
+    std::cout << "ChartSettings::fromJSON" << std::endl;
     if(chartJSON["TitlePosition"].toString() != "Unset")
         setTitlePosition(tagToPair(chartJSON["TitlePosition"].toString()));
-    setColorIndex(chartJSON["TitlePosition"].toInt());
-    qDebug() << "end ChartSettings::fromJSON";
+    setColorIndex(chartJSON["ColorIndex"].toInt());
 }
 QPair<QPair<int, int>, QPair<int, int> > ChartSettings::tagToPairPair(const QString& tag) const{
     QList<QString> tagSplitted = tag.split(' ');

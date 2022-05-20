@@ -6,6 +6,7 @@
 #include <QJsonValue>
 #include <QJsonArray>
 #include<string>
+#include "area.h"
 Controller::Controller(): _MainWindow(new MainWindow(this)),  _ActiveFiles(QMap<QString, QString>()){
     lastSessionRestore();
     _MainWindow->setWindowState(Qt::WindowMaximized);
@@ -58,7 +59,7 @@ void Controller::fileSave(int tableIndex, QString fileName){
         stream<<QJsonDocument(fullfile).toJson();
         file.close();
     }else{
-        qDebug() << "Cannot Open file : "<<filePath;
+//        std::cout << "Cannot Open file : "<<filePath;
     }
 }
 void Controller::UpperInsert(){
@@ -121,6 +122,7 @@ void Controller::TabClose(int index){
 };
 void Controller::openFile(){
     fileOpen();
+    std::cout << "openFile done"<< std::endl;
 };
 void Controller::saveACopy(){
     fileSave(_MainWindow->getCurrentTabIndex());
@@ -147,7 +149,7 @@ void Controller::mainWindowCloseEvent(){
         stream<<QJsonDocument(obj).toJson();
         file.close();
     }else{
-        qDebug()<<"file cannot be opened";
+//        std::cout<<"file cannot be opened";
     }
     _MainWindow->close();
 };
@@ -349,6 +351,22 @@ void Controller::pickLabels(){
                 //Se le posizioni sono diverse
                     //Aggiorna la tag con le nuove posizioni
                     //Aggiorna il grafico
+    QTableWidget* CurrentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+    QModelIndexList selections = CurrentTable->selectionModel()->selectedIndexes();
+    AreaLinePieSettings* currentChartTab = static_cast<AreaLinePieSettings*>(_MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex()));
+    if(selections.size() == 0){
+        currentChartTab->setLabelsRange();
+        currentChartTab->getChart()->clearData();
+    }else{
+        QPair<QPair<int, int>, QPair<int, int>> newPositions = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>((selections.first().row()+1),(selections.first().column()+1)),QPair<int, int>((selections.last().row()+1),(selections.last().column()+1)));
+        if(newPositions != currentChartTab->getDataRange()){
+            currentChartTab->setDataRange(newPositions);
+            currentChartTab->getChart()->setSeries(CurrentTable, selections, currentChartTab->getParseMethod());
+        }else{
+            currentChartTab->setDataRange();
+            currentChartTab->getChart()->clearData();
+        }
+    }
 }
 void Controller::pickCategories(){
     //Controlla la corrente porzione di tabella selezionata
@@ -367,20 +385,21 @@ void Controller::pickCategories(){
     if(selections.size() == 0){
         currentChartTab->setCategoriesRange();
         if(CandleStick* candleStickChart = dynamic_cast<CandleStick*>(currentChartTab->getChart()))
-            static_cast<CandleStick*>(currentChartTab->getChart())->clearCategories();
+            candleStickChart->clearCategories();
 //        else
 //            static_cast<Bar*>(currentChartTab->getChart())->clearCategories();
     }else{
         QPair<QPair<int, int>, QPair<int, int>> newPositions = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>((selections.first().row()+1),(selections.first().column()+1)),QPair<int, int>((selections.last().row()+1),(selections.last().column()+1)));
         if(newPositions != currentChartTab->getCategoriesRange()){
+            currentChartTab->setCategoriesRange(newPositions);
             if(CandleStick* candleStickChart = dynamic_cast<CandleStick*>(currentChartTab->getChart()))
-                static_cast<CandleStick*>(currentChartTab->getChart())->setCategories(CurrentTable, selections);
+                candleStickChart->setCategories(CurrentTable, selections);
     //        else
     //            static_cast<Bar*>(currentChartTab->getChart())->setCategories(CurrentTable, selections);
         }else{
             currentChartTab->setCategoriesRange();
             if(CandleStick* candleStickChart = dynamic_cast<CandleStick*>(currentChartTab->getChart()))
-                static_cast<CandleStick*>(currentChartTab->getChart())->clearCategories();
+                candleStickChart->clearCategories();
     //        else
     //            static_cast<Bar*>(currentChartTab->getChart())->clearCategories();
         }
@@ -392,7 +411,7 @@ void Controller::ChartRefresh(int row, int column){
     //Modifico il titolo del grafico con quello dell'elemento selezionato
 //    row++; column++;
     QTableWidget* CurrentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
-    QPair<int, int> cellPosition = QPair<int, int>(row, column);
+    QPair<int, int> cellPosition = QPair<int, int>(row+1, column+1);
 
     for (int i=0; i<_MainWindow->getChartNumber(_MainWindow->getCurrentTabIndex())-1; i++){
         ChartSettings* currentTab = _MainWindow->getChartTab(i);
@@ -400,22 +419,61 @@ void Controller::ChartRefresh(int row, int column){
             currentTab->getChart()->setTitle(CurrentTable->item(row, column)->text());
         }
         if(CandleStickSettings* candleStickTab = dynamic_cast<CandleStickSettings*>(currentTab)){
-            //Chart setting di tipo candlestic
-            if(isInRange(cellPosition, candleStickTab->getOpeningPricesRange()))
-                //                    candleStickTab->getChart->setOpeningPrices(CurrentTable,candleStickTab->getOpeningPricesPosition());
-                return;
-            if(isInRange(cellPosition, candleStickTab->getClosingPricesRange()))
-                //                    candleStickTab->getChart->setClosingPrices(CurrentTable,candleStickTab->getClosingPricesPositions());
-                return;
-            if(isInRange(cellPosition, candleStickTab->getLowestPricesRange()))
-                //                    candleStickTab->getChart->setLowestPrices(CurrentTable,candleStickTab->getLowestPricesPositions());
-                return;
-            if(isInRange(cellPosition, candleStickTab->getHighestPricesRange()))
-                //                    candleStickTab->getChart->seHighestPrices(CurrentTable,candleStickTab->getHighestPricesPositions());
-                return;
-            if(isInRange(cellPosition, candleStickTab->getCategoriesRange()))
-                //                    candleStickTab->getChart->setCategories(CurrentTable,candleStickTab->getCategoriesPositions());
-                return;
+            if(isInRange(cellPosition, candleStickTab->getOpeningPricesRange())){
+                QPair<QPair<int,int>, QPair<int,int>> dataRange = candleStickTab->getOpeningPricesRange();
+                QTableWidget* CurrentTable= _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+                QModelIndexList userSelection = CurrentTable->selectionModel()->selectedIndexes();
+                CurrentTable->clearSelection();
+                CurrentTable->setRangeSelected(QTableWidgetSelectionRange(dataRange.first.first-1, dataRange.first.second-1, dataRange.second.first-1, dataRange.second.second-1), true);
+                QModelIndexList indexes = CurrentTable->selectionModel()->selectedIndexes();
+                CurrentTable->clearSelection();
+                if(userSelection.size()>0) CurrentTable->setRangeSelected(QTableWidgetSelectionRange(userSelection.first().row(),userSelection.first().column(), userSelection.last().row(), userSelection.last().column()), true);
+                static_cast<CandleStick*>(candleStickTab->getChart())->setOpeningPrices(CurrentTable, indexes);
+            }
+            if(isInRange(cellPosition, candleStickTab->getClosingPricesRange())){
+                QPair<QPair<int,int>, QPair<int,int>> dataRange = candleStickTab->getClosingPricesRange();
+                QTableWidget* CurrentTable= _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+                QModelIndexList userSelection = CurrentTable->selectionModel()->selectedIndexes();
+                CurrentTable->clearSelection();
+                CurrentTable->setRangeSelected(QTableWidgetSelectionRange(dataRange.first.first-1, dataRange.first.second-1, dataRange.second.first-1, dataRange.second.second-1), true);
+                QModelIndexList indexes = CurrentTable->selectionModel()->selectedIndexes();
+                CurrentTable->clearSelection();
+                if(userSelection.size()>0) CurrentTable->setRangeSelected(QTableWidgetSelectionRange(userSelection.first().row(),userSelection.first().column(), userSelection.last().row(), userSelection.last().column()), true);
+                static_cast<CandleStick*>(candleStickTab->getChart())->setClosingPrices(CurrentTable, indexes);
+            }
+            if(isInRange(cellPosition, candleStickTab->getLowestPricesRange())){
+                QPair<QPair<int,int>, QPair<int,int>> dataRange = candleStickTab->getLowestPricesRange();
+                QTableWidget* CurrentTable= _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+                QModelIndexList userSelection = CurrentTable->selectionModel()->selectedIndexes();
+                CurrentTable->clearSelection();
+                CurrentTable->setRangeSelected(QTableWidgetSelectionRange(dataRange.first.first-1, dataRange.first.second-1, dataRange.second.first-1, dataRange.second.second-1), true);
+                QModelIndexList indexes = CurrentTable->selectionModel()->selectedIndexes();
+                CurrentTable->clearSelection();
+                if(userSelection.size()>0) CurrentTable->setRangeSelected(QTableWidgetSelectionRange(userSelection.first().row(),userSelection.first().column(), userSelection.last().row(), userSelection.last().column()), true);
+                static_cast<CandleStick*>(candleStickTab->getChart())->setLowestPrices(CurrentTable, indexes);
+            }
+            if(isInRange(cellPosition, candleStickTab->getHighestPricesRange())){
+                QPair<QPair<int,int>, QPair<int,int>> dataRange = candleStickTab->getHighestPricesRange();
+                QTableWidget* CurrentTable= _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+                QModelIndexList userSelection = CurrentTable->selectionModel()->selectedIndexes();
+                CurrentTable->clearSelection();
+                CurrentTable->setRangeSelected(QTableWidgetSelectionRange(dataRange.first.first-1, dataRange.first.second-1, dataRange.second.first-1, dataRange.second.second-1), true);
+                QModelIndexList indexes = CurrentTable->selectionModel()->selectedIndexes();
+                CurrentTable->clearSelection();
+                if(userSelection.size()>0) CurrentTable->setRangeSelected(QTableWidgetSelectionRange(userSelection.first().row(),userSelection.first().column(), userSelection.last().row(), userSelection.last().column()), true);
+                static_cast<CandleStick*>(candleStickTab->getChart())->setHighestPrices(CurrentTable, indexes);
+            }
+            if(isInRange(cellPosition, candleStickTab->getCategoriesRange())){
+                QPair<QPair<int,int>, QPair<int,int>> dataRange = candleStickTab->getCategoriesRange();
+                QTableWidget* CurrentTable= _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+                QModelIndexList userSelection = CurrentTable->selectionModel()->selectedIndexes();
+                CurrentTable->clearSelection();
+                CurrentTable->setRangeSelected(QTableWidgetSelectionRange(dataRange.first.first-1, dataRange.first.second-1, dataRange.second.first-1, dataRange.second.second-1), true);
+                QModelIndexList indexes = CurrentTable->selectionModel()->selectedIndexes();
+                CurrentTable->clearSelection();
+                if(userSelection.size()>0) CurrentTable->setRangeSelected(QTableWidgetSelectionRange(userSelection.first().row(),userSelection.first().column(), userSelection.last().row(), userSelection.last().column()), true);
+                static_cast<CandleStick*>(candleStickTab->getChart())->setCategories(CurrentTable, indexes);
+            }
         }else{
             AreaLinePieSettings* areaLinePieTab = dynamic_cast<AreaLinePieSettings*>(currentTab);
             if(BarSettings* barChart = dynamic_cast<BarSettings*>(currentTab))
@@ -423,9 +481,18 @@ void Controller::ChartRefresh(int row, int column){
                 if(isInRange(cellPosition, barChart->getCategoriesRange()))
                     //                    barChart->getChart->setCategories(CurrentTable,barChart->getCategoriesPositions());
                     return;
-            if(isInRange(cellPosition, areaLinePieTab->getDataRange()))
-//                areaLinePieTab->getChart->setData(CurrentTable,areaLinePieTab->getDataRange(), areaLinePieTab->getParseMethod());
-                return;
+            if(isInRange(cellPosition, areaLinePieTab->getDataRange())){
+                AreaLinePieSettings* currentChartTab = static_cast<AreaLinePieSettings*>(_MainWindow->getChartTab(i));
+                QPair<QPair<int,int>, QPair<int,int>> dataRange = currentChartTab->getDataRange();
+                QTableWidget* CurrentTable= _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+                QModelIndexList userSelection = CurrentTable->selectionModel()->selectedIndexes();
+                CurrentTable->clearSelection();
+                CurrentTable->setRangeSelected(QTableWidgetSelectionRange(dataRange.first.first-1, dataRange.first.second-1, dataRange.second.first-1, dataRange.second.second-1), true);
+                QModelIndexList indexes = CurrentTable->selectionModel()->selectedIndexes();
+                CurrentTable->clearSelection();
+                if(userSelection.size()>0) CurrentTable->setRangeSelected(QTableWidgetSelectionRange(userSelection.first().row(),userSelection.first().column(), userSelection.last().row(), userSelection.last().column()), true);
+                currentChartTab->getChart()->setSeries(CurrentTable, indexes, currentChartTab->getParseMethod());
+            }
             if(isInRange(cellPosition, areaLinePieTab->getLabelsRange()))
 //                areaLinePieTab->getChart->setLabels(CurrentTable,areaLinePieTab->getLabelsRange());
                 return;
@@ -440,14 +507,20 @@ void Controller::parseMethodChange(QAbstractButton* btnClicked){
         //Altrimenti
             //Dico al grafico di recuperare i dati con il flag COLUMN
     //Altrimenti ritorno
+
     AreaLinePieSettings* currentChartTab = static_cast<AreaLinePieSettings*>(_MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex()));
     QPair<QPair<int,int>, QPair<int,int>> dataRange = currentChartTab->getDataRange();
     if(dataRange.first.first == 0) return; //Label "Unset"
 
-    QTableWidget* CurrentTable= _MainWindow->getFullTable(_MainWindow->getCurrentChartTabIndex());
-    CurrentTable->setRangeSelected(QTableWidgetSelectionRange(dataRange.first.first, dataRange.first.second, dataRange.second.first, dataRange.second.second), true);
+    QTableWidget* CurrentTable= _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+    QModelIndexList userSelection = CurrentTable->selectionModel()->selectedIndexes();
+    CurrentTable->clearSelection();
+    CurrentTable->setRangeSelected(QTableWidgetSelectionRange(dataRange.first.first-1, dataRange.first.second-1, dataRange.second.first-1, dataRange.second.second-1), true);
     QModelIndexList indexes = CurrentTable->selectionModel()->selectedIndexes();
     CurrentTable->clearSelection();
+
+    if(userSelection.size() > 0) CurrentTable->setRangeSelected(QTableWidgetSelectionRange(userSelection.first().row(),userSelection.first().column(), userSelection.last().row(), userSelection.last().column()), true);
+
     if(btnClicked->text() == "Row Parsing") currentChartTab->getChart()->setSeries(CurrentTable, indexes);
     else currentChartTab->getChart()->setSeries(CurrentTable, indexes, Flags::COLUMN);
 }
@@ -532,7 +605,6 @@ void Controller::lastSessionRestore(){
 void Controller::fileOpen(QString filePath){
     if (filePath == "") filePath = QFileDialog::getOpenFileName(_MainWindow, QString("Open file"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation), tr("ChartCreator (*.crt)"));
     if(_MainWindow->getFilePosition(QString("../"+(filePath.split("/")).last())) < 0){
-        qDebug() << "fileOpen:" << filePath;
         if (!(filePath.isEmpty()) && filePath.endsWith(QString(".crt"))){
             //Apro il file
             QFile file(filePath);
@@ -550,10 +622,9 @@ void Controller::fileOpen(QString filePath){
 
                 //per ogni entries creo un chart del tipo corrispondente su mainwindow
                 QJsonObject chartList = fullTab["charts"].toObject();
-                qDebug() << chartList.size();
+
                 for(int i=0; i<chartList["chartNumber"].toInt(); i++){
                     QJsonObject chart = chartList[QString::number(i)].toObject();
-                    qDebug() <<i;
                     QString type = chart["Type"].toString();
                     if(type == "CandleStick"){
                         _MainWindow->chartTypeSelected(Flags::CANDLESTICK);
@@ -584,13 +655,14 @@ void Controller::fileOpen(QString filePath){
                     table->setItem(cell["row"].toInt(), cell["column"].toInt(), newCell);
                 }
 
-
                 //inserisco su _ActiveFiles il nuovo file
+                std::cout << "File in inserimento"<< std::endl;
                 _ActiveFiles.insert(QString("../"+(filePath.split("/")).last()), filePath);
-
+                std::cout << "File Inserito"<< std::endl;
             }
         }
     }
+    std::cout << "fileOpen Ok" << std::endl;
 }
 bool Controller::isNumeric(QString string) const{
     QRegExp regex("^[0-9]\\d*(\\.\\d+)?$");

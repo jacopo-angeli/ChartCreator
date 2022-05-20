@@ -1,21 +1,33 @@
 #include "area.h"
 
 Area::Area(QGraphicsItem* parent): Chart(parent), _series(QList<QLineSeries*>()){
-    setAnimationOptions(QChart::AllAnimations);
+    setAnimationOptions(QChart::SeriesAnimations);
+    legend()->hide();
 }
-
+/**
+ * @brief Area::setSeries
+ * @param table
+ * @param indexes : lista di indici della tabella indici che partono da 0;
+ * @param parseDirection
+ */
 void Area::setSeries(QTableWidget* table, const QModelIndexList& indexes, Flags parseDirection){
+    std::cout << "Set series";
     clearData();
     switch(parseDirection){
         case(Flags::ROW):{
+
             for(int i=indexes.last().row(); i>=indexes.first().row();i--){
                 QLineSeries *series = new QLineSeries();
                 int pC=0;
                 for(int j=indexes.first().column(); j<=indexes.last().column();j++){
                     QTableWidgetItem* item = table->item(i, j);
-                    if(item) *series << QPointF(++pC,item->text().toInt());
+                    if(item && item->text()!="") {
+                        std::cout << "item = " << item;
+                        series->append(++pC,item->text().toInt());
+                    }
                 }
                 if(series->count() > 0) _series.append(series);
+                else delete series;
             }
         }
         break;
@@ -39,19 +51,25 @@ void Area::setSeries(QTableWidget* table, const QModelIndexList& indexes, Flags 
 }
 
 void Area::clearData(){
-    _series.clear();
+    // It will only destroy pointers, not the objects behind them (same with removeAt() of course). Delete needs to be called explicitely on each item or, as already said, qDeleteAll() can be used.
     removeAllSeries();
+    _series.clear();
 }
 
 void Area::refresh(){
+    std::cout << "refresh";
     removeAllSeries();
     QPen pen(0x059605);
     pen.setWidth(3);
     for(auto it=_series.begin(); it!=_series.end(); it++){
-        QAreaSeries *series = new QAreaSeries(*it);
-        (*it)->setPen(pen);
-        addSeries(series);
+        if((*it)->count() > 1){
+            std::cout << (*it)->count();
+            QAreaSeries *series = new QAreaSeries(*it);
+            (*it)->setPen(pen);
+            addSeries(series);
+        }
     }
     createDefaultAxes();
+    std::cout << "refresh done";
 }
 

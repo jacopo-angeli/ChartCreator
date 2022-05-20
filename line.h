@@ -5,10 +5,13 @@
 class Line : public Chart
 {
     Q_OBJECT
+protected:
+    virtual void refresh();
 public:
     Line(QGraphicsItem* =nullptr);
     virtual void setSeries(QTableWidget*, const QModelIndexList&, Flags = Flags::ROW);
     virtual void clearData();
+
 };
 
 #endif // LINE_H

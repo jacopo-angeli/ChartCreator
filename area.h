@@ -6,13 +6,14 @@
 class Area : public Chart
 {
     Q_OBJECT
+protected:
+    virtual void refresh();
 public:
     Area(QGraphicsItem* =nullptr);
     virtual void setSeries(QTableWidget*, const QModelIndexList&, Flags = Flags::ROW);
     virtual void clearData();
 private:
     QList<QLineSeries*> _series;
-    void refresh();
 };
 
 #endif // AREA_H

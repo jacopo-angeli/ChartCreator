@@ -5,6 +5,8 @@
 class Pie : public Chart
 {
     Q_OBJECT
+protected:
+    virtual void refresh();
 public:
     Pie(QGraphicsItem* = nullptr);
     virtual void setSeries(QTableWidget*, const QModelIndexList&, Flags = Flags::ROW);

@@ -15,3 +15,8 @@ void Pie::clearData()
 
 }
 
+void Pie::refresh()
+{
+
+}
+

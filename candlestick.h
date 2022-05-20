@@ -5,13 +5,14 @@
 class CandleStick : public Chart
 {
     Q_OBJECT
+protected:
+    virtual void refresh();
 private:
     QList<double> _openingPrices;
     QList<double> _closingPrices;
     QList<double> _highestPrices;
     QList<double> _lowestPrices;
     QList<QString> _categories;
-    void refresh();
 public:
     CandleStick(QGraphicsItem* =nullptr);
     virtual void setSeries(QTableWidget*, const QModelIndexList&, Flags =Flags::ROW);

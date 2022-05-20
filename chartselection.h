@@ -2,7 +2,7 @@
 #define CHARTSELECTION_H
 
 #include <QWidget>
-#include <QWidgetAction>
+#include <QAction>
 #include <QStringList>
 #include <QColorDialog>
 #include <QtCharts>

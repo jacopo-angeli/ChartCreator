@@ -75,7 +75,7 @@ void CandleStickSettings::setOpeningPricesRange(QPair<QPair<int, int>, QPair<int
     QString tag=QString();
     if((pos.first.first)>0)
     {
-        tag=QString("{("+QString::number(pos.first.first)+ "," +QString::number(pos.first.second)+")->("+ QString::number(pos.second.first)+ "," + QString::number(pos.second.second));
+        tag=tag=QString("{( "+QString::number(pos.first.first)+ " , " +QString::number(pos.first.second)+" )->( "+ QString::number(pos.second.first)+ " , " + QString::number(pos.second.second) + " )}");
     }
     else
     {
@@ -99,7 +99,7 @@ void CandleStickSettings::setClosingPricesRange(QPair<QPair<int, int>, QPair<int
     QString tag=QString();
     if((pos.first.first)>0)
     {
-        tag=QString("{("+QString::number(pos.first.first)+ "," +QString::number(pos.first.second)+")->("+ QString::number(pos.second.first)+ "," + QString::number(pos.second.second));
+        tag=tag=QString("{( "+QString::number(pos.first.first)+ " , " +QString::number(pos.first.second)+" )->( "+ QString::number(pos.second.first)+ " , " + QString::number(pos.second.second) + " )}");
     }
     else
     {
@@ -123,7 +123,7 @@ void CandleStickSettings::setLowestPricesRange(QPair<QPair<int, int>, QPair<int,
     QString tag=QString();
     if((pos.first.first)>0)
     {
-        tag=QString("{("+QString::number(pos.first.first)+ "," +QString::number(pos.first.second)+")->("+ QString::number(pos.second.first)+ "," + QString::number(pos.second.second));
+        tag=tag=QString("{( "+QString::number(pos.first.first)+ " , " +QString::number(pos.first.second)+" )->( "+ QString::number(pos.second.first)+ " , " + QString::number(pos.second.second) + " )}");
     }
     else
     {
@@ -147,7 +147,7 @@ void CandleStickSettings::setHighestPricesRange(QPair<QPair<int, int>, QPair<int
     QString tag=QString();
     if((pos.first.first)>0)
     {
-        tag=QString("{("+QString::number(pos.first.first)+ "," +QString::number(pos.first.second)+")->("+ QString::number(pos.second.first)+ "," + QString::number(pos.second.second));
+        tag=QString("{( "+QString::number(pos.first.first)+ " , " +QString::number(pos.first.second)+" )->( "+ QString::number(pos.second.first)+ " , " + QString::number(pos.second.second) + " )}");
     }
     else
     {
@@ -171,7 +171,7 @@ void CandleStickSettings::setCategoriesRange(QPair<QPair<int, int>, QPair<int, i
     QString tag=QString();
     if((pos.first.first)>0)
     {
-        tag=QString("{("+QString::number(pos.first.first)+ "," +QString::number(pos.first.second)+")->("+ QString::number(pos.second.first)+ "," + QString::number(pos.second.second));
+        tag=QString("{( "+QString::number(pos.first.first)+ " , " +QString::number(pos.first.second)+" )->( "+ QString::number(pos.second.first)+ " , " + QString::number(pos.second.second) + " )}");
     }
     else
     {
@@ -181,7 +181,7 @@ void CandleStickSettings::setCategoriesRange(QPair<QPair<int, int>, QPair<int, i
 }
 
 QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getCategoriesRange() const{
-    QString tag = _HighestPrices->text();
+    QString tag = _Categories->text();
     QList<QString> tagSplitted = tag.split(' ');
     if(tag!="Unset"){
         QPair<int, int> fP = QPair<int, int>(tagSplitted[1].toInt(),tagSplitted[3].toInt());

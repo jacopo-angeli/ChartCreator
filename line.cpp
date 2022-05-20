@@ -14,3 +14,8 @@ void Line::clearData()
 {
 
 }
+
+void Line::refresh()
+{
+
+}

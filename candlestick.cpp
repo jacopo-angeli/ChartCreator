@@ -15,7 +15,9 @@ void CandleStick::clearData()
 }
 
 void CandleStick::refresh(){
-    if(int categoriesSize = _categories.size()){
+    int categoriesSize = _categories.size();
+    if(categoriesSize>0){
+        double max=INT_MIN, min=INT_MAX;
         removeAllSeries();
         int i=0;
         QCandlestickSeries *series = new QCandlestickSeries();
@@ -23,12 +25,19 @@ void CandleStick::refresh(){
         series->setIncreasingColor(QColor(Qt::green));
         series->setDecreasingColor(QColor(Qt::red));
         while(i<categoriesSize && i<_openingPrices.size() && i<_closingPrices.size() && i<_highestPrices.size() && i<_lowestPrices.size()){
-            qDebug() << "Serie aggiunta";
             QCandlestickSet *candlestickSet = new QCandlestickSet();
             candlestickSet->setOpen(_openingPrices[i]);
+            max = std::max(max,_openingPrices[i]);
+            min = std::min(min,_openingPrices[i]);
             candlestickSet->setClose(_closingPrices[i]);
+            max = std::max(max,_closingPrices[i]);
+            min = std::min(min,_closingPrices[i]);
             candlestickSet->setLow(_lowestPrices[i]);
+            max = std::max(max,_lowestPrices[i]);
+            min = std::min(min,_lowestPrices[i]);
             candlestickSet->setHigh(_highestPrices[i]);
+            max = std::max(max,_highestPrices[i]);
+            min = std::min(min,_highestPrices[i]);
             series->append(candlestickSet);
             categories << _categories[i];
             i++;
@@ -42,8 +51,9 @@ void CandleStick::refresh(){
         axisX->setCategories(categories);
 
         QValueAxis *axisY = qobject_cast<QValueAxis *>(axes(Qt::Vertical).at(0));
-        axisY->setMax(axisY->max() * 1.05);
-        axisY->setMin(axisY->min() * 0.5);
+        axisY->setMax(max * 1.1);
+        axisY->setMin(min * (0.5));
+        //se min è negativo problemi
     }return;
 }
 
@@ -53,10 +63,8 @@ void CandleStick::setOpeningPrices(QTableWidget* table, const QModelIndexList& i
     for(int i=0; i<indexes.size(); i++){
         QTableWidgetItem* item=table->item(indexes[i].row(), indexes[i].column());
         if(item){
-            qDebug() << item->text().toDouble();
             _openingPrices.append(item->text().toDouble());
         }else{
-            qDebug() << "INT_MIN";
             _openingPrices.append(INT_MIN);
         }
     }
@@ -72,10 +80,8 @@ void CandleStick::setClosingPrices(QTableWidget* table, const QModelIndexList& i
     for(int i=0; i<indexes.size(); i++){
         QTableWidgetItem* item=table->item(indexes[i].row(), indexes[i].column());
         if(item){
-            qDebug() << item->text().toDouble();
             _closingPrices.append(item->text().toDouble());
         }else{
-            qDebug() << "INT_MIN";
             _closingPrices.append(INT_MIN);
         }
     }
@@ -91,10 +97,8 @@ void CandleStick::setLowestPrices(QTableWidget* table, const QModelIndexList& in
     for(int i=0; i<indexes.size(); i++){
             QTableWidgetItem* item=table->item(indexes[i].row(), indexes[i].column());
             if(item){
-                qDebug() << item->text().toDouble();
                 _lowestPrices.append(item->text().toDouble());
             }else{
-                qDebug() << "INT_MIN";
                 _lowestPrices.append(INT_MIN);
             }
 
@@ -111,10 +115,8 @@ void CandleStick::setHighestPrices(QTableWidget* table, const QModelIndexList& i
     for(int i=0; i<indexes.size(); i++){
             QTableWidgetItem* item=table->item(indexes[i].row(), indexes[i].column());
             if(item){
-                qDebug() << item->text().toDouble();
                 _highestPrices.append(item->text().toDouble());
             }else{
-                qDebug() << "INT_MIN";
                 _highestPrices.append(INT_MIN);
             }
         }
@@ -130,10 +132,8 @@ void CandleStick::setCategories(QTableWidget *table, const QModelIndexList& inde
     for(int i=0; i<indexes.size(); i++){
         QTableWidgetItem* item=table->item(indexes[i].row(), indexes[i].column());
         if(item){
-            qDebug() << item->text().toDouble();
             _categories.append(item->text());
         }else{
-            qDebug() << "Stringa vuota";
             _categories.append("");
         }
     }

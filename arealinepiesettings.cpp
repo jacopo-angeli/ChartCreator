@@ -153,11 +153,9 @@ QJsonObject AreaLinePieSettings::toJSON() const{
 }
 
 void AreaLinePieSettings::fromJSON(const QJsonObject& chartJSON){
-    qDebug() << "AreaLinePieSettings::fromJSON";
     ChartSettings::fromJSON(chartJSON);
     if(chartJSON["DataRange"].toString() != "Unset")
         setDataRange(tagToPairPair(chartJSON["DataRange"].toString()));
     if(chartJSON["LabelsRange"].toString() != "Unset")
         setDataRange(tagToPairPair(chartJSON["LabelsRange"].toString()));
-    qDebug() << "end AreaLinePieSettings::fromJSON";
 }

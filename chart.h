@@ -2,11 +2,14 @@
 #define CHART_H
 #include <QObject>
 #include <QtCharts>
+#include <iostream>
 #include "flags.h"
 
 class Chart : public QChart
 {
     Q_OBJECT
+protected:
+    virtual void refresh() =0;
 public:
     Chart(QGraphicsItem* =nullptr);
     virtual void setSeries(QTableWidget*, const QModelIndexList&, Flags = Flags::ROW)=0;
