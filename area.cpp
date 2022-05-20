@@ -11,7 +11,6 @@ Area::Area(QGraphicsItem* parent): Chart(parent), _series(QList<QLineSeries*>())
  * @param parseDirection
  */
 void Area::setSeries(QTableWidget* table, const QModelIndexList& indexes, Flags parseDirection){
-    std::cout << "Set series";
     clearData();
     switch(parseDirection){
         case(Flags::ROW):{
@@ -22,7 +21,6 @@ void Area::setSeries(QTableWidget* table, const QModelIndexList& indexes, Flags 
                 for(int j=indexes.first().column(); j<=indexes.last().column();j++){
                     QTableWidgetItem* item = table->item(i, j);
                     if(item && item->text()!="") {
-                        std::cout << "item = " << item;
                         series->append(++pC,item->text().toInt());
                     }
                 }
@@ -57,19 +55,16 @@ void Area::clearData(){
 }
 
 void Area::refresh(){
-    std::cout << "refresh";
     removeAllSeries();
     QPen pen(0x059605);
     pen.setWidth(3);
     for(auto it=_series.begin(); it!=_series.end(); it++){
         if((*it)->count() > 1){
-            std::cout << (*it)->count();
             QAreaSeries *series = new QAreaSeries(*it);
             (*it)->setPen(pen);
             addSeries(series);
         }
     }
     createDefaultAxes();
-    std::cout << "refresh done";
 }
 

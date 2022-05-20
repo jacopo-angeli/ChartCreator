@@ -122,7 +122,7 @@ void Controller::TabClose(int index){
 };
 void Controller::openFile(){
     fileOpen();
-    std::cout << "openFile done"<< std::endl;
+    //std::cout << "openFile done"<< std::endl;
 };
 void Controller::saveACopy(){
     fileSave(_MainWindow->getCurrentTabIndex());
@@ -656,13 +656,10 @@ void Controller::fileOpen(QString filePath){
                 }
 
                 //inserisco su _ActiveFiles il nuovo file
-                std::cout << "File in inserimento"<< std::endl;
                 _ActiveFiles.insert(QString("../"+(filePath.split("/")).last()), filePath);
-                std::cout << "File Inserito"<< std::endl;
             }
         }
     }
-    std::cout << "fileOpen Ok" << std::endl;
 }
 bool Controller::isNumeric(QString string) const{
     QRegExp regex("^[0-9]\\d*(\\.\\d+)?$");
