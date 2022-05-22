@@ -5,11 +5,16 @@
 class Pie : public Chart
 {
     Q_OBJECT
+private:
+    QList<double> _Data;
+    QList<QString> _Labels;
 protected:
     virtual void refresh();
 public:
-    Pie(QGraphicsItem* = nullptr);
+    Pie(QWidget* =nullptr,QGraphicsItem* = nullptr);
     virtual void setSeries(QTableWidget*, const QModelIndexList&, Flags = Flags::ROW);
+    void setLabels(QTableWidget*, const QModelIndexList&, Flags = Flags::ROW);
+    void clearLabels();
     virtual void clearData();
 };
 

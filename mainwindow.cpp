@@ -442,7 +442,6 @@ void MainWindow::newTab(){
 
     _Files->setTabsClosable(true);
 
-    connect(_Files, SIGNAL(tabCloseRequested(int)), parent(), SLOT(TabClose(int)));
     connect(static_cast<QTableWidget*>(_Files->widget(_Files->count()-1)->layout()->itemAt(0)->widget()), SIGNAL(itemSelectionChanged()), parent(), SLOT(SpinBox()));
     connect(static_cast<QTableWidget*>(_Files->widget(_Files->count()-1)->layout()->itemAt(0)->widget()), SIGNAL(cellChanged(int,int)), parent(), SLOT(ChartRefresh(int,int)));
     _Files->setCurrentIndex(_Files->count()-1);

@@ -8,9 +8,11 @@ class Bar : public Chart
 protected:
     virtual void refresh();
 public:
-    Bar(QGraphicsItem* =nullptr);
+    Bar(QWidget* =nullptr,QGraphicsItem* =nullptr);
     virtual void setSeries(QTableWidget*, const QModelIndexList&, Flags = Flags::ROW);
     virtual void clearData();
+    virtual void setLabels(QTableWidget*, const QModelIndexList&, Flags = Flags::ROW);
+    virtual void clearLabels();
 };
 
 #endif // BAR_H

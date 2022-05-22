@@ -11,6 +11,7 @@ AreaLinePieSettings::AreaLinePieSettings(QWidget * parent): ChartSettings(parent
     btn1->setFixedWidth(120);
     connect(btn1, SIGNAL(clicked()), parent, SLOT(pickDataRange()));
     QPushButton* btn2=new QPushButton("PICK");
+    connect(btn2, SIGNAL(clicked()), parent, SLOT(pickLabels()));
     btn2->setFixedWidth(120);
 
     QRadioButton* row=new QRadioButton("Row Parsing");
@@ -53,15 +54,15 @@ AreaLinePieSettings::AreaLinePieSettings(QWidget * parent): ChartSettings(parent
 AreaLinePieSettings::AreaLinePieSettings(Flags type, QWidget* parent): AreaLinePieSettings(parent){
     switch(type){
         case (Flags::AREA):{
-            _Chart = new Area();
+            _Chart = new Area(parent);
         }
             break;
         case (Flags::LINES):{
-            _Chart = new Line();
+            _Chart = new Line(parent);
         }
             break;
         case (Flags::PIE):{
-            _Chart = new Pie();
+            _Chart = new Pie(parent);
         }
         default:
             break;
@@ -157,5 +158,5 @@ void AreaLinePieSettings::fromJSON(const QJsonObject& chartJSON){
     if(chartJSON["DataRange"].toString() != "Unset")
         setDataRange(tagToPairPair(chartJSON["DataRange"].toString()));
     if(chartJSON["LabelsRange"].toString() != "Unset")
-        setDataRange(tagToPairPair(chartJSON["LabelsRange"].toString()));
+        setLabelsRange(tagToPairPair(chartJSON["LabelsRange"].toString()));
 }

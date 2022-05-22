@@ -98,7 +98,6 @@ QJsonObject ChartSettings::toJSON() const{
     return JsonObj;
 }
 void ChartSettings::fromJSON(const QJsonObject & chartJSON){
-    std::cout << "ChartSettings::fromJSON" << std::endl;
     if(chartJSON["TitlePosition"].toString() != "Unset")
         setTitlePosition(tagToPair(chartJSON["TitlePosition"].toString()));
     setColorIndex(chartJSON["ColorIndex"].toInt());

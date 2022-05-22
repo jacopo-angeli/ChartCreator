@@ -19,7 +19,7 @@ private:
 
     QTableWidget* fileParser(const QString);
     void lastSessionRestore();
-    void fileSave(int, QString = "");
+    bool fileSave(int, QString = "");
     void fileOpen(QString = "");
     bool isNumeric(QString) const;
     bool isDate(QString);
@@ -77,6 +77,8 @@ public slots:
     void themeChanged(int);
     void chartReset();
     void chartCreationGuide();
+    void sliceStandOut();
+
 };
 
 #endif // CONTROLLER_H

@@ -9,11 +9,14 @@ class Chart : public QChart
 {
     Q_OBJECT
 protected:
+    QWidget* _controller;
     virtual void refresh() =0;
 public:
-    Chart(QGraphicsItem* =nullptr);
+    Chart(QWidget* =nullptr, QGraphicsItem* =nullptr);
     virtual void setSeries(QTableWidget*, const QModelIndexList&, Flags = Flags::ROW)=0;
     virtual void clearData()=0;
+    virtual void setLabels(QTableWidget*, const QModelIndexList&, Flags = Flags::ROW)=0;
+    virtual void clearLabels()=0;
 };
 
 #endif // CHART_H

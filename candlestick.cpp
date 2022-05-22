@@ -1,5 +1,5 @@
 #include "candlestick.h"
-CandleStick::CandleStick(QGraphicsItem * parent): Chart(parent), _openingPrices(QList<double>()), _closingPrices(QList<double>()), _highestPrices(QList<double>()), _lowestPrices(QList<double>()), _categories(QList<QString>()){
+CandleStick::CandleStick(QWidget* brain, QGraphicsItem * parent): Chart(brain, parent), _openingPrices(QList<double>()), _closingPrices(QList<double>()), _highestPrices(QList<double>()), _lowestPrices(QList<double>()), _categories(QList<QString>()){
     setAnimationOptions(QChart::SeriesAnimations);
     legend()->hide();
 }
@@ -10,6 +10,16 @@ void CandleStick::setSeries(QTableWidget *, const QModelIndexList &, Flags)
 }
 
 void CandleStick::clearData()
+{
+
+}
+
+void CandleStick::setLabels(QTableWidget *, const QModelIndexList &, Flags)
+{
+
+}
+
+void CandleStick::clearLabels()
 {
 
 }
