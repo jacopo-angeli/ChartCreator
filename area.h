@@ -16,7 +16,6 @@ public:
     virtual void clearLabels();
 private:
     QList<QList<double>> _values;
-    QList<QAreaSeries*> _areaSeries;
 };
 
 #endif // AREA_H

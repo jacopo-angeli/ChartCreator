@@ -61,8 +61,8 @@ void CandleStick::refresh(){
         axisX->setCategories(categories);
 
         QValueAxis *axisY = qobject_cast<QValueAxis *>(axes(Qt::Vertical).at(0));
-        axisY->setMax(max * 1.1);
-        axisY->setMin(min * (min < 0 ? 1.1 : 0.5));
+        axisY->setMax(max * 1.02);
+        axisY->setMin(min * (min < 0 ? 1.02 : 0.98));
         //se min è negativo problemi
     }return;
 }

@@ -3,6 +3,7 @@
 Pie::Pie(QWidget* brain, QGraphicsItem* parent): Chart(brain, parent), _Data(QList<double>()), _Labels(QList<QString>()){
     setAnimationOptions(QChart::AllAnimations);
     legend()->show();
+    legend()->setAlignment(Qt::AlignRight);
 }
 
 void Pie::setSeries(QTableWidget * table, const QModelIndexList & indexes, Flags parseDirection){
@@ -39,12 +40,36 @@ void Pie::setSeries(QTableWidget * table, const QModelIndexList & indexes, Flags
 
 void Pie::setLabels(QTableWidget* table, const QModelIndexList& indexes, Flags parseDirection){
     clearLabels();
-    for(int i = 0; i < indexes.count(); i++){
-        if(i<indexes.count() && table->item(indexes[i].row(), indexes[i].column()) && table->item(indexes[i].row(), indexes[i].column())->text() != "")
-           {_Labels.append(table->item(indexes[i].row(), indexes[i].column())->text());
-            qDebug()<<table->item(indexes[i].row(), indexes[i].column())->text();
-        }else
-            _Labels.append("Slice" + QString::number(i+1));
+    switch(parseDirection){
+        case(Flags::ROW):{
+            int sliceCount = 1;
+            for(int i=indexes.first().row(); i<=indexes.last().row(); i++){
+                for(int j=indexes.first().column(); j<=indexes.last().column(); j++){
+                    if(table->item(i,j) && table->item(i,j)->text() != "")
+                        _Labels.append(table->item(i,j)->text());
+                    else
+                        _Labels.append("Slice" + QString::number(sliceCount));
+                    sliceCount++;
+                }
+            }
+        }
+        break;
+        case(Flags::COLUMN):{
+            int sliceCount = 1;
+            for(int j=indexes.first().column(); j<=indexes.last().column();j++){
+                for(int i=indexes.first().row(); i<=indexes.last().row();i++){
+                    if(table->item(i,j) && table->item(i,j)->text() != "")
+                        _Labels.append(table->item(i,j)->text());
+                    else
+                        _Labels.append("Slice" + QString::number(sliceCount));
+                    sliceCount++;
+                }
+            }
+        }
+        break;
+        default:
+            //Lancia eccezioni
+        break;
     }
     refresh();
 }
@@ -72,9 +97,8 @@ void Pie::refresh(){
 
         }
     }
-    foreach(QPieSlice* slice, series->slices()){
+    foreach(QPieSlice* slice, series->slices())
         connect(slice, SIGNAL(clicked()), _controller, SLOT(sliceStandOut()));
-    }
     addSeries(series);
 }
 

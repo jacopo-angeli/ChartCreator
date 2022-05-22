@@ -525,19 +525,30 @@ void Controller::parseMethodChange(QAbstractButton* btnClicked){
 
     AreaLinePieSettings* currentChartTab = static_cast<AreaLinePieSettings*>(_MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex()));
     QPair<QPair<int,int>, QPair<int,int>> dataRange = currentChartTab->getDataRange();
+     QPair<QPair<int,int>, QPair<int,int>> labelsRange = currentChartTab->getLabelsRange();
     if(dataRange.first.first == 0) return; //Label "Unset"
 
     QTableWidget* CurrentTable= _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
     QModelIndexList userSelection = CurrentTable->selectionModel()->selectedIndexes();
     CurrentTable->clearSelection();
+
     CurrentTable->setRangeSelected(QTableWidgetSelectionRange(dataRange.first.first-1, dataRange.first.second-1, dataRange.second.first-1, dataRange.second.second-1), true);
-    QModelIndexList indexes = CurrentTable->selectionModel()->selectedIndexes();
+    QModelIndexList dataIndexes = CurrentTable->selectionModel()->selectedIndexes();
+    CurrentTable->clearSelection();
+
+    CurrentTable->setRangeSelected(QTableWidgetSelectionRange(labelsRange.first.first-1, labelsRange.first.second-1, labelsRange.second.first-1, labelsRange.second.second-1), true);
+    QModelIndexList labelsIndexes = CurrentTable->selectionModel()->selectedIndexes();
     CurrentTable->clearSelection();
 
     if(userSelection.size() > 0) CurrentTable->setRangeSelected(QTableWidgetSelectionRange(userSelection.first().row(),userSelection.first().column(), userSelection.last().row(), userSelection.last().column()), true);
 
-    if(btnClicked->text() == "Row Parsing") currentChartTab->getChart()->setSeries(CurrentTable, indexes);
-    else currentChartTab->getChart()->setSeries(CurrentTable, indexes, Flags::COLUMN);
+    if(btnClicked->text() == "Row Parsing") {
+        currentChartTab->getChart()->setSeries(CurrentTable, dataIndexes);
+        currentChartTab->getChart()->setLabels(CurrentTable, labelsIndexes);
+    }else{
+        currentChartTab->getChart()->setSeries(CurrentTable, dataIndexes, Flags::COLUMN);
+        currentChartTab->getChart()->setLabels(CurrentTable, labelsIndexes, Flags::COLUMN);
+    }
 }
 void Controller::themeChanged(int index){
     //Viene cambiato il theme del chart presente nella current tab di _Charts della current tab di _Files
