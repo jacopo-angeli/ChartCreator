@@ -4,38 +4,25 @@ CandleStick::CandleStick(QWidget* brain, QGraphicsItem * parent): Chart(brain, p
     legend()->hide();
 }
 
-void CandleStick::setSeries(QTableWidget *, const QModelIndexList &, Flags)
-{
+void CandleStick::setSeries(QTableWidget *, const QModelIndexList &, Flags){}
 
-}
+void CandleStick::clearData(){}
 
-void CandleStick::clearData()
-{
+void CandleStick::setLabels(QTableWidget *, const QModelIndexList &, Flags){}
 
-}
-
-void CandleStick::setLabels(QTableWidget *, const QModelIndexList &, Flags)
-{
-
-}
-
-void CandleStick::clearLabels()
-{
-
-}
+void CandleStick::clearLabels(){}
 
 void CandleStick::refresh(){
-    int categoriesSize = _categories.size();
-    if(categoriesSize>0){
-        double max=INT_MIN, min=INT_MAX;
-        removeAllSeries();
-        int i=0;
-        QCandlestickSeries *series = new QCandlestickSeries();
-        QStringList categories;
-        series->setIncreasingColor(QColor(Qt::green));
-        series->setDecreasingColor(QColor(Qt::red));
-        while(i<categoriesSize && i<_openingPrices.size() && i<_closingPrices.size() && i<_highestPrices.size() && i<_lowestPrices.size()){
-            QCandlestickSet *candlestickSet = new QCandlestickSet();
+    removeAllSeries();
+    int categoriesSize = _categories.count(), i=0;
+    double max=INT_MIN, min=INT_MAX;
+    QCandlestickSeries *series = new QCandlestickSeries();
+    QStringList categories;
+    series->setIncreasingColor(QColor(Qt::green));
+    series->setDecreasingColor(QColor(Qt::red));
+    while(i<_openingPrices.size() && i<_closingPrices.size() && i<_highestPrices.size() && i<_lowestPrices.size()){
+        QCandlestickSet *candlestickSet = new QCandlestickSet();
+        if(_openingPrices[i]>INT_MIN && _closingPrices[i]>INT_MIN && _highestPrices[i]>INT_MIN && _lowestPrices[i]>INT_MIN){
             candlestickSet->setOpen(_openingPrices[i]);
             max = std::max(max,_openingPrices[i]);
             min = std::min(min,_openingPrices[i]);
@@ -49,22 +36,25 @@ void CandleStick::refresh(){
             max = std::max(max,_highestPrices[i]);
             min = std::min(min,_highestPrices[i]);
             series->append(candlestickSet);
-            categories << _categories[i];
-            i++;
+            if(i<categoriesSize)
+                categories.append(_categories[i]);
+            else
+                categories.append(QString("Set " + QString::number(i+1)));
         }
-        series->setIncreasingColor(QColor(Qt::green));
-        series->setDecreasingColor(QColor(Qt::red));
-        addSeries(series);
-        createDefaultAxes();
+        i++;
+    }
+    series->setIncreasingColor(QColor(Qt::green));
+    series->setDecreasingColor(QColor(Qt::red));
+    addSeries(series);
+    createDefaultAxes();
 
-        QBarCategoryAxis *axisX = qobject_cast<QBarCategoryAxis *>(axes(Qt::Horizontal).at(0));
-        axisX->setCategories(categories);
+    QBarCategoryAxis *axisX = qobject_cast<QBarCategoryAxis *>(axes(Qt::Horizontal).at(0));
+    axisX->setCategories(categories);
 
-        QValueAxis *axisY = qobject_cast<QValueAxis *>(axes(Qt::Vertical).at(0));
-        axisY->setMax(max * 1.02);
-        axisY->setMin(min * (min < 0 ? 1.02 : 0.98));
-        //se min è negativo problemi
-    }return;
+    QValueAxis *axisY = qobject_cast<QValueAxis *>(axes(Qt::Vertical).at(0));
+    axisY->setMax(max * 1.02);
+    axisY->setMin(min * (min < 0 ? 1.02 : 0.98));
+    //se min è negativo problemi
 }
 
 void CandleStick::setOpeningPrices(QTableWidget* table, const QModelIndexList& indexes){
@@ -72,7 +62,7 @@ void CandleStick::setOpeningPrices(QTableWidget* table, const QModelIndexList& i
     _openingPrices.clear();
     for(int i=0; i<indexes.size(); i++){
         QTableWidgetItem* item=table->item(indexes[i].row(), indexes[i].column());
-        if(item){
+        if(item && item->text()!=""){
             _openingPrices.append(item->text().toDouble());
         }else{
             _openingPrices.append(INT_MIN);
@@ -89,7 +79,7 @@ void CandleStick::setClosingPrices(QTableWidget* table, const QModelIndexList& i
     _closingPrices.clear();
     for(int i=0; i<indexes.size(); i++){
         QTableWidgetItem* item=table->item(indexes[i].row(), indexes[i].column());
-        if(item){
+        if(item && item->text()!=""){
             _closingPrices.append(item->text().toDouble());
         }else{
             _closingPrices.append(INT_MIN);
@@ -106,7 +96,7 @@ void CandleStick::setLowestPrices(QTableWidget* table, const QModelIndexList& in
     _lowestPrices.clear();
     for(int i=0; i<indexes.size(); i++){
             QTableWidgetItem* item=table->item(indexes[i].row(), indexes[i].column());
-            if(item){
+            if(item && item->text()!=""){
                 _lowestPrices.append(item->text().toDouble());
             }else{
                 _lowestPrices.append(INT_MIN);
@@ -124,7 +114,7 @@ void CandleStick::setHighestPrices(QTableWidget* table, const QModelIndexList& i
     _highestPrices.clear();
     for(int i=0; i<indexes.size(); i++){
             QTableWidgetItem* item=table->item(indexes[i].row(), indexes[i].column());
-            if(item){
+            if(item && item->text()!=""){
                 _highestPrices.append(item->text().toDouble());
             }else{
                 _highestPrices.append(INT_MIN);
@@ -142,9 +132,12 @@ void CandleStick::setCategories(QTableWidget *table, const QModelIndexList& inde
     for(int i=0; i<indexes.size(); i++){
         QTableWidgetItem* item=table->item(indexes[i].row(), indexes[i].column());
         if(item){
-            _categories.append(item->text());
+            if(item->text()!="")
+                _categories.append(item->text());
+            else
+                _categories.append(QString("Set " + QString::number(i+1)));
         }else{
-            _categories.append("");
+            _categories.append(QString("Set " + QString::number(i+1)));
         }
     }
     refresh();

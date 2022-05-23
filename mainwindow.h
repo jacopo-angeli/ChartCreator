@@ -42,13 +42,7 @@ private:
     int getMaxMenuSize(QMenu*);
 public:
     MainWindow(QWidget* =nullptr);
-    void addRow(Flags = Flags::TOP);
-    void addColumn(Flags = Flags::LEFT);
-    void clearContent(Flags = Flags::SELECTION);
-    void deleteContent(Flags = Flags::ROW);
-    void textAlign(Flags = Flags::LEFT);
     void setSpinBox(int);
-    void setTextSize(int);
 
     int getFilePosition(QString);
     int getRowCount(int);

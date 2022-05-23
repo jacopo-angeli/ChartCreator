@@ -76,7 +76,10 @@ Chart* ChartSettings::getChart() const{
     return _Chart;
 }
 void ChartSettings::setTitlePosition(QPair<int, int> pos){
-     _Title->setText("( " + (QString::number(pos.first)) + " , " + (QString::number(pos.second)) + " )");
+    if(pos.first==0)
+        _Title->setText("Unset");
+    else
+        _Title->setText("( " + (QString::number(pos.first)) + " , " + (QString::number(pos.second)) + " )");
 }
 QPair<int, int> ChartSettings:: getTitlePosition() const{
     QString tag = _Title->text();

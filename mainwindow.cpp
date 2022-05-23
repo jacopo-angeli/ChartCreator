@@ -196,142 +196,12 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Files(new QTabWid
 
     connect(this, SIGNAL(closing()), parent, SLOT(mainWindowCloseEvent()));
 }
-
-void MainWindow::addRow(Flags dir)
-{
-    QTableWidget* currentTable = getFullTable(getCurrentTabIndex());
-    switch (dir) {
-        case (Flags::TOP):
-            currentTable->insertRow(currentTable->currentRow());
-        break;
-        case (Flags::DOWN):
-            currentTable->insertRow(currentTable->currentRow()+1);
-        break;
-        default:
-        break;
-    }
-}
-
-void MainWindow::addColumn(Flags dir){
-    QTableWidget* currentTable = getFullTable(getCurrentTabIndex());
-    switch (dir) {
-        case (Flags::LEFT):
-            currentTable->insertColumn(currentTable->currentColumn()+1);
-        break;
-        case (Flags::RIGHT):
-            currentTable->insertColumn(currentTable->currentColumn());
-        break;
-        default:
-        break;
-    }
-}
-
-
-void MainWindow::clearContent(Flags Content){
-    QTableWidget* currentTable = getFullTable(getCurrentTabIndex());
-    switch (Content) {
-        case (Flags::SELECTION): {
-            QList<QTableWidgetItem*> ItemList = currentTable->selectedItems();
-            for (auto it = ItemList.begin(); it!=ItemList.end(); it++){
-                QTableWidgetItem *element = *it;
-                element->setText("");
-            }
-        }
-            break;
-
-        case (Flags::COLUMN):{
-            //TODO:Multiple columns selection
-            int currentIndex = currentTable->currentColumn();
-            for(int i=0; i<currentTable->rowCount(); i++){
-                QTableWidgetItem *TI = currentTable->item(i, currentIndex);
-                if(TI) TI->setText("");
-            }
-        }
-            break;
-
-        case (Flags::ROW):{
-            //TODO:Multiple rows selection
-            int currentIndex = currentTable->currentRow();
-            for(int i=0; i<currentTable->columnCount(); i++){
-                QTableWidgetItem *TI = currentTable->item(currentIndex, i);
-                if(TI) TI->setText("");
-            }
-        }
-            break;
-
-        case (Flags::ALL):
-            currentTable->clear();
-            break;
-
-        default:
-            break;
-    }
-}
-
-void MainWindow::deleteContent(Flags Content){
-    QTableWidget* currentTable = getFullTable(getCurrentTabIndex());
-    switch (Content) {
-        case (Flags::COLUMN):
-            //TODO:Multiple columns selection handle
-            currentTable->removeColumn(currentTable->currentColumn());
-            break;
-        case (Flags::ROW):
-            //TODO:Multiple row selection handle
-            currentTable->removeRow(currentTable->currentRow());
-            break;
-        default:
-            break;
-    }
-}
-
-void MainWindow::textAlign(Flags dir){
-    QTableWidget* currentTable = getFullTable(getCurrentTabIndex());
-    QList<QTableWidgetItem*> ItemList = currentTable->selectedItems();
-    switch (dir) {
-        case(Flags::LEFT):{
-            for (auto it = ItemList.begin(); it!=ItemList.end(); it++){
-                QTableWidgetItem *element = *it;
-                element->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-            }
-        }
-            break;
-        case(Flags::CENTER):{
-            for (auto it = ItemList.begin(); it!=ItemList.end(); it++){
-                QTableWidgetItem *element = *it;
-                element->setTextAlignment(Qt::AlignCenter | Qt::AlignVCenter);
-            }
-        }
-            break;
-        case(Flags::RIGHT):{
-            for (auto it = ItemList.begin(); it!=ItemList.end(); it++){
-                QTableWidgetItem *element = *it;
-                element->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
-            }
-        }
-            break;
-        default:
-            break;
-    }
-}
-
 void MainWindow::setSpinBox(int value){
     _TxtDim->setValue(value);
 }
-
-void MainWindow::setTextSize(int pointSize){
-    QFont TFont= _Files->widget(_Files->currentIndex())->layout()->itemAt(0)->widget()->font();
-    TFont.setPointSize(pointSize);
-    QList<QTableWidgetItem*> ItemList = getFullTable(getCurrentTabIndex())->selectedItems();
-    for (auto it = ItemList.begin(); it!=ItemList.end(); it++){
-        QTableWidgetItem *element = *it;
-        element->setFont(TFont);
-    }
-}
-
 int MainWindow::getSpinValue(){
     return _TxtDim->value();
 }
-
 int MainWindow::getCurrentTabIndex(){
     return _Files->currentIndex();
 }
@@ -344,7 +214,7 @@ QString MainWindow::getTabName(int index){
 /**
  * @brief MainWindow::getFullTable
  * @param index
- * @return return pointer to the QTableWidget widget of the tab in _Files[index]
+ * @return rpointer to the QTableWidget widget of the tab in _Files[index]
  */
 QTableWidget* MainWindow::getFullTable(int index){
     return static_cast<QTableWidget*>(_Files->widget(index)->layout()->itemAt(0)->widget());

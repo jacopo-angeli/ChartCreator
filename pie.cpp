@@ -14,6 +14,7 @@ void Pie::setSeries(QTableWidget * table, const QModelIndexList & indexes, Flags
                 for(int j=indexes.first().column(); j<=indexes.last().column();j++){
                     QTableWidgetItem* item = table->item(i, j);
                     if(item && item->text()!=""){
+                        //check if is a double
                         _Data.append(item->text().toDouble());
                     }
                 }
@@ -25,6 +26,7 @@ void Pie::setSeries(QTableWidget * table, const QModelIndexList & indexes, Flags
                 for(int i=indexes.first().row(); i<=indexes.last().row();i++){
                     QTableWidgetItem* item = table->item(i, j);
                     if(item && item->text()!=""){
+                        //check if is a double
                         _Data.append(item->text().toDouble());
                     }
                 }

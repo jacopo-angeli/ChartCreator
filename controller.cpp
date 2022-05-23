@@ -65,53 +65,555 @@ bool Controller::fileSave(int tableIndex, QString fileName){
     return true;
 }
 void Controller::UpperInsert(){
-    _MainWindow->addRow();
+    QTableWidget* currentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+    int currentRow=currentTable->currentRow()+1;
+    currentTable->insertRow(currentRow-1);
+    //Aumentare di una riga tutti i range da currentRow in poi
+    //Scorro tutti i chart, prendo tutti i range e controllo se first.first è maggiore di currentRow
+    for (int i=0; i<_MainWindow->getChartNumber(_MainWindow->getCurrentTabIndex())-1; i++){
+        ChartSettings* currentTab = _MainWindow->getChartTab(i);
+        QPair<int, int> pos = currentTab->getTitlePosition();
+        if(pos.first>=currentRow){
+            //Aumento di una riga il titlePosition
+            QPair<int, int> newPos = QPair<int, int>(pos.first+1, pos.second);
+            currentTab->setTitlePosition(newPos);
+        }
+        QPair<QPair<int, int>, QPair<int, int>> range = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(), QPair<int, int>());
+        if(CandleStickSettings* candleStickTab = dynamic_cast<CandleStickSettings*>(currentTab)){
+            range = candleStickTab->getCategoriesRange();
+            if(range.first.first>=currentRow)
+                candleStickTab->setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first+1, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+            else if(range.second.first>=currentRow)
+                candleStickTab->setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+            range = candleStickTab->getOpeningPricesRange();
+            if(range.first.first>=currentRow)
+                candleStickTab->setOpeningPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first+1, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+            else if(range.second.first>=currentRow)
+                candleStickTab->setOpeningPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+            range = candleStickTab->getClosingPricesRange();
+            if(range.first.first>=currentRow)
+                candleStickTab->setClosingPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first+1, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+            else if(range.second.first>=currentRow)
+                candleStickTab->setClosingPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+            range = candleStickTab->getHighestPricesRange();
+            if(range.first.first>=currentRow)
+                candleStickTab->setHighestPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first+1, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+            else if(range.second.first>=currentRow)
+                candleStickTab->setHighestPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+            range = candleStickTab->getLowestPricesRange();
+            if(range.first.first>=currentRow)
+                candleStickTab->setLowestPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first+1, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+            else if(range.second.first>=currentRow)
+                candleStickTab->setLowestPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+        }else{
+            AreaLinePieSettings* areaLinePieTab = dynamic_cast<AreaLinePieSettings*>(currentTab);
+            if(BarSettings* barChart = dynamic_cast<BarSettings*>(currentTab)){
+                range = barChart->getCategoriesRange();
+                if(range.first.first>=currentRow)
+                    barChart->setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first+1, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+                else if(range.second.first>=currentRow)
+                    barChart->setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+            }
+            range = areaLinePieTab->getDataRange();
+            if(range.first.first>=currentRow)
+                areaLinePieTab->setDataRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first+1, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+            else if(range.second.first>=currentRow)
+                areaLinePieTab->setDataRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+            range = areaLinePieTab->getLabelsRange();
+            if(range.first.first>=currentRow)
+                areaLinePieTab->setLabelsRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first+1, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+            else if(range.second.first>=currentRow)
+                areaLinePieTab->setLabelsRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+        }
+    }
 }
 void Controller::LowerInsert(){
-    _MainWindow->addRow(Flags::DOWN);
+    QTableWidget* currentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+    int currentRow=currentTable->currentRow()+1;
+    currentTable->insertRow(currentRow);
+    //Aumentare di una riga tutti i range da currentRow in poi
+    //Scorro tutti i chart, prendo tutti i range e controllo se first.first è maggiore di currentRow
+    for (int i=0; i<_MainWindow->getChartNumber(_MainWindow->getCurrentTabIndex())-1; i++){
+        ChartSettings* currentTab = _MainWindow->getChartTab(i);
+        QPair<int, int> pos = currentTab->getTitlePosition();
+        if(pos.first>currentRow){
+            //Aumento di una riga il titlePosition
+            QPair<int, int> newPos = QPair<int, int>(pos.first+1, pos.second);
+            currentTab->setTitlePosition(newPos);
+        }
+        QPair<QPair<int, int>, QPair<int, int>> range = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(), QPair<int, int>());
+        if(CandleStickSettings* candleStickTab = dynamic_cast<CandleStickSettings*>(currentTab)){
+            range = candleStickTab->getCategoriesRange();
+            if(range.first.first>currentRow)
+                candleStickTab->setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first+1, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+            else if(range.second.first>currentRow)
+                candleStickTab->setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+            range = candleStickTab->getOpeningPricesRange();
+            if(range.first.first>currentRow)
+                candleStickTab->setOpeningPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first+1, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+            else if(range.second.first>currentRow)
+                candleStickTab->setOpeningPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+            range = candleStickTab->getClosingPricesRange();
+            if(range.first.first>currentRow)
+                candleStickTab->setClosingPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first+1, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+            else if(range.second.first>currentRow)
+                candleStickTab->setClosingPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+            range = candleStickTab->getHighestPricesRange();
+            if(range.first.first>currentRow)
+                candleStickTab->setHighestPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first+1, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+            else if(range.second.first>currentRow)
+                candleStickTab->setHighestPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+            range = candleStickTab->getLowestPricesRange();
+            if(range.first.first>currentRow)
+                candleStickTab->setLowestPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first+1, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+            else if(range.second.first>currentRow)
+                candleStickTab->setLowestPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+        }else{
+            AreaLinePieSettings* areaLinePieTab = dynamic_cast<AreaLinePieSettings*>(currentTab);
+            if(BarSettings* barChart = dynamic_cast<BarSettings*>(currentTab)){
+                range = barChart->getCategoriesRange();
+                if(range.first.first>currentRow)
+                    barChart->setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first+1, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+                else if(range.second.first>currentRow)
+                    barChart->setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+            }
+            range = areaLinePieTab->getDataRange();
+            if(range.first.first>currentRow)
+                areaLinePieTab->setDataRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first+1, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+            else if(range.second.first>currentRow)
+                areaLinePieTab->setDataRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+            range = areaLinePieTab->getLabelsRange();
+            if(range.first.first>currentRow)
+                areaLinePieTab->setLabelsRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first+1, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+            else if(range.second.first>currentRow)
+                areaLinePieTab->setLabelsRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first+1, range.second.second)));
+        }
+    }
 }
 void Controller::LeftInsert(){
-    _MainWindow->addColumn();
+    QTableWidget* currentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+    int currentColumn=currentTable->currentColumn()+1;
+    currentTable->insertColumn(currentColumn-1);
+    //Aumentare di una riga tutti i range da currentRow in poi
+    //Scorro tutti i chart, prendo tutti i range e controllo se first.first è maggiore di currentRow
+    for (int i=0; i<_MainWindow->getChartNumber(_MainWindow->getCurrentTabIndex())-1; i++){
+        ChartSettings* currentTab = _MainWindow->getChartTab(i);
+        QPair<int, int> pos = currentTab->getTitlePosition();
+        if(pos.second>=currentColumn){
+            //Aumento di una riga il titlePosition
+            QPair<int, int> newPos = QPair<int, int>(pos.first, pos.second+1);
+            currentTab->setTitlePosition(newPos);
+        }
+        QPair<QPair<int, int>, QPair<int, int>> range = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(), QPair<int, int>());
+        if(CandleStickSettings* candleStickTab = dynamic_cast<CandleStickSettings*>(currentTab)){
+            range = candleStickTab->getCategoriesRange();
+            if(range.first.second>=currentColumn)
+                candleStickTab->setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second+1),QPair<int, int>(range.second.first, range.second.second+1)));
+            else if(range.second.second>=currentColumn)
+                candleStickTab->setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second+1)));
+            range = candleStickTab->getOpeningPricesRange();
+            if(range.first.second>=currentColumn)
+                candleStickTab->setOpeningPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second+1),QPair<int, int>(range.second.first, range.second.second+1)));
+            else if(range.second.second>=currentColumn)
+                candleStickTab->setOpeningPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second+1)));
+            range = candleStickTab->getClosingPricesRange();
+            if(range.first.second>=currentColumn)
+                candleStickTab->setClosingPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second+1),QPair<int, int>(range.second.first, range.second.second+1)));
+            else if(range.second.second>=currentColumn)
+                candleStickTab->setClosingPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second+1)));
+            range = candleStickTab->getHighestPricesRange();
+            if(range.first.second>=currentColumn)
+                candleStickTab->setHighestPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second+1),QPair<int, int>(range.second.first, range.second.second+1)));
+            else if(range.second.second>=currentColumn)
+                candleStickTab->setHighestPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second+1)));
+            range = candleStickTab->getLowestPricesRange();
+            if(range.first.second>=currentColumn)
+                candleStickTab->setLowestPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second+1),QPair<int, int>(range.second.first, range.second.second+1)));
+            else if(range.second.second>=currentColumn)
+                candleStickTab->setLowestPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second+1)));
+        }else{
+            AreaLinePieSettings* areaLinePieTab = dynamic_cast<AreaLinePieSettings*>(currentTab);
+            if(BarSettings* barChart = dynamic_cast<BarSettings*>(currentTab)){
+                range = barChart->getCategoriesRange();
+                if(range.first.second>=currentColumn)
+                    barChart->setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second+1),QPair<int, int>(range.second.first, range.second.second+1)));
+                else if(range.second.second>=currentColumn)
+                    barChart->setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second+1)));
+            }
+            range = areaLinePieTab->getDataRange();
+            if(range.first.second>=currentColumn)
+                areaLinePieTab->setDataRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second+1),QPair<int, int>(range.second.first, range.second.second+1)));
+            else if(range.second.second>=currentColumn)
+                areaLinePieTab->setDataRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second+1)));
+            range = areaLinePieTab->getLabelsRange();
+            if(range.first.second>=currentColumn)
+                areaLinePieTab->setLabelsRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second+1),QPair<int, int>(range.second.first, range.second.second+1)));
+            else if(range.second.second>=currentColumn)
+                areaLinePieTab->setLabelsRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second+1)));
+        }
+    }
 }
 void Controller::RightInsert(){
-    _MainWindow->addColumn(Flags::RIGHT);
+    QTableWidget* currentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+    int currentColumn=currentTable->currentColumn()+1;
+    currentTable->insertColumn(currentColumn);
+    //Aumentare di una riga tutti i range da currentRow in poi
+    //Scorro tutti i chart, prendo tutti i range e controllo se first.first è maggiore di currentRow
+    for (int i=0; i<_MainWindow->getChartNumber(_MainWindow->getCurrentTabIndex())-1; i++){
+        ChartSettings* currentTab = _MainWindow->getChartTab(i);
+        QPair<int, int> pos = currentTab->getTitlePosition();
+        if(pos.second>currentColumn){
+            //Aumento di una riga il titlePosition
+            QPair<int, int> newPos = QPair<int, int>(pos.first, pos.second+1);
+            currentTab->setTitlePosition(newPos);
+        }
+        QPair<QPair<int, int>, QPair<int, int>> range = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(), QPair<int, int>());
+        if(CandleStickSettings* candleStickTab = dynamic_cast<CandleStickSettings*>(currentTab)){
+            range = candleStickTab->getCategoriesRange();
+            if(range.first.second>currentColumn)
+                candleStickTab->setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second+1),QPair<int, int>(range.second.first, range.second.second+1)));
+            else if(range.second.second>currentColumn)
+                candleStickTab->setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second+1)));
+            range = candleStickTab->getOpeningPricesRange();
+            if(range.first.second>currentColumn)
+                candleStickTab->setOpeningPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second+1),QPair<int, int>(range.second.first, range.second.second+1)));
+            else if(range.second.second>currentColumn)
+                candleStickTab->setOpeningPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second+1)));
+            range = candleStickTab->getClosingPricesRange();
+            if(range.first.second>currentColumn)
+                candleStickTab->setClosingPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second+1),QPair<int, int>(range.second.first, range.second.second+1)));
+            else if(range.second.second>currentColumn)
+                candleStickTab->setClosingPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second+1)));
+            range = candleStickTab->getHighestPricesRange();
+            if(range.first.second>currentColumn)
+                candleStickTab->setHighestPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second+1),QPair<int, int>(range.second.first, range.second.second+1)));
+            else if(range.second.second>currentColumn)
+                candleStickTab->setHighestPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second+1)));
+            range = candleStickTab->getLowestPricesRange();
+            if(range.first.second>currentColumn)
+                candleStickTab->setLowestPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second+1),QPair<int, int>(range.second.first, range.second.second+1)));
+            else if(range.second.second>currentColumn)
+                candleStickTab->setLowestPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second+1)));
+        }else{
+            AreaLinePieSettings* areaLinePieTab = dynamic_cast<AreaLinePieSettings*>(currentTab);
+            if(BarSettings* barChart = dynamic_cast<BarSettings*>(currentTab)){
+                range = barChart->getCategoriesRange();
+                if(range.first.second>currentColumn)
+                    barChart->setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second+1),QPair<int, int>(range.second.first, range.second.second+1)));
+                else if(range.second.second>currentColumn)
+                    barChart->setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second+1)));
+            }
+            range = areaLinePieTab->getDataRange();
+            if(range.first.second>currentColumn)
+                areaLinePieTab->setDataRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second+1),QPair<int, int>(range.second.first, range.second.second+1)));
+            else if(range.second.second>currentColumn)
+                areaLinePieTab->setDataRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second+1)));
+            range = areaLinePieTab->getLabelsRange();
+            if(range.first.second>currentColumn)
+                areaLinePieTab->setLabelsRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second+1),QPair<int, int>(range.second.first, range.second.second+1)));
+            else if(range.second.second>currentColumn)
+                areaLinePieTab->setLabelsRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second+1)));
+        }
+    }
 }
 void Controller::TableReset(){
     QMessageBox::StandardButton Reply;
     Reply = QMessageBox::question(_MainWindow, "WARNING", "You are cleaning the entire table. Are you sure?", QMessageBox::Yes|QMessageBox::No);
     if(Reply == QMessageBox::Yes){
-        _MainWindow->clearContent(Flags::ALL);
+        _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex())->clear();
     }
 };
 void Controller::RowReset(){
-    _MainWindow->clearContent(Flags::ROW);
+    QTableWidget* currentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+    int currentIndex = currentTable->currentRow();
+    for(int i=0; i<currentTable->columnCount(); i++)
+       if(currentTable->item(currentIndex, i))
+           currentTable->item(currentIndex, i)->setText("");
 };
 void Controller::ColumnReset(){
-    _MainWindow->clearContent(Flags::COLUMN);
+    QTableWidget* currentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+    int currentIndex = currentTable->currentColumn();
+    for(int i=0; i<currentTable->rowCount(); i++)
+        if(currentTable->item(i, currentIndex))
+            currentTable->item(i, currentIndex)->setText("");
 };
 void Controller::SelectionReset(){
-    _MainWindow->clearContent(Flags::SELECTION);
+    QTableWidget* currentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+    QList<QTableWidgetItem*> ItemList = currentTable->selectedItems();
+    for (auto it = ItemList.begin(); it!=ItemList.end(); it++)
+        if(*it)
+            (*it)->setText("");
 };
 void Controller::RowDelete(){
-    _MainWindow->deleteContent();
-};
+    QTableWidget* currentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+    int currentRow=currentTable->currentRow()+1;
+    for(int i=0; i< currentTable->columnCount(); i++)
+        if(currentTable->item(currentRow-1, i))
+            currentTable->item(currentRow-1, i)->setText("");
+    currentTable->removeRow(currentRow-1);
+    //Aumentare di una riga tutti i range da currentRow in poi
+    //Scorro tutti i chart, prendo tutti i range e controllo se first.first è maggiore di currentRow
+    for (int i=0; i<_MainWindow->getChartNumber(_MainWindow->getCurrentTabIndex())-1; i++){
+        ChartSettings* currentTab = _MainWindow->getChartTab(i);
+        QPair<int, int> pos = currentTab->getTitlePosition();
+        if(pos.first==currentRow){
+            currentTab->setTitlePosition();
+        }else if(pos.first>currentRow){
+            currentTab->setTitlePosition(QPair<int, int>(pos.first-1, pos.second));
+        }
+        QPair<QPair<int, int>, QPair<int, int>> range = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(), QPair<int, int>());
+        if(CandleStickSettings* candleStickTab = dynamic_cast<CandleStickSettings*>(currentTab)){
+            range = candleStickTab->getCategoriesRange();
+            if(range.first.first==currentRow){
+                if(range.first.first==range.second.first)
+                    candleStickTab->setCategoriesRange();
+                else
+                    candleStickTab->setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first-1, range.second.second)));
+            }
+            else if(range.first.first>currentRow)
+                candleStickTab->setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first-1, range.first.second),QPair<int, int>(range.second.first-1, range.second.second)));
+            else if(range.second.first>currentRow)
+                candleStickTab->setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first-1, range.second.second)));
+
+            range = candleStickTab->getOpeningPricesRange();
+            if(range.first.first==currentRow){
+                if(range.first.first==range.second.first)
+                    candleStickTab->setOpeningPricesRange();
+                else
+                    candleStickTab->setOpeningPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first-1, range.second.second)));
+            }
+            else if(range.first.first>currentRow)
+                candleStickTab->setOpeningPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first-1, range.first.second),QPair<int, int>(range.second.first-1, range.second.second)));
+            else if(range.second.first>currentRow)
+                candleStickTab->setOpeningPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first-1, range.second.second)));
+
+            range = candleStickTab->getClosingPricesRange();
+            if(range.first.first==currentRow){
+                if(range.first.first==range.second.first)
+                    candleStickTab->setClosingPricesRange();
+                else
+                    candleStickTab->setClosingPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first-1, range.second.second)));
+            }
+            else if(range.first.first>currentRow)
+                candleStickTab->setClosingPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first-1, range.first.second),QPair<int, int>(range.second.first-1, range.second.second)));
+            else if(range.second.first>currentRow)
+                candleStickTab->setClosingPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first-1, range.second.second)));
+
+            range = candleStickTab->getHighestPricesRange();
+            if(range.first.first==currentRow){
+                if(range.first.first==range.second.first)
+                    candleStickTab->setHighestPricesRange();
+                else
+                    candleStickTab->setHighestPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first-1, range.second.second)));
+            }
+            else if(range.first.first>currentRow)
+                candleStickTab->setHighestPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first-1, range.first.second),QPair<int, int>(range.second.first-1, range.second.second)));
+            else if(range.second.first>currentRow)
+                candleStickTab->setHighestPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first-1, range.second.second)));
+
+            range = candleStickTab->getLowestPricesRange();
+            if(range.first.first==currentRow){
+                if(range.first.first==range.second.first)
+                    candleStickTab->setLowestPricesRange();
+                else
+                    candleStickTab->setLowestPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first-1, range.second.second)));
+            }
+            else if(range.first.first>currentRow)
+                candleStickTab->setLowestPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first-1, range.first.second),QPair<int, int>(range.second.first-1, range.second.second)));
+            else if(range.second.first>currentRow)
+                candleStickTab->setLowestPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first-1, range.second.second)));
+        }else{
+            AreaLinePieSettings* areaLinePieTab = dynamic_cast<AreaLinePieSettings*>(currentTab);
+            if(BarSettings* barChart = dynamic_cast<BarSettings*>(currentTab)){
+                range = barChart->getCategoriesRange();
+                if(range.first.first==currentRow){
+                    if(range.first.first==range.second.first)
+                        barChart->setCategoriesRange();
+                    else
+                        barChart->setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first-1, range.second.second)));
+                }
+                else if(range.first.first>currentRow)
+                    barChart->setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first-1, range.first.second),QPair<int, int>(range.second.first-1, range.second.second)));
+                else if(range.second.first>currentRow)
+                    barChart->setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first-1, range.second.second)));
+            }
+            range = areaLinePieTab->getDataRange();
+            if(range.first.first==currentRow){
+                if(range.first.first==range.second.first)
+                    areaLinePieTab->setDataRange();
+                else
+                    areaLinePieTab->setDataRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first-1, range.second.second)));
+            }
+            else if(range.first.first>currentRow)
+                areaLinePieTab->setDataRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first-1, range.first.second),QPair<int, int>(range.second.first-1, range.second.second)));
+            else if(range.second.first>currentRow)
+                areaLinePieTab->setDataRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first-1, range.second.second)));
+
+            range = areaLinePieTab->getLabelsRange();
+            if(range.first.first==currentRow){
+                if(range.first.first==range.second.first)
+                    areaLinePieTab->setLabelsRange();
+                else
+                    areaLinePieTab->setLabelsRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first-1, range.second.second)));
+            }
+            else if(range.first.first>currentRow)
+                areaLinePieTab->setLabelsRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first-1, range.first.second),QPair<int, int>(range.second.first-1, range.second.second)));
+            else if(range.second.first>currentRow)
+                areaLinePieTab->setLabelsRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first-1, range.second.second)));
+        }
+    }
+}
 void Controller::ColumnDelete(){
-    _MainWindow->deleteContent(Flags::COLUMN);
+    QTableWidget* currentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+    int currentColumn=currentTable->currentColumn()+1;
+    for(int i=0; i< currentTable->rowCount(); i++)
+        if(currentTable->item(i, currentColumn-1))
+            currentTable->item(i, currentColumn-1)->setText("");
+    currentTable->removeColumn(currentColumn-1);
+    //Aumentare di una riga tutti i range da currentRow in poi
+    //Scorro tutti i chart, prendo tutti i range e controllo se first.first è maggiore di currentRow
+    for (int i=0; i<_MainWindow->getChartNumber(_MainWindow->getCurrentTabIndex())-1; i++){
+        ChartSettings* currentTab = _MainWindow->getChartTab(i);
+        QPair<int, int> pos = currentTab->getTitlePosition();
+        if(pos.second==currentColumn){
+            currentTab->setTitlePosition();
+        }else if(pos.second>currentColumn){
+            currentTab->setTitlePosition(QPair<int, int>(pos.first, pos.second-1));
+        }
+        QPair<QPair<int, int>, QPair<int, int>> range = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(), QPair<int, int>());
+        if(CandleStickSettings* candleStickTab = dynamic_cast<CandleStickSettings*>(currentTab)){
+            range = candleStickTab->getCategoriesRange();
+            if(range.first.second==currentColumn){
+                if(range.first.second==range.second.second)
+                    candleStickTab->setCategoriesRange();
+                else
+                    candleStickTab->setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second-1)));
+            }
+            else if(range.first.second>currentColumn)
+                candleStickTab->setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second-1),QPair<int, int>(range.second.first, range.second.second-1)));
+            else if(range.second.second>currentColumn)
+                candleStickTab->setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second-1)));
+
+            range = candleStickTab->getOpeningPricesRange();
+            if(range.first.second==currentColumn){
+                if(range.first.second==range.second.second)
+                    candleStickTab->setOpeningPricesRange();
+                else
+                    candleStickTab->setOpeningPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second-1)));
+            }
+            else if(range.first.second>currentColumn)
+                candleStickTab->setOpeningPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second-1),QPair<int, int>(range.second.first, range.second.second-1)));
+            else if(range.second.second>currentColumn)
+                candleStickTab->setOpeningPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second-1)));
+
+            range = candleStickTab->getClosingPricesRange();
+            if(range.first.second==currentColumn){
+                if(range.first.second==range.second.second)
+                    candleStickTab->setClosingPricesRange();
+                else
+                    candleStickTab->setClosingPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second-1)));
+            }
+            else if(range.first.second>currentColumn)
+                candleStickTab->setClosingPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second-1),QPair<int, int>(range.second.first, range.second.second-1)));
+            else if(range.second.second>currentColumn)
+                candleStickTab->setClosingPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second-1)));
+
+            range = candleStickTab->getHighestPricesRange();
+            if(range.first.second==currentColumn){
+                if(range.first.second==range.second.second)
+                    candleStickTab->setHighestPricesRange();
+                else
+                    candleStickTab->setHighestPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second-1)));
+            }
+            else if(range.first.second>currentColumn)
+                candleStickTab->setHighestPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second-1),QPair<int, int>(range.second.first, range.second.second-1)));
+            else if(range.second.second>currentColumn)
+                candleStickTab->setHighestPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second-1)));
+
+            range = candleStickTab->getLowestPricesRange();
+            if(range.first.second==currentColumn){
+                if(range.first.second==range.second.second)
+                    candleStickTab->setLowestPricesRange();
+                else
+                    candleStickTab->setLowestPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second-1)));
+            }
+            else if(range.first.second>currentColumn)
+                candleStickTab->setLowestPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second-1),QPair<int, int>(range.second.first, range.second.second-1)));
+            else if(range.second.second>currentColumn)
+                candleStickTab->setLowestPricesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second-1)));
+        }else{
+            AreaLinePieSettings* areaLinePieTab = dynamic_cast<AreaLinePieSettings*>(currentTab);
+            if(BarSettings* barChart = dynamic_cast<BarSettings*>(currentTab)){
+                range = barChart->getCategoriesRange();
+                if(range.first.second==currentColumn){
+                    if(range.first.second==range.second.second)
+                        barChart->setCategoriesRange();
+                    else
+                        barChart->setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second-1)));
+                }
+                else if(range.first.second>currentColumn)
+                    barChart->setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second-1),QPair<int, int>(range.second.first, range.second.second-1)));
+                else if(range.second.second>currentColumn)
+                    barChart->setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second-1)));
+            }
+
+            range = areaLinePieTab->getDataRange();
+            if(range.first.second==currentColumn){
+                if(range.first.second==range.second.second)
+                    areaLinePieTab->setDataRange();
+                else
+                    areaLinePieTab->setDataRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second-1)));
+            }
+            else if(range.first.second>currentColumn)
+                areaLinePieTab->setDataRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second-1),QPair<int, int>(range.second.first, range.second.second-1)));
+            else if(range.second.second>currentColumn)
+                areaLinePieTab->setDataRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second-1)));
+
+            range = areaLinePieTab->getLabelsRange();
+            if(range.first.second==currentColumn){
+                if(range.first.second==range.second.second)
+                    areaLinePieTab->setLabelsRange();
+                else
+                    areaLinePieTab->setLabelsRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second-1)));
+            }
+            else if(range.first.second>currentColumn)
+                areaLinePieTab->setLabelsRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second-1),QPair<int, int>(range.second.first, range.second.second-1)));
+            else if(range.second.second>currentColumn)
+                areaLinePieTab->setLabelsRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second-1)));
+        }
+    }
 };
 void Controller::LeftAlign(){
-    _MainWindow->textAlign();
+    QTableWidget* currentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+    QList<QTableWidgetItem*> ItemList = currentTable->selectedItems();
+    for (auto it = ItemList.begin(); it!=ItemList.end(); it++){
+        (*it)->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    }
 };
 void Controller::CenterAlign(){
-    _MainWindow->textAlign(Flags::CENTER);
+    QTableWidget* currentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+    QList<QTableWidgetItem*> ItemList = currentTable->selectedItems();
+    for (auto it = ItemList.begin(); it!=ItemList.end(); it++){
+        (*it)->setTextAlignment(Qt::AlignCenter | Qt::AlignVCenter);
+    }
 };
 void Controller::RightAlign(){
-    _MainWindow->textAlign(Flags::RIGHT);
+    QTableWidget* currentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+    QList<QTableWidgetItem*> ItemList = currentTable->selectedItems();
+    for (auto it = ItemList.begin(); it!=ItemList.end(); it++){
+        (*it)->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    }
 };
 void Controller::SpinBox(){
     _MainWindow->setSpinBox(10);
 };
 void Controller::SetTextSize(){
-    _MainWindow->setTextSize(_MainWindow->getSpinValue());
+    QTableWidget* currentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+    QFont TFont= currentTable->font();
+    TFont.setPointSize(_MainWindow->getSpinValue());
+    QList<QTableWidgetItem*> ItemList = currentTable->selectedItems();
+    for (auto it = ItemList.begin(); it!=ItemList.end(); it++)
+        (*it)->setFont(TFont);
 };
 void Controller::TabClose(int index){
     QString tabName = _MainWindow->getTabName(index);
