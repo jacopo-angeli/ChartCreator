@@ -14,7 +14,6 @@ void Area::setSeries(QTableWidget* table, const QModelIndexList& indexes, Flags 
     clearData();
     switch(parseDirection){
         case(Flags::ROW):{
-
             for(int i=indexes.last().row(); i>=indexes.first().row();i--){
                 QLineSeries *series = new QLineSeries();
                 int pC=0;
