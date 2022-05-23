@@ -9,11 +9,13 @@ class Area : public Chart
 protected:
     virtual void refresh();
 public:
-    Area(QGraphicsItem* =nullptr);
+    Area(QWidget* =nullptr,QGraphicsItem* =nullptr);
     virtual void setSeries(QTableWidget*, const QModelIndexList&, Flags = Flags::ROW);
     virtual void clearData();
+    virtual void setLabels(QTableWidget*, const QModelIndexList&, Flags = Flags::ROW);
+    virtual void clearLabels();
 private:
-    QList<QLineSeries*> _series;
+    QList<QList<double>> _values;
 };
 
 #endif // AREA_H

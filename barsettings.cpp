@@ -11,7 +11,7 @@ BarSettings::BarSettings(QWidget * parent): AreaLinePieSettings(parent), _Catego
     hor1->addWidget(btn1);
     hor1->addWidget(_Categories);
 
-    _Chart = new Bar();
+    _Chart = new Bar(parent);
     _ChartView->setChart(_Chart);
     static_cast<QVBoxLayout*>(_Settings->layout())->addLayout(hor1);
 }

@@ -66,7 +66,7 @@ CandleStickSettings::CandleStickSettings(QWidget* parent) : ChartSettings(parent
     static_cast<QVBoxLayout*>(_Settings->layout())->addLayout(hor4);
     static_cast<QVBoxLayout*>(_Settings->layout())->addLayout(hor5);
 
-    _Chart = new CandleStick();
+    _Chart = new CandleStick(parent);
     _ChartView->setChart(_Chart);
     _ChartView->setRenderHint(QPainter::Antialiasing);
 }

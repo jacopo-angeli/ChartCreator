@@ -13,10 +13,11 @@ Controller::Controller(): _MainWindow(new MainWindow(this)),  _ActiveFiles(QMap<
     _MainWindow->setAnimated(true);
     _MainWindow->show();
 }
-void Controller::fileSave(int tableIndex, QString fileName){
+bool Controller::fileSave(int tableIndex, QString fileName){
     QString filePath = "";
     if(fileName==""){
         filePath = QFileDialog::getSaveFileName(_MainWindow, QString("Open file"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation), tr("ChartCreator (*.crt)"));
+        if(filePath == "") return false;
         if(!(filePath.contains(".crt"))) filePath.append(".crt");
         _MainWindow->setCurrentTabTitle(QString("../"+(filePath.split("/")).last()));
     }else filePath=_ActiveFiles[fileName];
@@ -61,6 +62,7 @@ void Controller::fileSave(int tableIndex, QString fileName){
     }else{
 //        std::cout << "Cannot Open file : "<<filePath;
     }
+    return true;
 }
 void Controller::UpperInsert(){
     _MainWindow->addRow();
@@ -115,14 +117,18 @@ void Controller::TabClose(int index){
     QString tabName = _MainWindow->getTabName(index);
     QMessageBox::StandardButton Reply;
     Reply = QMessageBox::question(_MainWindow, "Unsaved File", tabName+" may have usaved changes. Would you like to save them?", QMessageBox::Cancel|QMessageBox::Discard|QMessageBox::Save);
-    if(Reply == QMessageBox::Save) fileSave(index, tabName=="Untitled" ? "" : tabName);
-    else if(Reply == QMessageBox::Cancel) return;
-    _ActiveFiles.remove(tabName);
-    _MainWindow->closeTab(index);
+    if(Reply == QMessageBox::Save){
+        if(fileSave(index, tabName=="Untitled" ? "" : tabName)){
+            _MainWindow->closeTab(index);
+            if(tabName != "Untitled") _ActiveFiles.remove(tabName);
+        }
+    }else if(Reply == QMessageBox::Discard){
+        _MainWindow->closeTab(index);
+        if(tabName != "Untitled") _ActiveFiles.remove(tabName);
+    }
 };
 void Controller::openFile(){
     fileOpen();
-    //std::cout << "openFile done"<< std::endl;
 };
 void Controller::saveACopy(){
     fileSave(_MainWindow->getCurrentTabIndex());
@@ -356,15 +362,15 @@ void Controller::pickLabels(){
     AreaLinePieSettings* currentChartTab = static_cast<AreaLinePieSettings*>(_MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex()));
     if(selections.size() == 0){
         currentChartTab->setLabelsRange();
-        currentChartTab->getChart()->clearData();
+        currentChartTab->getChart()->clearLabels();
     }else{
         QPair<QPair<int, int>, QPair<int, int>> newPositions = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>((selections.first().row()+1),(selections.first().column()+1)),QPair<int, int>((selections.last().row()+1),(selections.last().column()+1)));
-        if(newPositions != currentChartTab->getDataRange()){
-            currentChartTab->setDataRange(newPositions);
-            currentChartTab->getChart()->setSeries(CurrentTable, selections, currentChartTab->getParseMethod());
+        if(newPositions != currentChartTab->getLabelsRange()){
+            currentChartTab->setLabelsRange(newPositions);
+            currentChartTab->getChart()->setLabels(CurrentTable, selections);
         }else{
-            currentChartTab->setDataRange();
-            currentChartTab->getChart()->clearData();
+            currentChartTab->setLabelsRange();
+            currentChartTab->getChart()->clearLabels();
         }
     }
 }
@@ -493,9 +499,18 @@ void Controller::ChartRefresh(int row, int column){
                 if(userSelection.size()>0) CurrentTable->setRangeSelected(QTableWidgetSelectionRange(userSelection.first().row(),userSelection.first().column(), userSelection.last().row(), userSelection.last().column()), true);
                 currentChartTab->getChart()->setSeries(CurrentTable, indexes, currentChartTab->getParseMethod());
             }
-            if(isInRange(cellPosition, areaLinePieTab->getLabelsRange()))
-//                areaLinePieTab->getChart->setLabels(CurrentTable,areaLinePieTab->getLabelsRange());
-                return;
+            if(isInRange(cellPosition, areaLinePieTab->getLabelsRange())){
+                AreaLinePieSettings* currentChartTab = static_cast<AreaLinePieSettings*>(_MainWindow->getChartTab(i));
+                QPair<QPair<int,int>, QPair<int,int>> dataRange = currentChartTab->getLabelsRange();
+                QTableWidget* CurrentTable= _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+                QModelIndexList userSelection = CurrentTable->selectionModel()->selectedIndexes();
+                CurrentTable->clearSelection();
+                CurrentTable->setRangeSelected(QTableWidgetSelectionRange(dataRange.first.first-1, dataRange.first.second-1, dataRange.second.first-1, dataRange.second.second-1), true);
+                QModelIndexList indexes = CurrentTable->selectionModel()->selectedIndexes();
+                CurrentTable->clearSelection();
+                if(userSelection.size()>0) CurrentTable->setRangeSelected(QTableWidgetSelectionRange(userSelection.first().row(),userSelection.first().column(), userSelection.last().row(), userSelection.last().column()), true);
+                currentChartTab->getChart()->setLabels(CurrentTable, indexes);
+            }
         }
     }
 }
@@ -510,19 +525,30 @@ void Controller::parseMethodChange(QAbstractButton* btnClicked){
 
     AreaLinePieSettings* currentChartTab = static_cast<AreaLinePieSettings*>(_MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex()));
     QPair<QPair<int,int>, QPair<int,int>> dataRange = currentChartTab->getDataRange();
+     QPair<QPair<int,int>, QPair<int,int>> labelsRange = currentChartTab->getLabelsRange();
     if(dataRange.first.first == 0) return; //Label "Unset"
 
     QTableWidget* CurrentTable= _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
     QModelIndexList userSelection = CurrentTable->selectionModel()->selectedIndexes();
     CurrentTable->clearSelection();
+
     CurrentTable->setRangeSelected(QTableWidgetSelectionRange(dataRange.first.first-1, dataRange.first.second-1, dataRange.second.first-1, dataRange.second.second-1), true);
-    QModelIndexList indexes = CurrentTable->selectionModel()->selectedIndexes();
+    QModelIndexList dataIndexes = CurrentTable->selectionModel()->selectedIndexes();
+    CurrentTable->clearSelection();
+
+    CurrentTable->setRangeSelected(QTableWidgetSelectionRange(labelsRange.first.first-1, labelsRange.first.second-1, labelsRange.second.first-1, labelsRange.second.second-1), true);
+    QModelIndexList labelsIndexes = CurrentTable->selectionModel()->selectedIndexes();
     CurrentTable->clearSelection();
 
     if(userSelection.size() > 0) CurrentTable->setRangeSelected(QTableWidgetSelectionRange(userSelection.first().row(),userSelection.first().column(), userSelection.last().row(), userSelection.last().column()), true);
 
-    if(btnClicked->text() == "Row Parsing") currentChartTab->getChart()->setSeries(CurrentTable, indexes);
-    else currentChartTab->getChart()->setSeries(CurrentTable, indexes, Flags::COLUMN);
+    if(btnClicked->text() == "Row Parsing") {
+        currentChartTab->getChart()->setSeries(CurrentTable, dataIndexes);
+        currentChartTab->getChart()->setLabels(CurrentTable, labelsIndexes);
+    }else{
+        currentChartTab->getChart()->setSeries(CurrentTable, dataIndexes, Flags::COLUMN);
+        currentChartTab->getChart()->setLabels(CurrentTable, labelsIndexes, Flags::COLUMN);
+    }
 }
 void Controller::themeChanged(int index){
     //Viene cambiato il theme del chart presente nella current tab di _Charts della current tab di _Files
@@ -561,6 +587,19 @@ void Controller::chartReset(){
 }
 void Controller::chartCreationGuide(){
 
+}
+
+void Controller::sliceStandOut(){
+    QPieSlice* slice = dynamic_cast<QPieSlice*>(QObject::sender());
+    if(slice){
+        if(slice->isExploded()) {
+            slice->setExploded(false);
+            slice->setLabelVisible(false);
+        }else{
+            slice->setExploded();
+            slice->setLabelVisible();
+        }
+    }
 };
 QTableWidget* Controller::fileParser(const QString filePath){
     QFile file(filePath);
@@ -598,12 +637,13 @@ void Controller::lastSessionRestore(){
         QJsonObject lastArrayState = doc.object();
         for(int i=0; i<lastArrayState.size()-1; i++){
             QJsonObject keyValuePair = lastArrayState.value(QString("File ")+QString::number(i)).toObject();
-//            fileOpen(keyValuePair.value("path").toString());
+            fileOpen(keyValuePair.value("path").toString());
         }
     }
 };
 void Controller::fileOpen(QString filePath){
     if (filePath == "") filePath = QFileDialog::getOpenFileName(_MainWindow, QString("Open file"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation), tr("ChartCreator (*.crt)"));
+    qDebug() << filePath;
     if(_MainWindow->getFilePosition(QString("../"+(filePath.split("/")).last())) < 0){
         if (!(filePath.isEmpty()) && filePath.endsWith(QString(".crt"))){
             //Apro il file
