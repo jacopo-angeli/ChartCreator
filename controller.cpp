@@ -1124,7 +1124,6 @@ void Controller::chartReset(){
 void Controller::chartCreationGuide(){
 
 }
-
 void Controller::sliceStandOut(){
     QPieSlice* slice = dynamic_cast<QPieSlice*>(QObject::sender());
     if(slice){
@@ -1205,6 +1204,7 @@ void Controller::fileOpen(QString filePath){
                     if(type == "CandleStick"){
                         _MainWindow->chartTypeSelected(Flags::CANDLESTICK);
                     }else if(type == "Bar"){
+                        qDebug() << "Bar Chart resotred";
                         _MainWindow->chartTypeSelected(Flags::BARS);
                     }else{
                         if(type == "Area")

@@ -42,7 +42,7 @@ QPair<QPair<int, int>, QPair<int, int> > BarSettings::getCategoriesRange() const
 
 QJsonObject BarSettings::toJSON() const{
     QJsonObject JsonObj = AreaLinePieSettings::toJSON();
-    JsonObj["Type"]="BarSettings";
+    JsonObj["Type"]="Bar";
     JsonObj["CategoriesRange"]=_Categories->text();
     return JsonObj;
 }

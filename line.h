@@ -7,7 +7,7 @@ class Line : public Chart
     Q_OBJECT
 private:
     QList<QList<double>> _Values;
-    QStringList _Labels;
+    QList<QString> _Labels;
 protected:
     virtual void refresh();
 public:

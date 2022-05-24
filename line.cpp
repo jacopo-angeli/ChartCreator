@@ -1,6 +1,6 @@
 #include "line.h"
 
-Line::Line(QWidget* brain, QGraphicsItem* parent): Chart(brain, parent), _Values(QList<QList<double>>()){
+Line::Line(QWidget* brain, QGraphicsItem* parent): Chart(brain, parent), _Values(QList<QList<double>>()), _Labels(QList<QString>()){
     legend()->show();
     legend()->setAlignment(Qt::AlignRight);
 }
@@ -18,8 +18,6 @@ void Line::setSeries(QTableWidget * table, const QModelIndexList& indexes, Flags
                     if(item && item->text() != "")
                         //chek if its convetible to double
                         line.append(item->text().toDouble());
-                    else
-                        line.append(line.last());
                 }
                 if(line.count()>1) _Values.append(line);
             }
@@ -33,8 +31,6 @@ void Line::setSeries(QTableWidget * table, const QModelIndexList& indexes, Flags
                     if(item && item->text() != "")
                         //chek if its convetible to double
                         line.append(item->text().toDouble());
-                    else
-                        i=indexes.last().row();
                 }
                 if(line.count()>1) _Values.append(line);
             }
