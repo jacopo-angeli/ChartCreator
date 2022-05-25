@@ -57,6 +57,7 @@ public:
     void setCurrentTabTitle(QString);
 
     void closeTab(int);
+    void closeChartTab(int);
 
     void chartTypeSelected(Flags);
     void newTab();

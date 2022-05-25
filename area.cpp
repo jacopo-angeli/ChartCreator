@@ -109,7 +109,10 @@ void Area::refresh(){
     int areaCount=0;
     foreach(QLineSeries* lineSeries, _Values){
         QAreaSeries* areaSeries = new QAreaSeries(lineSeries);
-        areaSeries->setName("Area" + QString::number(areaCount++));
+        if(areaCount<_Labels.count())
+            areaSeries->setName(_Labels[areaCount++]);
+        else
+            areaSeries->setName("Area " + QString::number(++areaCount));
         addSeries(areaSeries);
     }
     createDefaultAxes();

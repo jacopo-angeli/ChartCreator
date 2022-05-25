@@ -164,6 +164,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Files(new QTabWid
     ChartList->addTab(new ChartSelection(parent), QString(""));
     ChartList->setTabIcon(0, QIcon("../OOPPROJECT/icons/NewGraph.png"));
     ChartList->setTabsClosable(true);
+    connect(ChartList, SIGNAL(tabCloseRequested(int)), parent, SLOT(ChartTabClose(int)));
 
     QTableWidget *ValueTab = new QTableWidget(50, 50, this);
 
@@ -258,6 +259,11 @@ void MainWindow::closeTab(int index){
     _Files->removeTab(index);
 }
 
+void MainWindow::closeChartTab(int index)
+{
+    static_cast<QTabWidget*>(_Files->widget(_Files->currentIndex())->layout()->itemAt(1)->widget())->removeTab(index);
+}
+
 void MainWindow::chartTypeSelected(Flags type){
     switch(type){
         case(Flags::CANDLESTICK):{
@@ -292,7 +298,7 @@ void MainWindow::chartTypeSelected(Flags type){
 void MainWindow::newTab(){
     QWidget *FileW = new QWidget();
 
-    QHBoxLayout *FileL = new QHBoxLayout;
+    QHBoxLayout *FileL = new QHBoxLayout();
     FileL->setSpacing(0);
 
     QTabWidget *ChartList = new QTabWidget(this);
@@ -300,6 +306,7 @@ void MainWindow::newTab(){
     ChartList->addTab(new ChartSelection(static_cast<QWidget*>(parent())), QString(""));
     ChartList->setTabIcon(0, QIcon("../OOPPROJECT/icons/NewGraph.png"));
     ChartList->setTabsClosable(true);
+    connect(ChartList, SIGNAL(tabCloseRequested(int)), parent(), SLOT(ChartTabClose(int)));
 
     QTableWidget *ValueTab = new QTableWidget(50, 50, this);
 

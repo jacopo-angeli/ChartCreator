@@ -13,7 +13,7 @@ Controller::Controller(): _MainWindow(new MainWindow(this)),  _ActiveFiles(QMap<
     _MainWindow->setAnimated(true);
     _MainWindow->show();
 }
-bool Controller::fileSave(int tableIndex, QString fileName){
+bool Controller::fileSave(int tableIndex, QString fileName) const{
     QString filePath = "";
     if(fileName==""){
         filePath = QFileDialog::getSaveFileName(_MainWindow, QString("Open file"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation), tr("ChartCreator (*.crt)"));
@@ -322,28 +322,28 @@ void Controller::TableReset(){
     if(Reply == QMessageBox::Yes){
         _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex())->clear();
     }
-};
+}
 void Controller::RowReset(){
     QTableWidget* currentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
     int currentIndex = currentTable->currentRow();
     for(int i=0; i<currentTable->columnCount(); i++)
        if(currentTable->item(currentIndex, i))
            currentTable->item(currentIndex, i)->setText("");
-};
+}
 void Controller::ColumnReset(){
     QTableWidget* currentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
     int currentIndex = currentTable->currentColumn();
     for(int i=0; i<currentTable->rowCount(); i++)
         if(currentTable->item(i, currentIndex))
             currentTable->item(i, currentIndex)->setText("");
-};
+}
 void Controller::SelectionReset(){
     QTableWidget* currentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
     QList<QTableWidgetItem*> ItemList = currentTable->selectedItems();
     for (auto it = ItemList.begin(); it!=ItemList.end(); it++)
         if(*it)
             (*it)->setText("");
-};
+}
 void Controller::RowDelete(){
     QTableWidget* currentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
     int currentRow=currentTable->currentRow()+1;
@@ -582,31 +582,31 @@ void Controller::ColumnDelete(){
                 areaLinePieTab->setLabelsRange(QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(range.first.first, range.first.second),QPair<int, int>(range.second.first, range.second.second-1)));
         }
     }
-};
+}
 void Controller::LeftAlign(){
     QTableWidget* currentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
     QList<QTableWidgetItem*> ItemList = currentTable->selectedItems();
     for (auto it = ItemList.begin(); it!=ItemList.end(); it++){
         (*it)->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     }
-};
+}
 void Controller::CenterAlign(){
     QTableWidget* currentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
     QList<QTableWidgetItem*> ItemList = currentTable->selectedItems();
     for (auto it = ItemList.begin(); it!=ItemList.end(); it++){
         (*it)->setTextAlignment(Qt::AlignCenter | Qt::AlignVCenter);
     }
-};
+}
 void Controller::RightAlign(){
     QTableWidget* currentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
     QList<QTableWidgetItem*> ItemList = currentTable->selectedItems();
     for (auto it = ItemList.begin(); it!=ItemList.end(); it++){
         (*it)->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
     }
-};
+}
 void Controller::SpinBox(){
     _MainWindow->setSpinBox(10);
-};
+}
 void Controller::SetTextSize(){
     QTableWidget* currentTable = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
     QFont TFont= currentTable->font();
@@ -614,7 +614,7 @@ void Controller::SetTextSize(){
     QList<QTableWidgetItem*> ItemList = currentTable->selectedItems();
     for (auto it = ItemList.begin(); it!=ItemList.end(); it++)
         (*it)->setFont(TFont);
-};
+}
 void Controller::TabClose(int index){
     QString tabName = _MainWindow->getTabName(index);
     QMessageBox::StandardButton Reply;
@@ -628,19 +628,35 @@ void Controller::TabClose(int index){
         _MainWindow->closeTab(index);
         if(tabName != "Untitled") _ActiveFiles.remove(tabName);
     }
-};
+}
+void Controller::ChartTabClose(int index){
+    _MainWindow->closeChartTab(index);
+}
+void Controller::lastSessionRestore(){
+    QFile file(QDir::currentPath()+"/cnfg.json");
+    if (file.open(QIODevice::ReadOnly)){
+        QByteArray data = file.readAll();
+        file.close();
+        QJsonDocument doc = QJsonDocument::fromJson(data);
+        QJsonObject lastArrayState = doc.object();
+        for(int i=0; i<lastArrayState.size()-1; i++){
+            QJsonObject keyValuePair = lastArrayState.value(QString("File ")+QString::number(i)).toObject();
+            fileOpen(keyValuePair.value("path").toString());
+        }
+    }
+}
 void Controller::openFile(){
     fileOpen();
-};
+}
 void Controller::saveACopy(){
     fileSave(_MainWindow->getCurrentTabIndex());
-};
+}
 void Controller::newTab(){
     _MainWindow->newTab();
-};
+}
 void Controller::saveFile(){
     fileSave(_MainWindow->getCurrentTabIndex(), _MainWindow->getTabName()=="Untitled" ? "" : _MainWindow->getTabName());
-};
+}
 void Controller::mainWindowCloseEvent(){
     QFile file(QDir::currentPath()+"/cnfg.json");
     if (file.open(QIODevice::ReadWrite | QIODevice::Truncate)) {
@@ -663,19 +679,19 @@ void Controller::mainWindowCloseEvent(){
 };
 void Controller::BarChartCreation(){
     _MainWindow->chartTypeSelected(Flags::BARS);
-};
+}
 void Controller::CandleStickChartCreation(){
     _MainWindow->chartTypeSelected(Flags::CANDLESTICK);
-};
+}
 void Controller::LineChartCreation(){
     _MainWindow->chartTypeSelected(Flags::LINES);
-};
+}
 void Controller::PieChartCreation(){
     _MainWindow->chartTypeSelected(Flags::PIE);
-};
+}
 void Controller::AreaChartCreation(){
     _MainWindow->chartTypeSelected(Flags::AREA);
-};
+}
 void Controller::pickTitle(){
     //Controlla la corrente porzione di tabella selezionata
         //Se la selezione è vuota
@@ -1135,47 +1151,7 @@ void Controller::sliceStandOut(){
             slice->setLabelVisible();
         }
     }
-};
-QTableWidget* Controller::fileParser(const QString filePath){
-    QFile file(filePath);
-    QTableWidget* parsedTable = nullptr;
-    if (file.open(QIODevice::ReadOnly)) {
-        QByteArray data = file.readAll();
-        file.close();
-
-        QJsonDocument doc = QJsonDocument::fromJson(data);
-        QJsonObject table = doc.object();
-        parsedTable = new QTableWidget(table.value("RowNumber").toInt(), table.value("ColNumber").toInt());
-
-        for(int i=0; i<table.size()-2; i++){
-            QJsonObject cellJSON = table.value(QString::number(i)).toObject();
-            cellJSON.value("fontSize").toInt();
-            QTableWidgetItem* cell = new QTableWidgetItem;
-
-            cell->setText(cellJSON.value("value").toString());
-
-            QFont makeAF = cell->font();
-            makeAF.setPointSize(cellJSON.value("fontSize").toInt());
-            cell->setFont(makeAF);
-
-            parsedTable->setItem(cellJSON.value("row").toInt(), cellJSON.value("column").toInt(), cell);
-        }
-    }
-    return parsedTable;
-};
-void Controller::lastSessionRestore(){
-    QFile file(QDir::currentPath()+"/cnfg.json");
-    if (file.open(QIODevice::ReadOnly)){
-        QByteArray data = file.readAll();
-        file.close();
-        QJsonDocument doc = QJsonDocument::fromJson(data);
-        QJsonObject lastArrayState = doc.object();
-        for(int i=0; i<lastArrayState.size()-1; i++){
-            QJsonObject keyValuePair = lastArrayState.value(QString("File ")+QString::number(i)).toObject();
-            fileOpen(keyValuePair.value("path").toString());
-        }
-    }
-};
+}
 void Controller::fileOpen(QString filePath){
     if (filePath == "") filePath = QFileDialog::getOpenFileName(_MainWindow, QString("Open file"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation), tr("ChartCreator (*.crt)"));
     if(_MainWindow->getFilePosition(QString("../"+(filePath.split("/")).last())) < 0){
@@ -1196,8 +1172,7 @@ void Controller::fileOpen(QString filePath){
                 QTableWidget* table = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
 
                 QJsonObject cellList = fullTab["table"].toObject();
-                int i=0;
-                for(i; i<cellList.size(); i++){
+                for(int i=0; i<cellList.size(); i++){
                     QJsonObject cell = cellList[QString::number(i)].toObject();
                     QTableWidgetItem* newCell = new QTableWidgetItem();
                     QFont f = newCell->font();
@@ -1234,10 +1209,6 @@ void Controller::fileOpen(QString filePath){
             }
         }
     }
-}
-bool Controller::isNumeric(QString string) const{
-    QRegExp regex("^[0-9]\\d*(\\.\\d+)?$");
-    return regex.exactMatch(string);
 }
 bool Controller::isInRange(QPair<int, int> pos, QPair<QPair<int, int>, QPair<int, int>> range){
     if((pos.first>=range.first.first && pos.first<=range.second.first) && (pos.second>=range.first.second && pos.second<=range.second.second)) return true;

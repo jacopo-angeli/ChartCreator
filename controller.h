@@ -16,13 +16,9 @@ class Controller : public QWidget{
 private:
     MainWindow* _MainWindow;
     QMap<QString, QString> _ActiveFiles;
-
-    QTableWidget* fileParser(const QString);
     void lastSessionRestore();
-    bool fileSave(int, QString = "");
+    bool fileSave(int, QString = "") const;
     void fileOpen(QString = "");
-    bool isNumeric(QString) const;
-    bool isDate(QString);
     bool isInRange(QPair<int,int>, QPair<QPair<int,int>,QPair<int,int>>);
     bool isInRange(QPair<int,int>, QPair<int,int>);
 public:
@@ -46,6 +42,7 @@ public slots:
     void SpinBox();
     void SetTextSize();
     void TabClose(int);
+    void ChartTabClose(int);
 
     /* File Managment */
     void openFile();
