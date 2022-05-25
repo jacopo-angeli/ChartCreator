@@ -39,6 +39,7 @@ public:
 
     void setColorIndex(int);
 
+    virtual void refresh(QTableWidget*) const;
     virtual void setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0))) =0;
     virtual QPair<QPair<int, int>, QPair<int, int>> getCategoriesRange() const =0;
     virtual QJsonObject toJSON() const;

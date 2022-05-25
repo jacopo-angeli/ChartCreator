@@ -68,7 +68,6 @@ AreaLinePieSettings::AreaLinePieSettings(Flags type, QWidget* parent): AreaLineP
             break;
     }
     _ChartView->setChart(_Chart);
-    _ChartView->setRenderHint(QPainter::Antialiasing);
 }
 
 void AreaLinePieSettings:: setDataRange(QPair<QPair<int, int>, QPair<int, int>> pos){
@@ -159,4 +158,28 @@ void AreaLinePieSettings::fromJSON(const QJsonObject& chartJSON){
         setDataRange(tagToPairPair(chartJSON["DataRange"].toString()));
     if(chartJSON["LabelsRange"].toString() != "Unset")
         setLabelsRange(tagToPairPair(chartJSON["LabelsRange"].toString()));
+}
+
+void AreaLinePieSettings::refresh(QTableWidget* table) const{
+    ChartSettings::refresh(table);
+    QPair<QPair<int,int>, QPair<int,int>> range = getDataRange();
+    if(range.first.first>0){
+        QModelIndexList userSelection = table->selectionModel()->selectedIndexes();
+        table->clearSelection();
+        table->setRangeSelected(QTableWidgetSelectionRange(range.first.first-1, range.first.second-1, range.second.first-1, range.second.second-1), true);
+        QModelIndexList indexes = table->selectionModel()->selectedIndexes();
+        table->clearSelection();
+        if(userSelection.size()>0) table->setRangeSelected(QTableWidgetSelectionRange(userSelection.first().row(),userSelection.first().column(), userSelection.last().row(), userSelection.last().column()), true);
+        getChart()->setSeries(table, indexes, getParseMethod());
+    }
+    range = getLabelsRange();
+    if(range.first.first>0){
+        QModelIndexList userSelection = table->selectionModel()->selectedIndexes();
+        table->clearSelection();
+        table->setRangeSelected(QTableWidgetSelectionRange(range.first.first-1, range.first.second-1, range.second.first-1, range.second.second-1), true);
+        QModelIndexList indexes = table->selectionModel()->selectedIndexes();
+        table->clearSelection();
+        if(userSelection.size()>0) table->setRangeSelected(QTableWidgetSelectionRange(userSelection.first().row(),userSelection.first().column(), userSelection.last().row(), userSelection.last().column()), true);
+        getChart()->setLabels(table, indexes, getParseMethod());
+    }
 }

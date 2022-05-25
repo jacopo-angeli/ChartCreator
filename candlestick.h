@@ -14,7 +14,7 @@ private:
     QList<double> _lowestPrices;
     QList<QString> _categories;
 public:
-    CandleStick(QWidget* =nullptr,QGraphicsItem* =nullptr);
+    CandleStick(QWidget* =nullptr);
     virtual void setSeries(QTableWidget*, const QModelIndexList&, Flags =Flags::ROW);
     virtual void clearData();
     virtual void setLabels(QTableWidget*, const QModelIndexList&, Flags =Flags::ROW);

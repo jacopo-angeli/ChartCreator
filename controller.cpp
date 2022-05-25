@@ -894,22 +894,22 @@ void Controller::pickCategories(){
         currentChartTab->setCategoriesRange();
         if(CandleStick* candleStickChart = dynamic_cast<CandleStick*>(currentChartTab->getChart()))
             candleStickChart->clearCategories();
-//        else
-//            static_cast<Bar*>(currentChartTab->getChart())->clearCategories();
+        else
+            static_cast<Bar*>(currentChartTab->getChart())->clearCategories();
     }else{
         QPair<QPair<int, int>, QPair<int, int>> newPositions = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>((selections.first().row()+1),(selections.first().column()+1)),QPair<int, int>((selections.last().row()+1),(selections.last().column()+1)));
         if(newPositions != currentChartTab->getCategoriesRange()){
             currentChartTab->setCategoriesRange(newPositions);
             if(CandleStick* candleStickChart = dynamic_cast<CandleStick*>(currentChartTab->getChart()))
                 candleStickChart->setCategories(CurrentTable, selections);
-    //        else
-    //            static_cast<Bar*>(currentChartTab->getChart())->setCategories(CurrentTable, selections);
+            else
+                static_cast<Bar*>(currentChartTab->getChart())->setCategories(CurrentTable, selections);
         }else{
             currentChartTab->setCategoriesRange();
             if(CandleStick* candleStickChart = dynamic_cast<CandleStick*>(currentChartTab->getChart()))
                 candleStickChart->clearCategories();
-    //        else
-    //            static_cast<Bar*>(currentChartTab->getChart())->clearCategories();
+            else
+                static_cast<Bar*>(currentChartTab->getChart())->clearCategories();
         }
     }
 }
@@ -987,7 +987,7 @@ void Controller::ChartRefresh(int row, int column){
             if(BarSettings* barChart = dynamic_cast<BarSettings*>(currentTab))
                 //Chart setting di tipo BarChart
                 if(isInRange(cellPosition, barChart->getCategoriesRange()))
-                    //                    barChart->getChart->setCategories(CurrentTable,barChart->getCategoriesPositions());
+//                                        barChart->getChart->setCategories(CurrentTable,barChart->getCategoriesPositions());
                     return;
             if(isInRange(cellPosition, areaLinePieTab->getDataRange())){
                 AreaLinePieSettings* currentChartTab = static_cast<AreaLinePieSettings*>(_MainWindow->getChartTab(i));
@@ -1178,7 +1178,6 @@ void Controller::lastSessionRestore(){
 };
 void Controller::fileOpen(QString filePath){
     if (filePath == "") filePath = QFileDialog::getOpenFileName(_MainWindow, QString("Open file"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation), tr("ChartCreator (*.crt)"));
-    qDebug() << filePath;
     if(_MainWindow->getFilePosition(QString("../"+(filePath.split("/")).last())) < 0){
         if (!(filePath.isEmpty()) && filePath.endsWith(QString(".crt"))){
             //Apro il file
@@ -1194,6 +1193,19 @@ void Controller::fileOpen(QString filePath){
                 //Setto il titolo con il nome del file
                 _MainWindow->setCurrentTabTitle(QString("../"+(filePath.split("/")).last()));
 
+                QTableWidget* table = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
+
+                QJsonObject cellList = fullTab["table"].toObject();
+                int i=0;
+                for(i; i<cellList.size(); i++){
+                    QJsonObject cell = cellList[QString::number(i)].toObject();
+                    QTableWidgetItem* newCell = new QTableWidgetItem();
+                    QFont f = newCell->font();
+                    f.setPointSize(cell["fontSize"].toInt());
+                    newCell->setFont(f);
+                    table->setItem(cell["row"].toInt(), cell["column"].toInt(), newCell);
+                    table->item(cell["row"].toInt(), cell["column"].toInt())->setText(cell["value"].toString());
+                }
 
                 //per ogni entries creo un chart del tipo corrispondente su mainwindow
                 QJsonObject chartList = fullTab["charts"].toObject();
@@ -1204,7 +1216,6 @@ void Controller::fileOpen(QString filePath){
                     if(type == "CandleStick"){
                         _MainWindow->chartTypeSelected(Flags::CANDLESTICK);
                     }else if(type == "Bar"){
-                        qDebug() << "Bar Chart resotred";
                         _MainWindow->chartTypeSelected(Flags::BARS);
                     }else{
                         if(type == "Area")
@@ -1215,20 +1226,7 @@ void Controller::fileOpen(QString filePath){
                             _MainWindow->chartTypeSelected(Flags::PIE);
                     }
                     _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->fromJSON(chart);
-                }
-
-                //riempio le celle salvate sul json così trigghero il refresh dei grafici
-                QTableWidget* table = _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
-
-                QJsonObject cellList = fullTab["table"].toObject();
-                for(int i=0; i<cellList.size(); i++){
-                    QJsonObject cell = cellList[QString::number(i)].toObject();
-                    QTableWidgetItem* newCell = new QTableWidgetItem();
-                    newCell->setText(cell["value"].toString());
-                    QFont f = newCell->font();
-                    f.setPointSize(cell["fontSize"].toInt());
-                    newCell->setFont(f);
-                    table->setItem(cell["row"].toInt(), cell["column"].toInt(), newCell);
+                    _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->refresh(table);
                 }
 
                 //inserisco su _ActiveFiles il nuovo file

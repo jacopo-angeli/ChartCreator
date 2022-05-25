@@ -1,8 +1,16 @@
 #include "bar.h"
+#include <QtCharts/QBarSeries>
+#include <QtCharts/QBarSet>
+#include <QtCharts/QLegend>
+#include <QtCharts/QBarCategoryAxis>
+#include <QtCharts/QValueAxis>
 
-Bar::Bar(QWidget* brain, QGraphicsItem* parent): Chart(brain, parent), _Values(QList<QList<double>>()), _Labels(QList<QString>()), _Categories(QList<QString>()){
+Bar::Bar(QWidget* brain): Chart(brain),_axisX(new QBarCategoryAxis()),_axisY(new QValueAxis()),_Values(QList<QList<double>>()),_Labels(QList<QString>()), _Categories(QList<QString>()){
     setAnimationOptions(QChart::SeriesAnimations);
+    legend()->setVisible(true);
     legend()->setAlignment(Qt::AlignRight);
+    addAxis(_axisX, Qt::AlignBottom);
+    addAxis(_axisY, Qt::AlignLeft);
 }
 
 void Bar::setSeries(QTableWidget* table, const QModelIndexList & indexes, Flags parseDirection){
@@ -12,31 +20,29 @@ void Bar::setSeries(QTableWidget* table, const QModelIndexList & indexes, Flags 
     switch(parseDirection){
         case(Flags::ROW):{
             for(int i=indexes.first().row(); i<=indexes.last().row();i++){
-                QList<double> bars = QList<double>();
+                QList<double> set = QList<double>();
                 for(int j=indexes.first().column(); j<=indexes.last().column();j++){
                     QTableWidgetItem* item = table->item(i, j);
-                    if(item && item->text() != "")
-                        //chek if its convetible to double
-                        bars.append(item->text().toDouble());
-                    else
-                        bars.append(0);
+                    if(item && item->text() != ""){
+                        set.append(item->text().toDouble()>0 ? item->text().toDouble() : 0);
+                    }else
+                        set.append(0);
                 }
-                if(bars.count()>1) _Values.append(bars);
+                _Values.append(set);
             }
         }
         break;
         case(Flags::COLUMN):{
             for(int j=indexes.first().column(); j<=indexes.last().column();j++){
-                QList<double> bars = QList<double>();
+                QList<double> set = QList<double>();
                 for(int i=indexes.first().row(); i<=indexes.last().row();i++){
                     QTableWidgetItem* item = table->item(i, j);
-                    if(item && item->text() != "")
-                        //chek if its convetible to double
-                        bars.append(item->text().toDouble());
-                    else
-                        bars.append(0);
+                    if(item && item->text() != ""){
+                        set.append(item->text().toDouble()>0 ? item->text().toDouble() : 0);
+                    }else
+                        set.append(0);
                 }
-                if(bars.count()>1) _Values.append(bars);
+                _Values.append(set);
             }
         }
         break;
@@ -51,34 +57,29 @@ void Bar::clearData(){
     foreach(QList<double> list, _Values)
         list.clear();
     _Values.clear();
+    removeAllSeries();
 }
 
 void Bar::setLabels(QTableWidget* table, const QModelIndexList &indexes, Flags parseDirection){
     //Riempio labels/* con tante Stringhe quante solo le celle selezionate e se una delle celle è vuota o non piena metto Line x
-    clearLabels();
+    _Labels.clear();
     switch(parseDirection){
         case(Flags::ROW):{
             for(int i=indexes.first().row(); i<=indexes.last().row();i++){
-                int itemCount=0;
                 for(int j=indexes.first().column(); j<=indexes.last().column();j++){
                     QTableWidgetItem* item = table->item(i, j);
-                    if(item && item->text()!="")
-                        _Labels.append(item->text());
-                    else
-                        _Labels.append("Set " + QString::number(itemCount++));
+                    if(item) _Labels.append(item->text());
+                    else _Labels.append("");
                 }
             }
         }
         break;
         case(Flags::COLUMN):{
             for(int j=indexes.first().column(); j<=indexes.last().column();j++){
-                int itemCount=0;
                 for(int i=indexes.first().row(); i<=indexes.last().row();i++){
                     QTableWidgetItem* item = table->item(i, j);
-                    if(item && item->text()!="")
-                        _Labels.append(item->text());
-                    else
-                        _Labels.append("Set " + QString::number(itemCount++));
+                    if(item) _Labels.append(item->text());
+                    else _Labels.append("");
                 }
             }
         }
@@ -92,14 +93,15 @@ void Bar::setLabels(QTableWidget* table, const QModelIndexList &indexes, Flags p
 
 void Bar::clearLabels(){
     _Labels.clear();
+    refresh();
 }
-
 void Bar::clearCategories(){
     _Categories.clear();
+    refresh();
 }
 
 void Bar::setCategories(QTableWidget* table, const QModelIndexList &indexes, Flags parseDirection){
-    clearCategories();
+    _Categories.clear();
     switch(parseDirection){
         case(Flags::ROW):{
             for(int i=indexes.first().row(); i<=indexes.last().row();i++){
@@ -136,36 +138,29 @@ void Bar::setCategories(QTableWidget* table, const QModelIndexList &indexes, Fla
 
 void Bar::refresh(){
     removeAllSeries();
-    int setCount=0, elNumber=0;
+    QBarSeries* barSeries = new QBarSeries();
+    int setNumber=0, catNumber=0;
     double min=INT_MAX, max=INT_MIN;
-    QBarSeries * series = new QBarSeries();
-    foreach(QList<double> set, _Values){
-        QBarSet *barSet = new QBarSet((setCount<_Labels.count() ? _Labels[setCount] : QString("Set "+QString::number(setCount+1))));
-        foreach(double val, set){
-            min=std::min(min, val);
+    foreach(QList<double> list, _Values){
+        QBarSet* barSet = new QBarSet((setNumber < _Labels.count() ? _Labels[setNumber++] : QString("Set " + QString::number(setNumber++))));
+        foreach(double val, list){
+            *barSet << val;
             max=std::max(max, val);
-            barSet->append(val);
         }
-        if(elNumber==0) elNumber=barSet->count();
-        series->append(barSet);
-        setCount++;
+        catNumber = std::max(barSet->count(), catNumber);
+        barSeries->append(barSet);
     }
-    addSeries(series);
-    QList<QString> categories;
-    for(int i=0; i<elNumber; i++){
+    addSeries(barSeries);
+    QStringList categories;
+    for(int i=0; i<catNumber; i++){
         if(i<_Categories.count())
-            categories.append(_Categories[i]);
+            categories << _Categories[i];
         else
-            categories.append("Category " + QString::number(i+1));
+            categories << "Categories" + QString::number(i);
     }
-    createDefaultAxes();
-//    if(axes(Qt::Vertical).count()>0) {
-//        QValueAxis *axisY = qobject_cast<QValueAxis *>(axes(Qt::Vertical).at(0));
-//        axisY->setRange(min,max*1.2);
-//        series->attachAxis(axisY);
-//    }
-//    if(axes(Qt::Horizontal).count()>0) {
-//        QBarCategoryAxis *axisX = qobject_cast<QBarCategoryAxis *>(axes(Qt::Vertical).at(0));
-//        axisX->append(categories);
-//    }
+    _axisX->clear();
+    _axisX->append(categories);
+    barSeries->attachAxis(_axisX);
+    _axisY->setRange(0,max*1.10);
+    barSeries->attachAxis(_axisY);
 }

@@ -12,7 +12,7 @@ protected:
     QWidget* _controller;
     virtual void refresh() =0;
 public:
-    Chart(QWidget* =nullptr, QGraphicsItem* =nullptr);
+    Chart(QWidget* =nullptr);
     virtual void setSeries(QTableWidget*, const QModelIndexList&, Flags = Flags::ROW)=0;
     virtual void clearData()=0;
     virtual void setLabels(QTableWidget*, const QModelIndexList&, Flags = Flags::ROW)=0;

@@ -13,6 +13,7 @@ public:
     virtual QPair<QPair<int, int>, QPair<int, int>> getCategoriesRange() const;
     virtual QJsonObject toJSON() const;
     virtual void fromJSON(const QJsonObject&);
+    virtual void refresh(QTableWidget*) const;
 private:
     QLabel* _Categories;
 };

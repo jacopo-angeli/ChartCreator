@@ -68,14 +68,13 @@ CandleStickSettings::CandleStickSettings(QWidget* parent) : ChartSettings(parent
 
     _Chart = new CandleStick(parent);
     _ChartView->setChart(_Chart);
-    _ChartView->setRenderHint(QPainter::Antialiasing);
 }
 
 void CandleStickSettings::setOpeningPricesRange(QPair<QPair<int, int>, QPair<int, int>>pos){
     QString tag=QString();
     if((pos.first.first)>0)
     {
-        tag=tag=QString("{( "+QString::number(pos.first.first)+ " , " +QString::number(pos.first.second)+" )->( "+ QString::number(pos.second.first)+ " , " + QString::number(pos.second.second) + " )}");
+        tag=QString("{( "+QString::number(pos.first.first)+ " , " +QString::number(pos.first.second)+" )->( "+ QString::number(pos.second.first)+ " , " + QString::number(pos.second.second) + " )}");
     }
     else
     {
@@ -189,6 +188,60 @@ QPair<QPair<int, int>, QPair<int, int> > CandleStickSettings::getCategoriesRange
         return QPair<QPair<int, int>, QPair<int, int>>(fP, lP);
     }
     return QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0));
+}
+
+void CandleStickSettings::refresh(QTableWidget* table) const{
+    ChartSettings::refresh(table);
+    QPair<QPair<int,int>, QPair<int,int>> range = getOpeningPricesRange();
+    if(range.first.first>0){
+        QModelIndexList userSelection = table->selectionModel()->selectedIndexes();
+        table->clearSelection();
+        table->setRangeSelected(QTableWidgetSelectionRange(range.first.first-1, range.first.second-1, range.second.first-1, range.second.second-1), true);
+        QModelIndexList indexes = table->selectionModel()->selectedIndexes();
+        table->clearSelection();
+        if(userSelection.size()>0) table->setRangeSelected(QTableWidgetSelectionRange(userSelection.first().row(),userSelection.first().column(), userSelection.last().row(), userSelection.last().column()), true);
+        static_cast<CandleStick*>(getChart())->setOpeningPrices(table, indexes);
+    }
+    range = getClosingPricesRange();
+    if(range.first.first>0){
+        QModelIndexList userSelection = table->selectionModel()->selectedIndexes();
+        table->clearSelection();
+        table->setRangeSelected(QTableWidgetSelectionRange(range.first.first-1, range.first.second-1, range.second.first-1, range.second.second-1), true);
+        QModelIndexList indexes = table->selectionModel()->selectedIndexes();
+        table->clearSelection();
+        if(userSelection.size()>0) table->setRangeSelected(QTableWidgetSelectionRange(userSelection.first().row(),userSelection.first().column(), userSelection.last().row(), userSelection.last().column()), true);
+        static_cast<CandleStick*>(getChart())->setClosingPrices(table, indexes);
+    }
+    range = getLowestPricesRange();
+    if(range.first.first>0){
+        QModelIndexList userSelection = table->selectionModel()->selectedIndexes();
+        table->clearSelection();
+        table->setRangeSelected(QTableWidgetSelectionRange(range.first.first-1, range.first.second-1, range.second.first-1, range.second.second-1), true);
+        QModelIndexList indexes = table->selectionModel()->selectedIndexes();
+        table->clearSelection();
+        if(userSelection.size()>0) table->setRangeSelected(QTableWidgetSelectionRange(userSelection.first().row(),userSelection.first().column(), userSelection.last().row(), userSelection.last().column()), true);
+        static_cast<CandleStick*>(getChart())->setLowestPrices(table, indexes);
+    }
+    range = getHighestPricesRange();
+    if(range.first.first>0){
+        QModelIndexList userSelection = table->selectionModel()->selectedIndexes();
+        table->clearSelection();
+        table->setRangeSelected(QTableWidgetSelectionRange(range.first.first-1, range.first.second-1, range.second.first-1, range.second.second-1), true);
+        QModelIndexList indexes = table->selectionModel()->selectedIndexes();
+        table->clearSelection();
+        if(userSelection.size()>0) table->setRangeSelected(QTableWidgetSelectionRange(userSelection.first().row(),userSelection.first().column(), userSelection.last().row(), userSelection.last().column()), true);
+        static_cast<CandleStick*>(getChart())->setHighestPrices(table, indexes);
+    }
+    range = getCategoriesRange();
+    if(range.first.first>0){
+        QModelIndexList userSelection = table->selectionModel()->selectedIndexes();
+        table->clearSelection();
+        table->setRangeSelected(QTableWidgetSelectionRange(range.first.first-1, range.first.second-1, range.second.first-1, range.second.second-1), true);
+        QModelIndexList indexes = table->selectionModel()->selectedIndexes();
+        table->clearSelection();
+        if(userSelection.size()>0) table->setRangeSelected(QTableWidgetSelectionRange(userSelection.first().row(),userSelection.first().column(), userSelection.last().row(), userSelection.last().column()), true);
+        static_cast<CandleStick*>(getChart())->setCategories(table, indexes);
+    }
 }
 
 QJsonObject CandleStickSettings::toJSON() const{

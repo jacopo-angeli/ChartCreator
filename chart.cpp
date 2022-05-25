@@ -1,6 +1,5 @@
 #include "chart.h"
 
-Chart::Chart(QWidget* brain, QGraphicsItem* parent) : QChart(parent), _controller(brain)
-{
+Chart::Chart(QWidget* brain) : QChart(), _controller(brain){
 
 }

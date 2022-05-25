@@ -71,6 +71,7 @@ ChartSettings::ChartSettings(QWidget * parent) : QWidget(parent),  _Settings(new
     main->addWidget(_Settings);
 
     setLayout(main);
+    _ChartView->setRenderHint(QPainter::Antialiasing);
 }
 Chart* ChartSettings::getChart() const{
     return _Chart;
@@ -93,6 +94,12 @@ QPair<int, int> ChartSettings:: getTitlePosition() const{
 void ChartSettings::setColorIndex(int index){
     if(index>0 && index<7)
         _Color->setCurrentIndex(index);
+}
+
+void ChartSettings::refresh(QTableWidget* table) const{
+    QPair<int, int> titlePos = getTitlePosition();
+    if(titlePos.first>0 && table->item(titlePos.first-1, titlePos.second-1))
+        getChart()->setTitle(table->item(titlePos.first-1, titlePos.second-1)->text());
 }
 QJsonObject ChartSettings::toJSON() const{
     QJsonObject JsonObj = QJsonObject();

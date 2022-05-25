@@ -1,6 +1,6 @@
 #include "pie.h"
 
-Pie::Pie(QWidget* brain, QGraphicsItem* parent): Chart(brain, parent), _Data(QList<double>()), _Labels(QList<QString>()){
+Pie::Pie(QWidget* brain): Chart(brain), _Data(QList<double>()), _Labels(QList<QString>()){
     setAnimationOptions(QChart::AllAnimations);
     legend()->show();
     legend()->setAlignment(Qt::AlignRight);

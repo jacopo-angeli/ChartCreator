@@ -11,7 +11,7 @@ private:
 protected:
     virtual void refresh();
 public:
-    Line(QWidget* =nullptr,QGraphicsItem* =nullptr);
+    Line(QWidget* =nullptr);
     virtual void setSeries(QTableWidget*, const QModelIndexList&, Flags = Flags::ROW);
     virtual void clearData();
     virtual void setLabels(QTableWidget*, const QModelIndexList&, Flags = Flags::ROW);

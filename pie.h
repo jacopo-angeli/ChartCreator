@@ -11,7 +11,7 @@ private:
 protected:
     virtual void refresh();
 public:
-    Pie(QWidget* =nullptr,QGraphicsItem* = nullptr);
+    Pie(QWidget* =nullptr);
     virtual void setSeries(QTableWidget*, const QModelIndexList&, Flags = Flags::ROW);
     void setLabels(QTableWidget*, const QModelIndexList&, Flags = Flags::ROW);
     void clearLabels();

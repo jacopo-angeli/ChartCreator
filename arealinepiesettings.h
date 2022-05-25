@@ -24,6 +24,8 @@ public:
     virtual QJsonObject toJSON() const;
     virtual void fromJSON(const QJsonObject&);
 
+    void refresh(QTableWidget*)const;
+
     Flags getParseMethod() const;
 private:
     QLabel* _DataRange;
