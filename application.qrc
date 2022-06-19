@@ -1,0 +1,29 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/AreaChart.png</file>
+        <file>icons/Back.png</file>
+        <file>icons/BarChart.png</file>
+        <file>icons/CandlestickChart.png</file>
+        <file>icons/CenterAlign.png</file>
+        <file>icons/ColorSettings.png</file>
+        <file>icons/ColumnParse.png</file>
+        <file>icons/Delete.png</file>
+        <file>icons/Erase.png</file>
+        <file>icons/HistogramChart.png</file>
+        <file>icons/LeftAlign.png</file>
+        <file>icons/LineChart.png</file>
+        <file>icons/NewColumn.png</file>
+        <file>icons/NewGraph.png</file>
+        <file>icons/NewRow.png</file>
+        <file>icons/PdfExport.png</file>
+        <file>icons/PieChart.png</file>
+        <file>icons/Reset.png</file>
+        <file>icons/RightAlign.png</file>
+        <file>icons/RowParse.png</file>
+        <file>icons/RowSelect.png</file>
+        <file>icons/Save.png</file>
+        <file>icons/SliceExplode.png</file>
+        <file>icons/StackedAreaChart.png</file>
+        <file>icons/TextSettings.png</file>
+    </qresource>
+</RCC>
