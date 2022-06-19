@@ -60,7 +60,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Files(new QTabWid
 
     QToolButton *NewRow = new QToolButton(ToolBar);
     NewRow->setText("New Row");
-    NewRow->setIcon(QIcon("icons/NewRow.png"));
+    NewRow->setIcon(QIcon(":/icons/NewRow.png"));
     NewRow->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     NewRow->setPopupMode(QToolButton::InstantPopup);
     QAction *UpperInsert = new QAction("Upper Insert", NewRow);
@@ -72,7 +72,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Files(new QTabWid
 
     QToolButton *NewColumn = new QToolButton(ToolBar);
     NewColumn->setText("New Column");
-    NewColumn->setIcon(QIcon("icons/NewColumn.png"));
+    NewColumn->setIcon(QIcon(":/icons/NewColumn.png"));
     NewColumn->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     NewColumn->setPopupMode(QToolButton::InstantPopup);
     QAction *RightInsert = new QAction("Right Insert", NewColumn);
@@ -84,7 +84,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Files(new QTabWid
 
     QToolButton *Clear = new QToolButton(ToolBar);
     Clear->setText("Eraser");
-    Clear->setIcon(QIcon("icons/Erase.png"));
+    Clear->setIcon(QIcon(":/icons/Erase.png"));
     Clear->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     Clear->setPopupMode(QToolButton::InstantPopup);
     QAction *ClearSelection = new QAction("Clear current selection", Clear);
@@ -100,7 +100,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Files(new QTabWid
 
     QToolButton *Delete = new QToolButton(ToolBar);
     Delete->setText("Delete");
-    Delete->setIcon(QIcon("icons/Delete.png"));
+    Delete->setIcon(QIcon(":/icons/Delete.png"));
     Delete->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     Delete->setPopupMode(QToolButton::InstantPopup);
     QAction *ColumnDeleting = new QAction("Delete selected column", Delete);
@@ -112,22 +112,22 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Files(new QTabWid
 
     QToolButton *TableReset = new QToolButton(ToolBar);
     TableReset->setText("Reset Table");
-    TableReset->setIcon(QIcon("icons/Reset.png"));
+    TableReset->setIcon(QIcon(":/icons/Reset.png"));
     TableReset->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     TableReset->setPopupMode(QToolButton::InstantPopup);
     connect(TableReset, SIGNAL(clicked()), parent, SLOT(TableReset()));
 
     QToolButton *TextAlignment = new QToolButton(ToolBar);
     TextAlignment->setText("Text Align");
-    TextAlignment->setIcon(QIcon("icons/TextSettings.png"));
+    TextAlignment->setIcon(QIcon(":/icons/TextSettings.png"));
     TextAlignment->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     TextAlignment->setPopupMode(QToolButton::InstantPopup);
     QAction *LeftAlign = new QAction("Align left",TextAlignment);
-    LeftAlign->setIcon(QIcon("icons/LeftAlign.png"));
+    LeftAlign->setIcon(QIcon(":/icons/LeftAlign.png"));
     QAction *CenterAlign = new QAction("Align center",TextAlignment);
-    CenterAlign->setIcon(QIcon("icons/CenterAlign.png"));
+    CenterAlign->setIcon(QIcon(":/icons/CenterAlign.png"));
     QAction *RightAlign = new QAction("Align right",TextAlignment);
-    RightAlign->setIcon(QIcon("icons/RightAlign.png"));
+    RightAlign->setIcon(QIcon(":/icons/RightAlign.png"));
     TextAlignment->addAction(LeftAlign);
     TextAlignment->addAction(CenterAlign);
     TextAlignment->addAction(RightAlign);
@@ -164,7 +164,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Files(new QTabWid
     QTabWidget *ChartList = new QTabWidget(this);
     ChartList->setTabPosition(QTabWidget::West);
     ChartList->addTab(new ChartSelection(parent), QString(""));
-    ChartList->setTabIcon(0, QIcon("icons/NewGraph.png"));
+    ChartList->setTabIcon(0, QIcon(":/icons/NewGraph.png"));
     ChartList->setTabsClosable(true);
     connect(ChartList, SIGNAL(tabCloseRequested(int)), parent, SLOT(ChartTabClose(int)));
 
@@ -270,7 +270,7 @@ void MainWindow::chartTypeSelected(Flags type){
     switch(type){
         case(Flags::CANDLESTICK):{
             if(QTabWidget *ChartListCurrentIndex = dynamic_cast<QTabWidget*>(_Files->widget(_Files->currentIndex())->layout()->itemAt(1)->widget())){
-                ChartListCurrentIndex->insertTab(0, new CandleStickSettings(static_cast<QWidget*>(parent())), QIcon("icons/NewGraph.png"), QString(""));
+                ChartListCurrentIndex->insertTab(0, new CandleStickSettings(static_cast<QWidget*>(parent())), QIcon(":/icons/NewGraph.png"), QString(""));
                 ChartListCurrentIndex->setCurrentIndex(0);
             }
             else{
@@ -280,14 +280,14 @@ void MainWindow::chartTypeSelected(Flags type){
             break;
         case(Flags::AREA) : case(Flags::LINES): case(Flags::PIE):{
             if(QTabWidget *ChartListCurrentIndex = dynamic_cast<QTabWidget*>(_Files->widget(_Files->currentIndex())->layout()->itemAt(1)->widget())){
-                ChartListCurrentIndex->insertTab(0, new AreaLinePieSettings(type,static_cast<QWidget*>(parent())),QIcon("icons/NewGraph.png"), QString(""));//TODO Settare il parent per i connect adeguatamente
+                ChartListCurrentIndex->insertTab(0, new AreaLinePieSettings(type,static_cast<QWidget*>(parent())),QIcon(":/icons/NewGraph.png"), QString(""));//TODO Settare il parent per i connect adeguatamente
                 ChartListCurrentIndex->setCurrentIndex(0);
             }
         }
             break;
         case(Flags::BARS):{
             if(QTabWidget *ChartListCurrentIndex = dynamic_cast<QTabWidget*>(_Files->widget(_Files->currentIndex())->layout()->itemAt(1)->widget())){
-                ChartListCurrentIndex->insertTab(0, new BarSettings(static_cast<QWidget*>(parent())),QIcon("icons/NewGraph.png"), QString(""));//TODO Settare il parent per i connect adeguatamente
+                ChartListCurrentIndex->insertTab(0, new BarSettings(static_cast<QWidget*>(parent())),QIcon(":/icons/NewGraph.png"), QString(""));//TODO Settare il parent per i connect adeguatamente
                 ChartListCurrentIndex->setCurrentIndex(0);
             }
         }
@@ -306,7 +306,7 @@ void MainWindow::newTab(){
     QTabWidget *ChartList = new QTabWidget(this);
     ChartList->setTabPosition(QTabWidget::West);
     ChartList->addTab(new ChartSelection(static_cast<QWidget*>(parent())), QString(""));
-    ChartList->setTabIcon(0, QIcon("icons/NewGraph.png"));
+    ChartList->setTabIcon(0, QIcon(":/icons/NewGraph.png"));
     ChartList->setTabsClosable(true);
     connect(ChartList, SIGNAL(tabCloseRequested(int)), parent(), SLOT(ChartTabClose(int)));
 

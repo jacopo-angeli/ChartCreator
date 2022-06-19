@@ -34,7 +34,7 @@
 #include <QFont>
 
 class MainWindow : public QMainWindow{
-   Q_OBJECT
+    Q_OBJECT;
 private:
     QTabWidget* _Files;
     QSpinBox* _TxtDim;

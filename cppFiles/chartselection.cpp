@@ -11,7 +11,7 @@ ChartSelection::ChartSelection(QWidget* parent): QWidget(parent){
 
     QToolButton *BarC = new QToolButton();
     BarC->setText("Bar Chart");
-    BarC->setIcon(QIcon("icons/BarChart.png"));
+    BarC->setIcon(QIcon(":/icons/BarChart.png"));
     BarC->setMinimumWidth(150);
     BarC->setMinimumHeight(150);
     BarC->setIconSize(QSize(100,100));
@@ -21,7 +21,7 @@ ChartSelection::ChartSelection(QWidget* parent): QWidget(parent){
 
     QToolButton *CandleStickC = new QToolButton();
     CandleStickC->setText("CandleStick Chart");
-    CandleStickC->setIcon(QIcon("icons/CandlestickChart.png"));
+    CandleStickC->setIcon(QIcon(":/icons/CandlestickChart.png"));
     CandleStickC->setMinimumWidth(150);
     CandleStickC->setMinimumHeight(150);
     CandleStickC->setIconSize(QSize(100,100));
@@ -31,7 +31,7 @@ ChartSelection::ChartSelection(QWidget* parent): QWidget(parent){
 
     QToolButton *LineC = new QToolButton();
     LineC->setText("Line Chart");
-    LineC->setIcon(QIcon("icons/LineChart.png"));
+    LineC->setIcon(QIcon(":/icons/LineChart.png"));
     LineC->setMinimumWidth(150);
     LineC->setMinimumHeight(150);
     LineC->setIconSize(QSize(100,100));
@@ -40,7 +40,7 @@ ChartSelection::ChartSelection(QWidget* parent): QWidget(parent){
 
     QToolButton *PieC = new QToolButton();
     PieC->setText("Pie Chart");
-    PieC->setIcon(QIcon("icons/PieChart.png"));
+    PieC->setIcon(QIcon(":/icons/PieChart.png"));
     PieC->setMinimumWidth(150);
     PieC->setMinimumHeight(150);
     PieC->setIconSize(QSize(100,100));
@@ -49,7 +49,7 @@ ChartSelection::ChartSelection(QWidget* parent): QWidget(parent){
 
     QToolButton *AreaC = new QToolButton();
     AreaC->setText("Area Chart");
-    AreaC->setIcon(QIcon("icons/AreaChart.png"));
+    AreaC->setIcon(QIcon(":/icons/AreaChart.png"));
     AreaC->setMinimumWidth(150);
     AreaC->setMinimumHeight(150);
     AreaC->setIconSize(QSize(100,100));
