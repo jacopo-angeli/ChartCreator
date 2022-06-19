@@ -1,0 +1,1294 @@
+{
+    "charts": {
+        "0": {
+            "ColorIndex": 1,
+            "DataRange": "{( 19 , 2 )->( 20 , 8 )}",
+            "LabelsRange": "{( 19 , 1 )->( 20 , 1 )}",
+            "TitlePosition": "( 18 , 1 )",
+            "Type": "Area"
+        },
+        "1": {
+            "CategoriesRange": "{( 23 , 1 )->( 44 , 1 )}",
+            "ClosingPricesRange": "{( 23 , 2 )->( 44 , 2 )}",
+            "ColorIndex": 2,
+            "HighestPricesRange": "{( 23 , 5 )->( 44 , 5 )}",
+            "LowestPricesRange": "{( 23 , 4 )->( 44 , 4 )}",
+            "OpeningPricesRange": "{( 23 , 3 )->( 44 , 3 )}",
+            "TitlePosition": "( 22 , 1 )",
+            "Type": "CandleStick"
+        },
+        "2": {
+            "ColorIndex": 2,
+            "DataRange": "{( 3 , 2 )->( 11 , 2 )}",
+            "LabelsRange": "{( 3 , 1 )->( 11 , 1 )}",
+            "TitlePosition": "( 1 , 1 )",
+            "Type": "Pie"
+        },
+        "3": {
+            "ColorIndex": 1,
+            "DataRange": "{( 14 , 2 )->( 16 , 8 )}",
+            "LabelsRange": "{( 14 , 1 )->( 16 , 1 )}",
+            "TitlePosition": "( 13 , 1 )",
+            "Type": "Line"
+        },
+        "4": {
+            "CategoriesRange": "{( 18 , 2 )->( 18 , 8 )}",
+            "ColorIndex": 2,
+            "DataRange": "{( 19 , 2 )->( 20 , 8 )}",
+            "LabelsRange": "{( 19 , 1 )->( 20 , 1 )}",
+            "TitlePosition": "( 18 , 1 )",
+            "Type": "Bar"
+        },
+        "chartNumber": 5
+    },
+    "table": {
+        "0": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 0,
+            "value": "Screen Resolution Marketshare"
+        },
+        "1": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 0,
+            "value": ""
+        },
+        "10": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 5,
+            "value": "4.56"
+        },
+        "100": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 22,
+            "value": "37662"
+        },
+        "101": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 22,
+            "value": "37426"
+        },
+        "102": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 22,
+            "value": "38689"
+        },
+        "103": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 23,
+            "value": "2"
+        },
+        "104": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 23,
+            "value": "38520"
+        },
+        "105": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 23,
+            "value": "38496"
+        },
+        "106": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 23,
+            "value": "38090"
+        },
+        "107": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 23,
+            "value": "39184"
+        },
+        "108": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 24,
+            "value": "3"
+        },
+        "109": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 24,
+            "value": "37751"
+        },
+        "11": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 6,
+            "value": "414x896"
+        },
+        "110": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 24,
+            "value": "38520"
+        },
+        "111": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 24,
+            "value": "37555"
+        },
+        "112": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 24,
+            "value": "38673"
+        },
+        "113": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 25,
+            "value": "4"
+        },
+        "114": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 25,
+            "value": "39701"
+        },
+        "115": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 25,
+            "value": "37751"
+        },
+        "116": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 25,
+            "value": "37695"
+        },
+        "117": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 25,
+            "value": "39996"
+        },
+        "118": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 26,
+            "value": "5"
+        },
+        "119": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 26,
+            "value": "36577"
+        },
+        "12": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 6,
+            "value": "4.25"
+        },
+        "120": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 26,
+            "value": "39701"
+        },
+        "121": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 26,
+            "value": "36209"
+        },
+        "122": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 26,
+            "value": "39843"
+        },
+        "123": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 27,
+            "value": "6"
+        },
+        "124": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 27,
+            "value": "36040"
+        },
+        "125": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 27,
+            "value": "36588"
+        },
+        "126": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 27,
+            "value": "35315"
+        },
+        "127": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 27,
+            "value": "36684"
+        },
+        "128": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 28,
+            "value": "7"
+        },
+        "129": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 28,
+            "value": "35508"
+        },
+        "13": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 7,
+            "value": "1536x864"
+        },
+        "130": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 28,
+            "value": "36040"
+        },
+        "131": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 28,
+            "value": "34879"
+        },
+        "132": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 28,
+            "value": "36163"
+        },
+        "133": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 29,
+            "value": "8"
+        },
+        "134": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 29,
+            "value": "34084"
+        },
+        "135": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 29,
+            "value": "35506"
+        },
+        "136": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 29,
+            "value": "33779"
+        },
+        "137": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 29,
+            "value": "35540"
+        },
+        "138": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 30,
+            "value": "9"
+        },
+        "139": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 30,
+            "value": "30158"
+        },
+        "14": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 7,
+            "value": "4.02"
+        },
+        "140": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 30,
+            "value": "34064"
+        },
+        "141": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 30,
+            "value": "30114"
+        },
+        "142": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 30,
+            "value": "34259"
+        },
+        "143": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 31,
+            "value": "10"
+        },
+        "144": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 31,
+            "value": "31050"
+        },
+        "145": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 31,
+            "value": "30158"
+        },
+        "146": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 31,
+            "value": "29845"
+        },
+        "147": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 31,
+            "value": "32681"
+        },
+        "148": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 32,
+            "value": "11"
+        },
+        "149": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 32,
+            "value": "29095"
+        },
+        "15": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 7,
+            "value": ""
+        },
+        "150": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 32,
+            "value": "31064"
+        },
+        "151": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 32,
+            "value": "27902"
+        },
+        "152": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 32,
+            "value": "32181"
+        },
+        "153": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 33,
+            "value": "12"
+        },
+        "154": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 33,
+            "value": "29089"
+        },
+        "155": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 33,
+            "value": "29095"
+        },
+        "156": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 33,
+            "value": "26600"
+        },
+        "157": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 33,
+            "value": "30224"
+        },
+        "158": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 34,
+            "value": "13"
+        },
+        "159": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 34,
+            "value": "29306"
+        },
+        "16": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 8,
+            "value": "360x780"
+        },
+        "160": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 34,
+            "value": "29089"
+        },
+        "161": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 34,
+            "value": "28831"
+        },
+        "162": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 34,
+            "value": "31068"
+        },
+        "163": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 35,
+            "value": "14"
+        },
+        "164": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 35,
+            "value": "30104"
+        },
+        "165": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 35,
+            "value": "29306"
+        },
+        "166": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 35,
+            "value": "28674"
+        },
+        "167": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 35,
+            "value": "30346"
+        },
+        "168": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 36,
+            "value": "15"
+        },
+        "169": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 36,
+            "value": "31319"
+        },
+        "17": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 8,
+            "value": "3.1"
+        },
+        "170": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 36,
+            "value": "30104"
+        },
+        "171": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 36,
+            "value": "29483"
+        },
+        "172": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 36,
+            "value": "31416"
+        },
+        "173": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 37,
+            "value": "16"
+        },
+        "174": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 37,
+            "value": "29854"
+        },
+        "175": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 37,
+            "value": "31318"
+        },
+        "176": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 37,
+            "value": "29083"
+        },
+        "177": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 37,
+            "value": "31324"
+        },
+        "178": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 38,
+            "value": "17"
+        },
+        "179": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 38,
+            "value": "30442"
+        },
+        "18": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 9,
+            "value": "375x667"
+        },
+        "180": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 38,
+            "value": "29854"
+        },
+        "181": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 38,
+            "value": "29445"
+        },
+        "182": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 38,
+            "value": "30766"
+        },
+        "183": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 39,
+            "value": "18"
+        },
+        "184": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 39,
+            "value": "28680"
+        },
+        "185": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 39,
+            "value": "30442"
+        },
+        "186": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 39,
+            "value": "28634"
+        },
+        "187": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 39,
+            "value": "30702"
+        },
+        "188": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 40,
+            "value": "19"
+        },
+        "189": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 40,
+            "value": "30329"
+        },
+        "19": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 9,
+            "value": "2.91"
+        },
+        "190": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 40,
+            "value": "28680"
+        },
+        "191": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 40,
+            "value": "28673"
+        },
+        "192": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 40,
+            "value": "30542"
+        },
+        "193": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 41,
+            "value": "20"
+        },
+        "194": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 41,
+            "value": "29202"
+        },
+        "195": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 41,
+            "value": "30329"
+        },
+        "196": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 41,
+            "value": "28713"
+        },
+        "197": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 41,
+            "value": "30764"
+        },
+        "198": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 42,
+            "value": "21"
+        },
+        "199": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 42,
+            "value": "29439"
+        },
+        "2": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 1,
+            "value": "Site :https://gs.statcounter.com/screen-resolution-stats"
+        },
+        "20": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 9,
+            "value": ""
+        },
+        "200": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 42,
+            "value": "29202"
+        },
+        "201": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 42,
+            "value": "28963"
+        },
+        "202": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 42,
+            "value": "29652"
+        },
+        "203": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 43,
+            "value": "22"
+        },
+        "204": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 43,
+            "value": "29980"
+        },
+        "205": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 43,
+            "value": "29439"
+        },
+        "206": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 43,
+            "value": "29253"
+        },
+        "207": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 43,
+            "value": "30314"
+        },
+        "21": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 9,
+            "value": ""
+        },
+        "22": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 9,
+            "value": ""
+        },
+        "23": {
+            "column": 5,
+            "fontSize": 10,
+            "row": 9,
+            "value": ""
+        },
+        "24": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 10,
+            "value": "Other"
+        },
+        "25": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 10,
+            "value": "59.9"
+        },
+        "26": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 10,
+            "value": ""
+        },
+        "27": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 10,
+            "value": ""
+        },
+        "28": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 10,
+            "value": ""
+        },
+        "29": {
+            "column": 5,
+            "fontSize": 10,
+            "row": 10,
+            "value": ""
+        },
+        "3": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 2,
+            "value": "1920x1080"
+        },
+        "30": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 11,
+            "value": ""
+        },
+        "31": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 11,
+            "value": ""
+        },
+        "32": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 12,
+            "value": "WorkOut"
+        },
+        "33": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 12,
+            "value": "Mon"
+        },
+        "34": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 12,
+            "value": "Tue"
+        },
+        "35": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 12,
+            "value": "Wed"
+        },
+        "36": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 12,
+            "value": "Thu"
+        },
+        "37": {
+            "column": 5,
+            "fontSize": 10,
+            "row": 12,
+            "value": "Fri"
+        },
+        "38": {
+            "column": 6,
+            "fontSize": 10,
+            "row": 12,
+            "value": "Sat"
+        },
+        "39": {
+            "column": 7,
+            "fontSize": 10,
+            "row": 12,
+            "value": "Sun"
+        },
+        "4": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 2,
+            "value": "9.98"
+        },
+        "40": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 13,
+            "value": "PushUp"
+        },
+        "41": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 13,
+            "value": "11"
+        },
+        "42": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 13,
+            "value": "13"
+        },
+        "43": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 13,
+            "value": "14"
+        },
+        "44": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 13,
+            "value": "10"
+        },
+        "45": {
+            "column": 5,
+            "fontSize": 10,
+            "row": 13,
+            "value": "9"
+        },
+        "46": {
+            "column": 6,
+            "fontSize": 10,
+            "row": 13,
+            "value": "1"
+        },
+        "47": {
+            "column": 7,
+            "fontSize": 10,
+            "row": 13,
+            "value": "15"
+        },
+        "48": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 14,
+            "value": "Squats"
+        },
+        "49": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 14,
+            "value": "8"
+        },
+        "5": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 3,
+            "value": "1366x768"
+        },
+        "50": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 14,
+            "value": "9"
+        },
+        "51": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 14,
+            "value": "7"
+        },
+        "52": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 14,
+            "value": "10"
+        },
+        "53": {
+            "column": 5,
+            "fontSize": 10,
+            "row": 14,
+            "value": "22"
+        },
+        "54": {
+            "column": 6,
+            "fontSize": 10,
+            "row": 14,
+            "value": "14"
+        },
+        "55": {
+            "column": 7,
+            "fontSize": 10,
+            "row": 14,
+            "value": "0"
+        },
+        "56": {
+            "column": 8,
+            "fontSize": 10,
+            "row": 14,
+            "value": ""
+        },
+        "57": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 15,
+            "value": "Abs"
+        },
+        "58": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 15,
+            "value": "4"
+        },
+        "59": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 15,
+            "value": "7"
+        },
+        "6": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 3,
+            "value": "7.78"
+        },
+        "60": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 15,
+            "value": "4"
+        },
+        "61": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 15,
+            "value": "1"
+        },
+        "62": {
+            "column": 5,
+            "fontSize": 10,
+            "row": 15,
+            "value": "4"
+        },
+        "63": {
+            "column": 6,
+            "fontSize": 10,
+            "row": 15,
+            "value": "2"
+        },
+        "64": {
+            "column": 7,
+            "fontSize": 10,
+            "row": 15,
+            "value": "1"
+        },
+        "65": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 16,
+            "value": ""
+        },
+        "66": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 16,
+            "value": ""
+        },
+        "67": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 17,
+            "value": "Project Time Consuming"
+        },
+        "68": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 17,
+            "value": "Monday"
+        },
+        "69": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 17,
+            "value": "Tuesday"
+        },
+        "7": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 4,
+            "value": "360x640"
+        },
+        "70": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 17,
+            "value": "Wednesday"
+        },
+        "71": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 17,
+            "value": "Thursday"
+        },
+        "72": {
+            "column": 5,
+            "fontSize": 10,
+            "row": 17,
+            "value": "Friday"
+        },
+        "73": {
+            "column": 6,
+            "fontSize": 10,
+            "row": 17,
+            "value": "Saturday"
+        },
+        "74": {
+            "column": 7,
+            "fontSize": 10,
+            "row": 17,
+            "value": "Sunday"
+        },
+        "75": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 18,
+            "value": "Angeloni"
+        },
+        "76": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 18,
+            "value": "10"
+        },
+        "77": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 18,
+            "value": "5"
+        },
+        "78": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 18,
+            "value": "10"
+        },
+        "79": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 18,
+            "value": "6"
+        },
+        "8": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 4,
+            "value": "4.94"
+        },
+        "80": {
+            "column": 5,
+            "fontSize": 10,
+            "row": 18,
+            "value": "7"
+        },
+        "81": {
+            "column": 6,
+            "fontSize": 10,
+            "row": 18,
+            "value": "8"
+        },
+        "82": {
+            "column": 7,
+            "fontSize": 10,
+            "row": 18,
+            "value": "9"
+        },
+        "83": {
+            "column": 8,
+            "fontSize": 11,
+            "row": 18,
+            "value": ""
+        },
+        "84": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 19,
+            "value": "Angeli"
+        },
+        "85": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 19,
+            "value": "5"
+        },
+        "86": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 19,
+            "value": "2"
+        },
+        "87": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 19,
+            "value": "6"
+        },
+        "88": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 19,
+            "value": "2"
+        },
+        "89": {
+            "column": 5,
+            "fontSize": 10,
+            "row": 19,
+            "value": "5"
+        },
+        "9": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 5,
+            "value": "360x800"
+        },
+        "90": {
+            "column": 6,
+            "fontSize": 10,
+            "row": 19,
+            "value": "4"
+        },
+        "91": {
+            "column": 7,
+            "fontSize": 10,
+            "row": 19,
+            "value": "7"
+        },
+        "92": {
+            "column": 8,
+            "fontSize": 11,
+            "row": 19,
+            "value": ""
+        },
+        "93": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 21,
+            "value": "BTC/USD May 2022"
+        },
+        "94": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 21,
+            "value": "Closing"
+        },
+        "95": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 21,
+            "value": "Opening"
+        },
+        "96": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 21,
+            "value": "Lowest"
+        },
+        "97": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 21,
+            "value": "Highest"
+        },
+        "98": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 22,
+            "value": "1"
+        },
+        "99": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 22,
+            "value": "38496"
+        }
+    }
+}
