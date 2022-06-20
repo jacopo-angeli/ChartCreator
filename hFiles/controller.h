@@ -9,10 +9,12 @@
 #include <QObject>
 #include <QVector>
 #include <QWidget>
+#include <QDesktopServices>
 
 class Controller : public QWidget{
     Q_OBJECT
 private:
+    QWidget* guideWindow;
     MainWindow* _MainWindow;
     QMap<QString, QString> _ActiveFiles;
     void lastSessionRestore();
@@ -51,6 +53,8 @@ public slots:
 
     /* App Managment */
     void mainWindowCloseEvent();
+    void chartCreationGuide();
+    void closeGuideWindow();
 
     /*Chart section slots*/
     void BarChartCreation();
@@ -72,9 +76,7 @@ public slots:
     void parseMethodChange(QAbstractButton*);
     void themeChanged(int);
     void chartReset();
-    void chartCreationGuide();
     void sliceStandOut();
-
 };
 
 #endif // CONTROLLER_H

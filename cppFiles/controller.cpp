@@ -7,8 +7,37 @@
 #include <QJsonArray>
 #include<string>
 #include "../hFiles/area.h"
-Controller::Controller(): _MainWindow(new MainWindow(this)),  _ActiveFiles(QMap<QString, QString>()){
+Controller::Controller():guideWindow(new QWidget()), _MainWindow(new MainWindow(this)),  _ActiveFiles(QMap<QString, QString>()){
     lastSessionRestore();
+
+    QFile file(":/files/Guida.html");
+
+    guideWindow->setMinimumSize(500,500);
+    guideWindow->setWindowFlags(Qt::WindowTitleHint | Qt::WindowMinimizeButtonHint);
+    QVBoxLayout * l = new QVBoxLayout();
+
+    if(file.open(QIODevice::ReadOnly)){
+       QString data = file.readAll();
+       file.close();
+
+       QTextBrowser *tb = new QTextBrowser(this);
+
+       tb->setHtml(data);
+       l->addWidget(tb);
+       tb->setOpenExternalLinks(true);
+
+       guideWindow->setLayout(l);
+    }
+
+    QHBoxLayout* btns= new QHBoxLayout();
+    QPushButton* closeBtn = new QPushButton("Close");
+    connect(closeBtn, SIGNAL(clicked()), this, SLOT(closeGuideWindow()));
+
+    btns->addStretch();
+    btns->addWidget(closeBtn);
+
+    l->addLayout(btns);
+
     _MainWindow->setWindowState(Qt::WindowMaximized);
     _MainWindow->setAnimated(true);
     _MainWindow->show();
@@ -1140,7 +1169,11 @@ void Controller::chartReset(){
     _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->getChart()->clearData();
 }
 void Controller::chartCreationGuide(){
+    if(guideWindow) guideWindow->show();
+}
 
+void Controller::closeGuideWindow(){
+    guideWindow->hide();
 }
 void Controller::sliceStandOut(){
     QPieSlice* slice = dynamic_cast<QPieSlice*>(QObject::sender());

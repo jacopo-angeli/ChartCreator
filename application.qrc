@@ -25,5 +25,6 @@
         <file>icons/SliceExplode.png</file>
         <file>icons/StackedAreaChart.png</file>
         <file>icons/TextSettings.png</file>
+    	<file>files/Guida.html</file>
     </qresource>
 </RCC>

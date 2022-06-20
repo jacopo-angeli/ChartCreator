@@ -1,21 +1,19 @@
 {
     "charts": {
         "0": {
-            "ColorIndex": 1,
+            "CategoriesRange": "{( 18 , 2 )->( 18 , 8 )}",
+            "ColorIndex": 2,
             "DataRange": "{( 19 , 2 )->( 20 , 8 )}",
             "LabelsRange": "{( 19 , 1 )->( 20 , 1 )}",
             "TitlePosition": "( 18 , 1 )",
-            "Type": "Area"
+            "Type": "Bar"
         },
         "1": {
-            "CategoriesRange": "{( 23 , 1 )->( 44 , 1 )}",
-            "ClosingPricesRange": "{( 23 , 2 )->( 44 , 2 )}",
-            "ColorIndex": 2,
-            "HighestPricesRange": "{( 23 , 5 )->( 44 , 5 )}",
-            "LowestPricesRange": "{( 23 , 4 )->( 44 , 4 )}",
-            "OpeningPricesRange": "{( 23 , 3 )->( 44 , 3 )}",
-            "TitlePosition": "( 22 , 1 )",
-            "Type": "CandleStick"
+            "ColorIndex": 1,
+            "DataRange": "{( 14 , 2 )->( 16 , 8 )}",
+            "LabelsRange": "{( 14 , 1 )->( 16 , 1 )}",
+            "TitlePosition": "( 13 , 1 )",
+            "Type": "Line"
         },
         "2": {
             "ColorIndex": 2,
@@ -25,19 +23,21 @@
             "Type": "Pie"
         },
         "3": {
-            "ColorIndex": 1,
-            "DataRange": "{( 14 , 2 )->( 16 , 8 )}",
-            "LabelsRange": "{( 14 , 1 )->( 16 , 1 )}",
-            "TitlePosition": "( 13 , 1 )",
-            "Type": "Line"
+            "CategoriesRange": "{( 23 , 1 )->( 45 , 1 )}",
+            "ClosingPricesRange": "{( 23 , 2 )->( 45 , 2 )}",
+            "ColorIndex": 2,
+            "HighestPricesRange": "{( 23 , 5 )->( 45 , 5 )}",
+            "LowestPricesRange": "{( 23 , 4 )->( 45 , 4 )}",
+            "OpeningPricesRange": "{( 23 , 3 )->( 45 , 3 )}",
+            "TitlePosition": "( 22 , 1 )",
+            "Type": "CandleStick"
         },
         "4": {
-            "CategoriesRange": "{( 18 , 2 )->( 18 , 8 )}",
-            "ColorIndex": 2,
+            "ColorIndex": 1,
             "DataRange": "{( 19 , 2 )->( 20 , 8 )}",
             "LabelsRange": "{( 19 , 1 )->( 20 , 1 )}",
             "TitlePosition": "( 18 , 1 )",
-            "Type": "Bar"
+            "Type": "Area"
         },
         "chartNumber": 5
     },
@@ -190,7 +190,7 @@
             "column": 1,
             "fontSize": 10,
             "row": 6,
-            "value": "4.25"
+            "value": "10"
         },
         "120": {
             "column": 2,
@@ -774,11 +774,41 @@
             "row": 43,
             "value": "30314"
         },
+        "208": {
+            "column": 0,
+            "fontSize": 10,
+            "row": 44,
+            "value": "19-06"
+        },
+        "209": {
+            "column": 1,
+            "fontSize": 10,
+            "row": 44,
+            "value": "20556"
+        },
         "21": {
             "column": 3,
             "fontSize": 10,
             "row": 9,
             "value": ""
+        },
+        "210": {
+            "column": 2,
+            "fontSize": 10,
+            "row": 44,
+            "value": "18000"
+        },
+        "211": {
+            "column": 3,
+            "fontSize": 10,
+            "row": 44,
+            "value": "17950"
+        },
+        "212": {
+            "column": 4,
+            "fontSize": 10,
+            "row": 44,
+            "value": "20444"
         },
         "22": {
             "column": 4,
@@ -910,7 +940,7 @@
             "column": 1,
             "fontSize": 10,
             "row": 13,
-            "value": "11"
+            "value": "15"
         },
         "42": {
             "column": 2,
@@ -1288,7 +1318,7 @@
             "column": 1,
             "fontSize": 10,
             "row": 22,
-            "value": "38496"
+            "value": "39000"
         }
     }
 }
