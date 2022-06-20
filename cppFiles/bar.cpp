@@ -140,7 +140,7 @@ void Bar::refresh(){
     removeAllSeries();
     QBarSeries* barSeries = new QBarSeries();
     int setNumber=0, catNumber=0;
-    double min=INT_MAX, max=INT_MIN;
+    double max=INT_MIN;
     foreach(QList<double> list, _Values){
         QBarSet* barSet = new QBarSet((setNumber < _Labels.count() ? _Labels[setNumber++] : QString("Set " + QString::number(setNumber++))));
         foreach(double val, list){
