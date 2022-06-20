@@ -12,9 +12,9 @@ EXEC_DIRECTORY = $${ROOT_DIRECTORY}
 
 DESTDIR = $${EXEC_DIRECTORY}
 QMAKE_QMAKE = $${EXEC_DIRECTORY}
-OBJECTS_DIR = $${BUILD_DIRECTORY}/.obj
-MOC_DIR = $${BUILD_DIRECTORY}/.moc
-RCC_DIR = $${BUILD_DIRECTORY}/.rcc
+OBJECTS_DIR = $${BUILD_DIRECTORY}/obj
+MOC_DIR = $${BUILD_DIRECTORY}/moc
+RCC_DIR = $${BUILD_DIRECTORY}/rcc
 
 # The following define makes your compiler warn you if you use any
 # feature of Qt which has been marked as deprecated (the exact warnings
