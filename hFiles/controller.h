@@ -24,6 +24,7 @@ private:
     bool isInRange(QPair<int,int>, QPair<int,int>);
 public:
     Controller();
+    ~Controller();
 public slots:
 
     /* MainWindow slots */

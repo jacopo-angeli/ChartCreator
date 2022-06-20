@@ -17,6 +17,10 @@ BarSettings::BarSettings(QWidget * parent): AreaLinePieSettings(parent), _Catego
     static_cast<QVBoxLayout*>(_Settings->layout())->addLayout(hor1);
 }
 
+BarSettings::~BarSettings(){
+    delete _Categories;
+}
+
 void BarSettings::setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>> pos){
     QString tag=QString();
     if((pos.first.first)>0)

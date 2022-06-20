@@ -70,6 +70,14 @@ CandleStickSettings::CandleStickSettings(QWidget* parent) : ChartSettings(parent
     _ChartView->setChart(_Chart);
 }
 
+CandleStickSettings::~CandleStickSettings(){
+    delete _OpeningPrices;
+    delete _ClosingPrices;
+    delete _LowestPrices;
+    delete _HighestPrices;
+    delete _Categories;
+}
+
 void CandleStickSettings::setOpeningPricesRange(QPair<QPair<int, int>, QPair<int, int>>pos){
     QString tag=QString();
     if((pos.first.first)>0)

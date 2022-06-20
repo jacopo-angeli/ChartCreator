@@ -42,6 +42,10 @@ Controller::Controller():guideWindow(new QWidget()), _MainWindow(new MainWindow(
     _MainWindow->setAnimated(true);
     _MainWindow->show();
 }
+Controller::~Controller(){
+    delete guideWindow;
+    delete _MainWindow;
+}
 bool Controller::fileSave(int tableIndex, QString fileName) const{
     QString filePath = "";
     if(fileName==""){

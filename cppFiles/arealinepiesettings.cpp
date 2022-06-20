@@ -70,6 +70,12 @@ AreaLinePieSettings::AreaLinePieSettings(Flags type, QWidget* parent): AreaLineP
     _ChartView->setChart(_Chart);
 }
 
+AreaLinePieSettings::~AreaLinePieSettings(){
+    delete _DataRange;
+    delete _Labels;
+    delete _ParseMethod;
+}
+
 void AreaLinePieSettings:: setDataRange(QPair<QPair<int, int>, QPair<int, int>> pos){
     //Check se pos.first>0
         //crei la stringa

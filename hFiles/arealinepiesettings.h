@@ -11,6 +11,7 @@ class AreaLinePieSettings : public ChartSettings
 public:
     AreaLinePieSettings(QWidget * = nullptr);
     AreaLinePieSettings(Flags type, QWidget * = nullptr);
+    ~AreaLinePieSettings();
 
     void setDataRange(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0)));
     QPair <QPair<int , int>, QPair<int, int>> getDataRange() const;

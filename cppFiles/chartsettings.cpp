@@ -73,6 +73,11 @@ ChartSettings::ChartSettings(QWidget * parent) : QWidget(parent),  _Settings(new
     setLayout(main);
     _ChartView->setRenderHint(QPainter::Antialiasing);
 }
+ChartSettings::~ChartSettings(){
+    delete _Title;
+    delete _ChartView;
+    delete _Chart;
+}
 Chart* ChartSettings::getChart() const{
     return _Chart;
 }

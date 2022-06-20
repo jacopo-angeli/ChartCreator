@@ -9,6 +9,7 @@ class BarSettings: public AreaLinePieSettings
     Q_OBJECT
 public:
     BarSettings(QWidget* =nullptr);
+    ~BarSettings();
     virtual void setCategoriesRange(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0)));
     virtual QPair<QPair<int, int>, QPair<int, int>> getCategoriesRange() const;
     virtual QJsonObject toJSON() const;

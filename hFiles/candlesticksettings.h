@@ -9,6 +9,7 @@ class CandleStickSettings : public ChartSettings
     Q_OBJECT
 public:
     CandleStickSettings(QWidget * = nullptr);
+    ~CandleStickSettings();
     void setOpeningPricesRange(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0)));
     QPair<QPair<int, int>, QPair<int, int>> getOpeningPricesRange() const;
     void setClosingPricesRange(QPair<QPair<int, int>, QPair<int, int>> = QPair<QPair<int, int>, QPair<int, int>>(QPair<int, int>(0,0), QPair<int, int>(0,0)));

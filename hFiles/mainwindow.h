@@ -42,6 +42,7 @@ private:
     int getMaxMenuSize(QMenu*);
 public:
     MainWindow(QWidget* =nullptr);
+    ~MainWindow();
     void setSpinBox(int);
 
     int getFilePosition(QString);

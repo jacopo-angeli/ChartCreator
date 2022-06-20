@@ -199,6 +199,10 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Files(new QTabWid
 
     connect(this, SIGNAL(closing()), parent, SLOT(mainWindowCloseEvent()));
 }
+MainWindow::~MainWindow(){
+    delete _Files;
+    delete _TxtDim;
+}
 void MainWindow::setSpinBox(int value){
     _TxtDim->setValue(value);
 }
