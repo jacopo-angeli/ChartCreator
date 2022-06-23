@@ -1081,6 +1081,7 @@ void Controller::parseMethodChange(QAbstractButton* btnClicked){
     AreaLinePieSettings* currentChartTab = static_cast<AreaLinePieSettings*>(_MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex()));
     QPair<QPair<int,int>, QPair<int,int>> dataRange = currentChartTab->getDataRange();
     QPair<QPair<int,int>, QPair<int,int>> labelsRange = currentChartTab->getLabelsRange();
+
     if(dataRange.first.first != 0 && labelsRange.first.first !=0){
         QTableWidget* CurrentTable= _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
         QModelIndexList userSelection = CurrentTable->selectionModel()->selectedIndexes();
@@ -1119,7 +1120,7 @@ void Controller::parseMethodChange(QAbstractButton* btnClicked){
         }else{
             currentChartTab->getChart()->setSeries(CurrentTable, dataIndexes, Flags::COLUMN);
         }
-    }else{
+    }else if(labelsRange.first.first != 0){
         QTableWidget* CurrentTable= _MainWindow->getFullTable(_MainWindow->getCurrentTabIndex());
         QModelIndexList userSelection = CurrentTable->selectionModel()->selectedIndexes();
         CurrentTable->clearSelection();
