@@ -7,7 +7,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Files(new QTabWid
     QMenuBar *MenuBar = new QMenuBar(this);
 
     QMenu *File = new QMenu("&File", MenuBar);
-    QMenu *Tools = new QMenu("&Tools", MenuBar);
     QMenu *Help = new QMenu("&Help", MenuBar);
 
     QAction *NewTab = new QAction("&New File", File);
@@ -34,24 +33,19 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), _Files(new QTabWid
 
     File->addSeparator();
 
-    File->addAction(new QAction("&Print", File));
-    /*TODO : Print command*/
-
-    File->addSeparator();
-
     QAction *Quit = new QAction("&Quit", File);
     Quit->setShortcut(QKeySequence::Quit);
     connect(Quit, SIGNAL(triggered()), parent, SLOT(close()));
     File->addAction(Quit);
 
-    Help->addAction(new QAction("Usage &Manual", Help));
-    Help->addAction(new QAction("&Contacts", Help));
+    QAction *UsageManual = new QAction("Usage &Manual", Help);
+    UsageManual->setShortcut(QKeySequence::HelpContents);
+    connect(UsageManual, SIGNAL(triggered()), parent, SLOT(toggleGuideWindow()));
+    Help->addAction(UsageManual);
 
     File->setMinimumWidth(getMaxMenuSize(File) * 1.5);
-    Tools->setMinimumWidth(getMaxMenuSize(Tools) * 1.5);
     Help->setMinimumWidth(getMaxMenuSize(Help) * 1.5);
     MenuBar->addMenu(File);
-    MenuBar->addMenu(Tools);
     MenuBar->addMenu(Help);
 
     setMenuBar(MenuBar);

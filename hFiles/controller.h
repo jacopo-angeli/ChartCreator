@@ -44,7 +44,6 @@ public slots:
     void SpinBox();
     void SetTextSize();
     void TabClose(int);
-    void ChartTabClose(int);
 
     /* File Managment */
     void openFile();
@@ -54,8 +53,8 @@ public slots:
 
     /* App Managment */
     void mainWindowCloseEvent();
-    void chartCreationGuide();
-    void closeGuideWindow();
+    void toggleGuideWindow();
+    void ChartTabClose(int);
 
     /*Chart section slots*/
     void BarChartCreation();

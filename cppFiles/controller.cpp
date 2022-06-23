@@ -31,7 +31,7 @@ Controller::Controller():guideWindow(new QWidget()), _MainWindow(new MainWindow(
 
     QHBoxLayout* btns= new QHBoxLayout();
     QPushButton* closeBtn = new QPushButton("Close");
-    connect(closeBtn, SIGNAL(clicked()), this, SLOT(closeGuideWindow()));
+    connect(closeBtn, SIGNAL(clicked()), this, SLOT(toggleGuideWindow()));
 
     btns->addStretch();
     btns->addWidget(closeBtn);
@@ -663,7 +663,9 @@ void Controller::TabClose(int index){
     }
 }
 void Controller::ChartTabClose(int index){
-    _MainWindow->closeChartTab(index);
+    if(index != _MainWindow->getChartNumber(_MainWindow->getCurrentTabIndex())-1){
+        _MainWindow->closeChartTab(index);
+    }
 }
 void Controller::lastSessionRestore(){
     if(QDir(QDir::homePath() + "/.chartCreator").exists()){
@@ -1172,12 +1174,11 @@ void Controller::themeChanged(int index){
 void Controller::chartReset(){
     _MainWindow->getChartTab(_MainWindow->getCurrentChartTabIndex())->getChart()->clearData();
 }
-void Controller::chartCreationGuide(){
-    if(guideWindow) guideWindow->show();
-}
-
-void Controller::closeGuideWindow(){
-    guideWindow->hide();
+void Controller::toggleGuideWindow(){
+    if(guideWindow){
+        if(guideWindow->isVisible()) guideWindow->hide();
+        else guideWindow->show();
+    }
 }
 void Controller::sliceStandOut(){
     QPieSlice* slice = dynamic_cast<QPieSlice*>(QObject::sender());

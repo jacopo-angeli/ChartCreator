@@ -26,7 +26,7 @@ ChartSettings::ChartSettings(QWidget * parent) : QWidget(parent),  _Settings(new
     QPushButton* btn01=new QPushButton("Guide");
     btn01->setFixedWidth(120);
     btn01->setFixedHeight(50);
-    connect(btn01, SIGNAL(clicked()), parent, SLOT(chartCreationGuide()));
+    connect(btn01, SIGNAL(clicked()), parent, SLOT(toggleGuideWindow()));
     hor0->addWidget(btn00);
     hor0->addWidget(btn01);
     hor0->addStretch();
