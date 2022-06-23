@@ -1,7 +1,6 @@
 #include "../hFiles/pie.h"
 
 Pie::Pie(QWidget* brain): Chart(brain), _Data(QList<double>()), _Labels(QList<QString>()){
-    setAnimationOptions(QChart::AllAnimations);
     legend()->show();
     legend()->setAlignment(Qt::AlignRight);
 }

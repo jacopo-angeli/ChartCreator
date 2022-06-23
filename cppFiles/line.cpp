@@ -1,7 +1,6 @@
 #include "../hFiles/line.h"
 
 Line::Line(QWidget* brain): Chart(brain), _Values(QList<QList<double>>()), _Labels(QList<QString>()){
-    setAnimationOptions(QChart::SeriesAnimations);
     legend()->setVisible(true);
     legend()->setAlignment(Qt::AlignRight);
 }

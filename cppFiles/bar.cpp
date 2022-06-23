@@ -6,7 +6,6 @@
 #include <QtCharts/QValueAxis>
 
 Bar::Bar(QWidget* brain): Chart(brain),_axisX(new QBarCategoryAxis()),_axisY(new QValueAxis()),_Values(QList<QList<double>>()),_Labels(QList<QString>()), _Categories(QList<QString>()){
-    setAnimationOptions(QChart::SeriesAnimations);
     legend()->setVisible(true);
     legend()->setAlignment(Qt::AlignRight);
     addAxis(_axisX, Qt::AlignBottom);
@@ -62,7 +61,7 @@ void Bar::clearData(){
 
 void Bar::setLabels(QTableWidget* table, const QModelIndexList &indexes, Flags parseDirection){
     //Riempio labels/* con tante Stringhe quante solo le celle selezionate e se una delle celle è vuota o non piena metto Line x
-    _Labels.clear();
+    clearLabels();
     switch(parseDirection){
         case(Flags::ROW):{
             for(int i=indexes.first().row(); i<=indexes.last().row();i++){
@@ -101,7 +100,7 @@ void Bar::clearCategories(){
 }
 
 void Bar::setCategories(QTableWidget* table, const QModelIndexList &indexes, Flags parseDirection){
-    _Categories.clear();
+    clearCategories();
     switch(parseDirection){
         case(Flags::ROW):{
             for(int i=indexes.first().row(); i<=indexes.last().row();i++){

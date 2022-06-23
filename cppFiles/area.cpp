@@ -1,7 +1,6 @@
 #include "../hFiles/area.h"
 
 Area::Area(QWidget* brain): Chart(brain), _Values(QList<QLineSeries*>()), _Labels(QList<QString>()){
-//    setAnimationOptions(QChart::SeriesAnimations);
     legend()->setVisible(true);
     legend()->setAlignment(Qt::AlignRight);
 }
