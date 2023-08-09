@@ -14,7 +14,11 @@ Sviluppato come progetto accademico per il corso di Programmazione ad oggetti, i
 
 L'applicazio scrive e legge da file dei dati che rappresentano una sessione.
 
-## 2. Gerarchie utilizzate
+## 2. Gerarchie utilizzate e UML
+
+### UML
+
+![UML generale](images/ProjectUML.svg "UML di tutta l'applicazione")
 
 ### Chart
 
@@ -50,7 +54,11 @@ Developed as an academic project for the course of Object-oriented Programming, 
 
 The application also writes to and reads from files that represent a working session.
 
-## 2. Hierarchies
+## 2. Hierarchies and UML
+
+### UML
+
+![Application UML](images/ProjectUML.svg "Application UML")
 
 ### Chart
 
