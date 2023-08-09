@@ -3,7 +3,7 @@
 [English version below](#english-version)
 
 1. [Introduzione](#1-introduzione)
-2. [Gerarchie utilizzate](#2-gerarchie-utilizzate)
+2. [Gerarchie utilizzate](#2-gerarchie-utilizzate-e-UML)
 3. [Istruzioni sulla compilazione ed esecuzione](#3-istruzioni-su-compilazione-ed-esecuzione)
 
 ## 1. Introduzione
@@ -43,7 +43,7 @@ Viene generato da qt una cartella con la seguente struttura:
 # English version
 
 1. [Introduction](#1-introduction)
-2. [Hierarchies](#2-hierarchies)
+2. [Hierarchies](#2-hierarchies-ad-UML)
 3. [Build](#3-build)
 
 ## 1. Introduction
