@@ -42,9 +42,9 @@ Viene generato da qt una cartella con la seguente struttura:
 
 # English version
 
-1. [Introduction] (#introduction)
-2. [Hierarchies] (#hierarchies)
-3. [Build] (#build)
+1. [Introduction](#introduction)
+2. [Hierarchies](#hierarchies)
+3. [Build](#build)
 
 ## 1. Introduction
 
